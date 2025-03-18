@@ -1,0 +1,14 @@
+users:
+  enabled: true
+  fields:
+    - email
+    - password
+    - wallet
+  requiredFields:
+    - email
+    - password
+  file: data/users.json
+  format: json
+  moderation: false
+  transforms:
+    password: sha256
