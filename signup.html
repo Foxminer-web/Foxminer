@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOXMINER - Sign Up</title>
-    <script async src="https://tally.so/widgets/embed.js"></script>
     <style>
         body { font-family: Arial, sans-serif; background: #1A1A2E; color: #F7F7F7; margin: 0; padding: 0; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
@@ -14,7 +13,10 @@
         nav a:hover { color: #E94560; }
         .form-container { max-width: 600px; margin: 50px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
         h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
-        iframe { width: 100%; border: none; height: 500px; }
+        form { display: flex; flex-direction: column; align-items: center; }
+        input { width: 80%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; font-size: 1em; }
+        button { padding: 10px 20px; margin-top: 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        button:hover { background: #FF6F61; }
     </style>
 </head>
 <body>
@@ -29,7 +31,11 @@
     </header>
     <div class="form-container">
         <h1>Sign Up for FOXMINER</h1>
-        <iframe data-tally-src="https://tally.so/r/mZDkEz" width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0" title="Join The Web Mining Revolution"></iframe>
+        <form action="https://foxminer-server.onrender.com/signup" method="POST">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
     </div>
 </body>
 </html>
