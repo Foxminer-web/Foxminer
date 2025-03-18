@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOXMINER - Monero Mining Re-Awakened</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1A1A2E;
+            color: #E94560;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px 0;
+            border-bottom: 1px solid #E94560;
+            max-height: 60px;
+        }
+        header img {
+            height: 125px;
+            max-height: 125px;
+            width: auto;
+            object-fit: contain;
+            margin-left: -25px; /* Nudge left by 10px */
+        }
+        nav a {
+            color: #F7F7F7;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #E94560;
+        }
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+        }
+        .hero h1 {
+            font-size: 3em;
+            margin: 0;
+            color: #F7F7F7;
+        }
+        .hero p {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #F7F7F7;
+        }
+        .start-box {
+            background: #16213E;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            width: 100%;
+            max-width: 400px;
+        }
+        .start-box input {
+            padding: 12px;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #E94560;
+            border-radius: 5px 0 0 5px;
+            font-size: 1em;
+            background: #F7F7F7;
+            color: #1A1A2E;
+            box-sizing: border-box;
+        }
+        .start-box button {
+            padding: 12px 20px;
+            border: none;
+            background: #E94560;
+            color: #F7F7F7;
+            font-weight: bold;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .start-box button:hover {
+            background: #D32F49;
+        }
+        .features {
+            display: flex;
+            justify-content: space-around;
+            padding: 40px 0;
+            flex-wrap: wrap;
+        }
+        .feature {
+            background: #16213E;
+            padding: 20px;
+            border-radius: 10px;
+            width: 30%;
+            margin: 10px;
+            text-align: center;
+        }
+        .feature h3 {
+            color: #F7F7F7;
+            margin: 0 0 10px;
+        }
+        .stats {
+            text-align: center;
+            padding: 40px 0;
+            background: #E94560;
+            color: #F7F7F7;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .stats p {
+            font-size: 1.5em;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .about {
+            text-align: center;
+            padding: 40px 0;
+            color: #F7F7F7;
+        }
+        .about h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #E94560;
+        }
+        .comparison {
+            padding: 40px 0;
+            text-align: center;
+        }
+        .comparison h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #E94560;
+        }
+        .comparison table {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background: #16213E;
+            color: #F7F7F7;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .comparison th, .comparison td {
+            padding: 15px;
+            border: 1px solid #E94560;
+        }
+        .comparison th {
+            background: #E94560;
+            color: #F7F7F7;
+            font-weight: bold;
+        }
+        .comparison td {
+            color: #F7F7F7;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #F7F7F7;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            nav a {
+                margin-left: 10px;
+                font-size: 0.9em;
+            }
+            .hero h1 {
+                font-size: 1.8em;
+            }
+            .hero p {
+                font-size: 1em;
+                padding: 0 10px;
+            }
+            .start-box {
+                padding: 10px;
+            }
+            .start-box input {
+                width: 100%;
+                border-radius: 5px;
+                margin-bottom: 10px;
+            }
+            .start-box button {
+                width: 100%;
+                border-radius: 5px;
+            }
+            .features {
+                padding: 20px 0;
+            }
+            .feature {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .stats {
+                padding: 20px 10px;
+            }
+            .stats p {
+                font-size: 1em;
+                word-wrap: break-word;
+                padding: 0 10px;
+            }
+            .about {
+                padding: 20px 0;
+            }
+            .about p {
+                padding: 0 15px;
+            }
+            .comparison table {
+                font-size: 0.8em;
+                width: 100%;
+                max-width: 100%;
+                overflow-x: auto;
+                display: block;
+            }
+        }
+        @media (min-width: 769px) {
+            .features {
+                flex-wrap: nowrap;
+            }
+            .start-box {
+                display: flex; /* Fix button layout */
+                justify-content: center; /* Center contents */
+                align-items: center; /* Vertically align */
+                max-width: 400px;
+                margin: 0 auto; /* Center the box in hero */
+            }
+            .start-box input {
+                width: 300px; /* Match max-width for consistency */
+                margin: 0; /* Remove default spacing */
+            }
+            .start-box button {
+                margin: 0; /* Remove default spacing */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="container">
+        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="docs.html">Docs</a>
+            <a href="signup.html">Sign Up</a>
+            <a href="signin.html">Sign In</a>
+        </nav>
+    </header>
+
+    <section class="hero container">
+        <h1>FOXMINER</h1>
+        <p>CPU Web Mining Reinvented w/ Our Custom RandomX fork, RandomFOX. Auto-Algo Switching to Maximize Monero (XMR) Profits</p>
+        <div class="start-box">
+            <input type="text" id="walletInput" placeholder="Your Monero Wallet">
+            <button onclick="startMining()">Start Mining</button>
+        </div>
+        <p id="status" style="color: #F7F7F7; margin-top: 10px;"></p>
+    </section>
+
+    <section class="features container">
+        <div class="feature">
+            <h3>Highest Yields</h3>
+            <p>30-50% more profit with our RandomX fork, RandomFOX v1.1 designed for optimized CPU Monero (XMR) mining</p>
+        </div>
+        <div class="feature">
+            <h3>Desktop and Mobile</h3>
+            <p>Mine Monero (XMR) in-browser on Desktop or Mobile. Signup to see your XMR stack on the user dashboard.</p>
+        </div>
+        <div class="feature">
+            <h3>Global Power</h3>
+            <p>Join thousands mining smarter. Maximize reward output with our custom CPU 'MineBoost' feature.</p>
+        </div>
+    </section>
+
+    <section class="stats">
+        <p>Miners Online: <span id="miners">1,237</span></p>
+        <p>Total Hashrate: <span id="hashrate">225.5 MH/s</span></p>
+    </section>
+
+    <section class="about container">
+        <h2>About FOXMINER</h2>
+        <p>FOXMINER launched in 2025 after 18 months of relentless innovation by our dedicated team, culminating in RandomFOX v1.1—a custom fork of Monero’s RandomX algorithm. Originally designed in 2019, RandomX had become outdated, leaving web-based CPU mining unprofitable for years. Our breakthrough with RandomFOX redefines this space, boosting mining reward output by optimizing browser efficiency, delivering 30-50% higher Monero (XMR) yields than traditional protocols. Unlike others, we’ve cracked the code to make browser mining profitable again, seamlessly running on iOS, Android, and desktop devices—empowering users worldwide to maximize earnings with zero hassle.</p>
+    </section>
+
+    <section class="comparison container">
+        <h2>Why FOXMINER Wins</h2>
+        <table>
+            <tr>
+                <th></th>
+                <th>FOXMINER (RandomFOX)</th>
+                <th>CoinIMP (MintMe)</th>
+                <th>Monero (RandomX)</th>
+            </tr>
+            <tr>
+                <td>Profit Per Day</td>
+                <td>$0.05-$0.12</td>
+                <td>$0.01</td>
+                <td>$0.02</td>
+            </tr>
+            <tr>
+                <td>Algo Efficiency</td>
+                <td>Auto-switching, 50% boost</td>
+                <td>Static WebHash</td>
+                <td>Auto-switching, 30% boost</td>
+            </tr>
+            <tr>
+                <td>Browser Mining</td>
+                <td>Optimized JS</td>
+                <td>Basic JS</td>
+                <td>Heavy JS</td>
+            </tr>
+            <tr>
+                <td>Fees</td>
+                <td>8% Dev + 0.12% Cashout</td>
+                <td>0% (1 MintMe payout)</td>
+                <td>0.12% (MoneroOcean)</td>
+            </tr>
+        </table>
+    </section>
+
+    <footer>
+        FOXMINER © 2025 - Monero Mining, Fox Style
+    </footer>
+
+    <script>
+        function startMining() {
+            let wallet = document.getElementById('walletInput').value;
+            if (wallet) {
+                document.getElementById('status').textContent = 'Mining Started! Check Dashboard.';
+            } else {
+                alert('Enter a Monero wallet address!');
+            }
+        }
+    </script>
+</body>
+</html>

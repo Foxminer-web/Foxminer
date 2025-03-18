@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOXMINER - Sign In</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1A1A2E;
+            color: #F7F7F7;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #E94560;
+            max-height: 60px;
+        }
+        header img {
+            height: 125px;
+            max-height: 125px;
+            width: auto;
+            object-fit: contain;
+            margin-top: 10px; /* Nudge down on desktop */
+        }
+        nav a {
+            color: #F7F7F7;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #E94560;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #16213E;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        h1 {
+            font-size: 2em;
+            color: #E94560;
+            margin-bottom: 20px;
+        }
+        input {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 10px;
+            border: 1px solid #E94560;
+            border-radius: 5px;
+            background: #F7F7F7;
+            color: #1A1A2E;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background: #E94560;
+            color: #F7F7F7;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #D32F49;
+        }
+        a {
+            color: #E94560;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                padding: 15px;
+            }
+            header img {
+                height: 100px; /* Mobile logo size */
+                max-height: 100px;
+                margin-top: 0; /* No nudge on mobile */
+            }
+            nav a {
+                margin-left: 10px;
+                font-size: 0.9em;
+            }
+            .form-container {
+                margin: 20px auto;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="container">
+        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="docs.html">Docs</a>
+            <a href="signup.html">Sign Up</a>
+            <a href="signin.html">Sign In</a>
+        </nav>
+    </header>
+
+    <div class="form-container">
+        <h1>Sign In to FOXMINER</h1>
+        <form action="https://snapper-powerful-snipe.ngrok-free.app/login" method="POST">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="hidden" name="_next" value="https://foxminer.glitch.me/dashboard.html">
+            <button type="submit">Sign In</button>
+        </form>
+        <p>Need an account? <a href="signup.html">Sign Up</a></p>
+    </div>
+</body>
+</html>
