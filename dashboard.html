@@ -24,6 +24,7 @@
     </style>
     <script>
         const server = 'https://foxminer-server.onrender.com';
+        let isSignedIn = false;
 
         async function checkSession() {
             try {
@@ -34,15 +35,15 @@
                 const data = await response.json();
                 const status = document.getElementById('status');
                 if (data.signedIn) {
+                    isSignedIn = true;
                     status.textContent = `Welcome, ${data.email}!`;
-                    document.getElementById('wallet-form').style.display = 'block';
                     if (data.wallet) {
                         document.getElementById('wallet').value = data.wallet;
                         updateStats(data.wallet);
                     }
                 } else {
-                    status.textContent = 'Not signed in. Redirecting to Sign In...';
-                    setTimeout(() => window.location.href = '/signin.html', 2000);
+                    isSignedIn = false;
+                    status.textContent = 'Not signed in? Sign up to track your stats!';
                 }
             } catch (error) {
                 console.error('Session check failed:', error);
@@ -52,6 +53,15 @@
 
         async function saveWallet() {
             const wallet = document.getElementById('wallet').value;
+            const message = document.getElementById('message');
+            if (!wallet) {
+                message.textContent = 'Please enter a wallet address.';
+                return;
+            }
+            if (!isSignedIn) {
+                message.textContent = 'Please sign up to save your wallet and track stats.';
+                return;
+            }
             try {
                 const response = await fetch(`${server}/set-wallet`, {
                     method: 'POST',
@@ -61,14 +71,14 @@
                 });
                 const data = await response.json();
                 if (data.success) {
-                    document.getElementById('message').textContent = 'Please allow up to 5 mins for stats from Monero Ocean to reflect.';
+                    message.textContent = 'Please allow up to 5 mins for stats from Monero Ocean to reflect.';
                     updateStats(wallet);
                 } else {
-                    document.getElementById('message').textContent = 'Failed to save wallet.';
+                    message.textContent = 'Failed to save wallet.';
                 }
             } catch (error) {
                 console.error('Save wallet failed:', error);
-                document.getElementById('message').textContent = 'Error saving wallet.';
+                message.textContent = 'Error saving wallet.';
             }
         }
 
@@ -97,7 +107,7 @@
     <div class="dashboard">
         <h1>FOXMINER Dashboard</h1>
         <p id="status">Checking session...</p>
-        <div id="wallet-form" style="display: none;">
+        <div>
             <input type="text" id="wallet" placeholder="Enter XMR Wallet Address">
             <button onclick="saveWallet()">Save</button>
             <p id="message"></p>
