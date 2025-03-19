@@ -25,14 +25,6 @@
         input { width: 80%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
         button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
         button:hover { background: #FF6F61; }
-        .global-stats { text-align: center; margin: 20px 0; }
-        .global-stats span { font-size: 1.2em; margin: 0 20px; }
-        .pulse { animation: pulse 2s infinite; }
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-            100% { transform: scale(1); opacity: 1; }
-        }
         .hamburger { display: none; font-size: 2em; cursor: pointer; }
         @media (max-width: 768px) {
             .hamburger { display: block; }
@@ -42,7 +34,7 @@
             .user-info { margin: 10px 0; }
         }
         @media (min-width: 769px) {
-            nav.logged-in a { margin-left: 15px; } /* Shift left when logged in */
+            nav.logged-in a { margin-left: 10px; } /* More nudge left */
         }
     </style>
     <script>
@@ -169,10 +161,6 @@
             <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
         </nav>
     </header>
-    <div class="global-stats">
-        <span class="pulse">Miners online: 1,267</span>
-        <span class="pulse">Hashes: 229 MH/s</span>
-    </div>
     <div class="dashboard">
         <h1>FOXMINER Dashboard</h1>
         <p id="status">Checking session...</p>
