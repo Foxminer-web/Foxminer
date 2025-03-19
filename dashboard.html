@@ -27,12 +27,15 @@
         let isSignedIn = false;
 
         async function checkSession() {
+            console.log('checkSession started');
             try {
                 const response = await fetch(`${server}/check-session`, {
                     method: 'GET',
                     credentials: 'include'
                 });
+                console.log('Fetch response:', response);
                 const data = await response.json();
+                console.log('Session data:', data);
                 const status = document.getElementById('status');
                 const message = document.getElementById('message');
                 if (data.signedIn) {
@@ -87,7 +90,6 @@
         }
 
         function updateStats(wallet) {
-            // Placeholder for Monero Ocean API
             document.getElementById('hashrate').textContent = 'N/A';
             document.getElementById('balance').textContent = 'N/A';
             document.getElementById('workers').textContent = 'N/A';
@@ -95,7 +97,10 @@
             console.log(`Stats update triggered for wallet: ${wallet}`);
         }
 
-        window.onload = checkSession;
+        window.onload = () => {
+            console.log('Window loaded, calling checkSession');
+            checkSession();
+        };
     </script>
 </head>
 <body>
