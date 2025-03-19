@@ -34,16 +34,20 @@
                 });
                 const data = await response.json();
                 const status = document.getElementById('status');
+                const message = document.getElementById('message');
                 if (data.signedIn) {
                     isSignedIn = true;
                     status.textContent = `Welcome, ${data.email}!`;
-                    if (data.wallet) {
+                    if (!data.wallet) {
+                        message.textContent = 'Welcome you young, Foxminer! Please enter your XMR wallet address and click "save" to start mining. Please note that live stats will start updating from MoneroOcean within 5-10 mins in most cases. Happy Mining.';
+                    } else {
                         document.getElementById('wallet').value = data.wallet;
                         updateStats(data.wallet);
                     }
                 } else {
                     isSignedIn = false;
                     status.textContent = 'Not signed in? Sign up to track your stats!';
+                    message.textContent = '';
                 }
             } catch (error) {
                 console.error('Session check failed:', error);
@@ -83,7 +87,7 @@
         }
 
         function updateStats(wallet) {
-            // Placeholder for Monero Ocean API - next step
+            // Placeholder for Monero Ocean API
             document.getElementById('hashrate').textContent = 'N/A';
             document.getElementById('balance').textContent = 'N/A';
             document.getElementById('workers').textContent = 'N/A';
