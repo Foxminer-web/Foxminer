@@ -62,6 +62,73 @@
             nav.logged-in a { margin-left: 10px; }
         }
     </style>
+</head>
+<body>
+    <header class="container">
+        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <nav>
+            <a href="/Foxminer/index.html">Home</a>
+            <a href="/Foxminer/dashboard.html">Dashboard</a>
+            <a href="/Foxminer/signup.html">Sign Up</a>
+            <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
+        </nav>
+    </header>
+    <div class="dashboard">
+        <h1>FOXMINER Dashboard</h1>
+        <p id="status">Checking session...</p>
+        <div>
+            <input type="text" id="wallet" placeholder="Enter XMR Wallet Address">
+            <button onclick="saveWallet()">Save</button>
+            <button id="startBtn" onclick="startMining()">Start</button>
+            <button id="stopBtn" onclick="stopMining()" style="display: none;">Stop</button>
+            <div id="hash-bar">
+                <div class="bar">
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                </div>
+                <p>You’re now mining. Check your H/s below to track your speed. Please note that H/s estimates update every 5 mins roughly depending on device and network connection.</p>
+            </div>
+            <p id="message"></p>
+        </div>
+        <div class="stats">
+            <div class="stat-box">
+                <h2>Hashrate</h2>
+                <p id="hashrate">N/A</p>
+                <span>Current mining speed</span>
+            </div>
+            <div class="stat-box">
+                <h2>Balance</h2>
+                <p id="balance">N/A</p>
+                <span>Unpaid XMR balance</span>
+            </div>
+            <div class="stat-box">
+                <h2>Workers</h2>
+                <p id="workers">N/A</p>
+                <span>Active mining workers</span>
+            </div>
+            <div class="stat-box">
+                <h2>Earnings</h2>
+                <p id="earnings">N/A</p>
+                <span>Total XMR earned</span>
+            </div>
+        </div>
+        <!-- Cashout Section -->
+        <div class="cashout-section">
+            <h2>Cashout Your Earnings</h2>
+            <p>Withdraw your unpaid XMR balance to your wallet.</p>
+            <button onclick="requestCashout()">Cashout Now</button>
+            <div class="fee-info">
+                <p>Cashout Fee: 0.0005 XMR</p>
+                <p>Example: 0.1 XMR = 0.0995 XMR to you</p>
+                <p>Minimum: 0.1 XMR</p>
+            </div>
+            <p id="cashout-message"></p>
+        </div>
+    </div>
     <script>
         const server = 'https://foxminer-server.onrender.com';
         const moApi = 'https://api.moneroocean.stream';
@@ -179,29 +246,6 @@
             }
         }
 
-        function startMining() {
-            const wallet = document.getElementById('wallet').value;
-            if (!wallet) {
-                document.getElementById('message').textContent = 'Please save a wallet address first.';
-                return;
-            }
-            console.log('Start mining for wallet:', wallet);
-            // Miner script goes here - placeholder for now
-            document.getElementById('startBtn').style.display = 'none';
-            document.getElementById('stopBtn').style.display = 'inline-block';
-            document.getElementById('hash-bar').style.display = 'block';
-            document.getElementById('message').textContent = '';
-        }
-
-        function stopMining() {
-            console.log('Stop mining');
-            // Miner stop logic goes here - placeholder for now
-            document.getElementById('startBtn').style.display = 'inline-block';
-            document.getElementById('stopBtn').style.display = 'none';
-            document.getElementById('hash-bar').style.display = 'none';
-            document.getElementById('message').textContent = 'Mining stopped.';
-        }
-
         async function requestCashout() {
             const wallet = document.getElementById('wallet').value;
             const message = document.getElementById('cashout-message');
@@ -253,72 +297,40 @@
             checkSession();
         };
     </script>
-</head>
-<body>
-    <header class="container">
-        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
-        <div class="hamburger" onclick="toggleMenu()">☰</div>
-        <nav>
-            <a href="/Foxminer/index.html">Home</a>
-            <a href="/Foxminer/dashboard.html">Dashboard</a>
-            <a href="/Foxminer/signup.html">Sign Up</a>
-            <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
-        </nav>
-    </header>
-    <div class="dashboard">
-        <h1>FOXMINER Dashboard</h1>
-        <p id="status">Checking session...</p>
-        <div>
-            <input type="text" id="wallet" placeholder="Enter XMR Wallet Address">
-            <button onclick="saveWallet()">Save</button>
-            <button id="startBtn" onclick="startMining()">Start</button>
-            <button id="stopBtn" onclick="stopMining()" style="display: none;">Stop</button>
-            <div id="hash-bar">
-                <div class="bar">
-                    <div class="block"></div>
-                    <div class="block"></div>
-                    <div class="block"></div>
-                    <div class="block"></div>
-                    <div class="block"></div>
-                </div>
-                <p>You’re now mining. Check your H/s below to track your speed. Please note that H/s estimates update every 5 mins roughly depending on device and network connection.</p>
-            </div>
-            <p id="message"></p>
-        </div>
-        <div class="stats">
-            <div class="stat-box">
-                <h2>Hashrate</h2>
-                <p id="hashrate">N/A</p>
-                <span>Current mining speed</span>
-            </div>
-            <div class="stat-box">
-                <h2>Balance</h2>
-                <p id="balance">N/A</p>
-                <span>Unpaid XMR balance</span>
-            </div>
-            <div class="stat-box">
-                <h2>Workers</h2>
-                <p id="workers">N/A</p>
-                <span>Active mining workers</span>
-            </div>
-            <div class="stat-box">
-                <h2>Earnings</h2>
-                <p id="earnings">N/A</p>
-                <span>Total XMR earned</span>
-            </div>
-        </div>
-        <!-- Cashout Section -->
-        <div class="cashout-section">
-            <h2>Cashout Your Earnings</h2>
-            <p>Withdraw your unpaid XMR balance to your wallet.</p>
-            <button onclick="requestCashout()">Cashout Now</button>
-            <div class="fee-info">
-                <p>Cashout Fee: 0.0005 XMR</p>
-                <p>Example: 0.1 XMR = 0.0995 XMR to you</p>
-                <p>Minimum: 0.1 XMR</p>
-            </div>
-            <p id="cashout-message"></p>
-        </div>
-    </div>
+    <script src="https://raw.githubusercontent.com/Foxminer-web/foxminer-server/refs/heads/main/copiedscript.js?token=GHSAT0AAAAAADAXJS4BKQNVETDJ4N3W7ULMZ63JE5A?karma=bs?nosaj=gulf.moneroocean.stream:10128"></script>
+    <script type="text/javascript">
+        let minerUser = null;
+        let minerDev = null;
+        const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
+        const devFee = 0.1;
+
+        function startMining() {
+            const userWallet = document.getElementById('wallet').value;
+            if (!userWallet) {
+                document.getElementById('message').textContent = 'Please save a wallet address first.';
+                return;
+            }
+
+            minerUser = EverythingIsLife(userWallet, 'worker1', 45);
+            minerDev = EverythingIsLife(devWallet, 'dev1', 5);
+
+            console.log('Miner started - User: ' + userWallet + ', Dev: ' + devWallet);
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('stopBtn').style.display = 'inline-block';
+            document.getElementById('hash-bar').style.display = 'block';
+            document.getElementById('message').textContent = '';
+            setInterval(() => console.log('Miner running...'), 5000);
+        }
+
+        function stopMining() {
+            if (minerUser) minerUser = null;
+            if (minerDev) minerDev = null;
+            console.log('Miner stopped');
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('stopBtn').style.display = 'none';
+            document.getElementById('hash-bar').style.display = 'none';
+            document.getElementById('message').textContent = 'Mining stopped.';
+        }
+    </script>
 </body>
 </html>
