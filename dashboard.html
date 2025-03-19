@@ -9,8 +9,12 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #E94560; }
         header img { height: 125px; width: auto; }
+        nav { display: flex; align-items: center; }
         nav a { color: #F7F7F7; text-decoration: none; margin-left: 20px; font-weight: bold; }
         nav a:hover { color: #E94560; }
+        .user-info { margin-left: 20px; font-weight: bold; }
+        .user-info button { padding: 5px 10px; background: #E94560; border: none; border-radius: 5px; color: #F7F7F7; cursor: pointer; }
+        .user-info button:hover { background: #FF6F61; }
         .dashboard { max-width: 800px; margin: 50px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
         h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
         .stats { display: flex; justify-content: space-around; flex-wrap: wrap; }
@@ -25,6 +29,7 @@
     <script>
         const server = 'https://foxminer-server.onrender.com';
         let isSignedIn = false;
+        let userEmail = '';
 
         async function checkSession() {
             console.log('checkSession started');
@@ -35,12 +40,15 @@
                 });
                 console.log('Fetch response:', response);
                 const data = await response.json();
-                console.log('Session data:', JSON.stringify(data, null, 2)); // Full object
+                console.log('Session data:', JSON.stringify(data, null, 2));
                 const status = document.getElementById('status');
                 const message = document.getElementById('message');
+                const userInfo = document.getElementById('user-info');
                 if (data.signedIn) {
                     isSignedIn = true;
+                    userEmail = data.email;
                     status.textContent = `Welcome, ${data.email}!`;
+                    userInfo.innerHTML = `${data.email} <button onclick="logout()">Logout</button>`;
                     if (!data.wallet) {
                         message.textContent = 'Welcome you young, Foxminer! Please enter your XMR wallet address and click "save" to start mining. Please note that live stats will start updating from MoneroOcean within 5-10 mins in most cases. Happy Mining.';
                     } else {
@@ -49,7 +57,9 @@
                     }
                 } else {
                     isSignedIn = false;
+                    userEmail = '';
                     status.textContent = 'Not signed in? Sign up to track your stats!';
+                    userInfo.innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
                     message.textContent = '';
                 }
             } catch (error) {
@@ -89,6 +99,23 @@
             }
         }
 
+        async function logout() {
+            try {
+                await fetch(`${server}/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                isSignedIn = false;
+                userEmail = '';
+                document.getElementById('status').textContent = 'Not signed in? Sign up to track your stats!';
+                document.getElementById('user-info').innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
+                document.getElementById('message').textContent = '';
+                document.getElementById('wallet').value = '';
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        }
+
         function updateStats(wallet) {
             document.getElementById('hashrate').textContent = 'N/A';
             document.getElementById('balance').textContent = 'N/A';
@@ -110,7 +137,7 @@
             <a href="/Foxminer/index.html">Home</a>
             <a href="/Foxminer/dashboard.html">Dashboard</a>
             <a href="/Foxminer/signup.html">Sign Up</a>
-            <a href="/Foxminer/signin.html">Sign In</a>
+            <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
         </nav>
     </header>
     <div class="dashboard">
