@@ -22,8 +22,8 @@
         .stat-box h2 { font-size: 1.2em; margin: 0 0 10px; color: #E94560; }
         .stat-box p { font-size: 1.5em; margin: 0 0 10px; }
         .stat-box span { font-size: 0.9em; color: #B0B0B0; }
-        input { width: 80%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
-        button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        input { width: 60%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
+        button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin: 0 5px; }
         button:hover { background: #FF6F61; }
         .hamburger { display: none; font-size: 2em; cursor: pointer; }
         @media (max-width: 768px) {
@@ -39,6 +39,7 @@
     </style>
     <script>
         const server = 'https://foxminer-server.onrender.com';
+        const moApi = 'https://api.moneroocean.stream';
         let isSignedIn = false;
         let userEmail = '';
 
@@ -131,12 +132,43 @@
             }
         }
 
-        function updateStats(wallet) {
-            document.getElementById('hashrate').textContent = 'N/A';
-            document.getElementById('balance').textContent = 'N/A';
-            document.getElementById('workers').textContent = 'N/A';
-            document.getElementById('earnings').textContent = 'N/A';
-            console.log(`Stats update triggered for wallet: ${wallet}`);
+        async function updateStats(wallet) {
+            try {
+                // Fetch hashrate and balance
+                const statsResp = await fetch(`${moApi}/miner/${wallet}/stats`);
+                const stats = await statsResp.json();
+                // Fetch workers
+                const workersResp = await fetch(`${moApi}/miner/${wallet}/identifiers`);
+                const workers = await workersResp.json();
+
+                // Hashrate (H/s)
+                document.getElementById('hashrate').textContent = stats.hash ? `${stats.hash} H/s` : '0 H/s';
+                // Balance (unpaid XMR, convert piconero to XMR)
+                document.getElementById('balance').textContent = stats.total ? (stats.total / 1e12).toFixed(6) + ' XMR' : '0 XMR';
+                // Workers (count active identifiers)
+                document.getElementById('workers').textContent = workers.length || '0';
+                // Earnings (total paid XMR, convert piconero to XMR)
+                document.getElementById('earnings').textContent = stats.paid ? (stats.paid / 1e12).toFixed(6) + ' XMR' : '0 XMR';
+
+                console.log(`Stats updated for wallet: ${wallet}`, { stats, workers });
+            } catch (error) {
+                console.error('Stats update failed:', error);
+                document.getElementById('hashrate').textContent = 'N/A';
+                document.getElementById('balance').textContent = 'N/A';
+                document.getElementById('workers').textContent = 'N/A';
+                document.getElementById('earnings').textContent = 'N/A';
+            }
+        }
+
+        function startMining() {
+            const wallet = document.getElementById('wallet').value;
+            if (!wallet) {
+                document.getElementById('message').textContent = 'Please save a wallet address first.';
+                return;
+            }
+            console.log('Start mining for wallet:', wallet);
+            // Miner script goes here - placeholder for now
+            document.getElementById('message').textContent = 'Mining started!';
         }
 
         function toggleMenu() {
@@ -167,6 +199,7 @@
         <div>
             <input type="text" id="wallet" placeholder="Enter XMR Wallet Address">
             <button onclick="saveWallet()">Save</button>
+            <button onclick="startMining()">Start</button>
             <p id="message"></p>
         </div>
         <div class="stats">
