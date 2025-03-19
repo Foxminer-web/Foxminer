@@ -28,12 +28,13 @@
     </style>
     <script>
         const server = 'https://foxminer-server.onrender.com';
+        const secretKey = 'fox123'; // Match server.js secret
         
         async function loadUsers() {
             try {
-                const response = await fetch(`${server}/users`, {
+                const response = await fetch(`${server}/users?key=${secretKey}`, {
                     method: 'GET',
-                    credentials: 'include' // Include cookies if we add auth later
+                    credentials: 'include'
                 });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const users = await response.json();
