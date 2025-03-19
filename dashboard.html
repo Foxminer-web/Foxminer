@@ -16,7 +16,8 @@
         .stats { display: flex; justify-content: space-around; flex-wrap: wrap; }
         .stat-box { background: #0F3460; padding: 20px; margin: 10px; border-radius: 5px; width: 200px; }
         .stat-box h2 { font-size: 1.2em; margin: 0 0 10px; color: #E94560; }
-        .stat-box p { font-size: 1.5em; margin: 0; }
+        .stat-box p { font-size: 1.5em; margin: 0 0 10px; }
+        .stat-box span { font-size: 0.9em; color: #B0B0B0; }
         input { width: 80%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
         button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
         button:hover { background: #FF6F61; }
@@ -37,7 +38,7 @@
                     document.getElementById('wallet-form').style.display = 'block';
                     if (data.wallet) {
                         document.getElementById('wallet').value = data.wallet;
-                        updateStats(data.wallet); // Update stats if wallet exists
+                        updateStats(data.wallet);
                     }
                 } else {
                     status.textContent = 'Not signed in. Redirecting to Sign In...';
@@ -61,7 +62,7 @@
                 const data = await response.json();
                 if (data.success) {
                     document.getElementById('message').textContent = 'Please allow up to 5 mins for stats from Monero Ocean to reflect.';
-                    updateStats(wallet); // Update stats after saving
+                    updateStats(wallet);
                 } else {
                     document.getElementById('message').textContent = 'Failed to save wallet.';
                 }
@@ -72,7 +73,7 @@
         }
 
         function updateStats(wallet) {
-            // Placeholder for Monero Ocean API stats - we'll flesh this out next
+            // Placeholder for Monero Ocean API - next step
             document.getElementById('hashrate').textContent = 'N/A';
             document.getElementById('balance').textContent = 'N/A';
             document.getElementById('workers').textContent = 'N/A';
@@ -105,18 +106,22 @@
             <div class="stat-box">
                 <h2>Hashrate</h2>
                 <p id="hashrate">N/A</p>
+                <span>Current mining speed</span>
             </div>
             <div class="stat-box">
                 <h2>Balance</h2>
                 <p id="balance">N/A</p>
+                <span>Unpaid XMR balance</span>
             </div>
             <div class="stat-box">
                 <h2>Workers</h2>
                 <p id="workers">N/A</p>
+                <span>Active mining workers</span>
             </div>
             <div class="stat-box">
                 <h2>Earnings</h2>
                 <p id="earnings">N/A</p>
+                <span>Total XMR earned</span>
             </div>
         </div>
     </div>
