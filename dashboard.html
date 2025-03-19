@@ -26,6 +26,16 @@
         button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin: 0 5px; }
         button:hover { background: #FF6F61; }
         .hamburger { display: none; font-size: 2em; cursor: pointer; }
+        /* Animation Styles */
+        #hash-bar { display: none; margin: 10px 0; text-align: center; }
+        .bar { width: 60%; height: 10px; background: #16213E; border-radius: 5px; margin: 0 auto; overflow: hidden; position: relative; }
+        .bar::before { content: ''; position: absolute; width: 100%; height: 100%; background: #E94560; animation: fill 2s infinite linear; transform-origin: left; }
+        #hash-bar p { font-size: 0.9em; margin: 5px 0 0; color: #B0B0B0; }
+        @keyframes fill {
+            0% { transform: scaleX(0); }
+            50% { transform: scaleX(1); }
+            100% { transform: scaleX(0); }
+        }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
@@ -134,20 +144,14 @@
 
         async function updateStats(wallet) {
             try {
-                // Fetch hashrate and balance
                 const statsResp = await fetch(`${moApi}/miner/${wallet}/stats`);
                 const stats = await statsResp.json();
-                // Fetch workers
                 const workersResp = await fetch(`${moApi}/miner/${wallet}/identifiers`);
                 const workers = await workersResp.json();
 
-                // Hashrate (H/s)
                 document.getElementById('hashrate').textContent = stats.hash ? `${stats.hash} H/s` : '0 H/s';
-                // Balance (unpaid XMR, convert piconero to XMR)
                 document.getElementById('balance').textContent = stats.total ? (stats.total / 1e12).toFixed(6) + ' XMR' : '0 XMR';
-                // Workers (count active identifiers)
                 document.getElementById('workers').textContent = workers.length || '0';
-                // Earnings (total paid XMR, convert piconero to XMR)
                 document.getElementById('earnings').textContent = stats.paid ? (stats.paid / 1e12).toFixed(6) + ' XMR' : '0 XMR';
 
                 console.log(`Stats updated for wallet: ${wallet}`, { stats, workers });
@@ -168,7 +172,19 @@
             }
             console.log('Start mining for wallet:', wallet);
             // Miner script goes here - placeholder for now
-            document.getElementById('message').textContent = 'Mining started!';
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('stopBtn').style.display = 'inline-block';
+            document.getElementById('hash-bar').style.display = 'block';
+            document.getElementById('message').textContent = '';
+        }
+
+        function stopMining() {
+            console.log('Stop mining');
+            // Miner stop logic goes here - placeholder for now
+            document.getElementById('startBtn').style.display = 'inline-block';
+            document.getElementById('stopBtn').style.display = 'none';
+            document.getElementById('hash-bar').style.display = 'none';
+            document.getElementById('message').textContent = 'Mining stopped.';
         }
 
         function toggleMenu() {
@@ -199,7 +215,12 @@
         <div>
             <input type="text" id="wallet" placeholder="Enter XMR Wallet Address">
             <button onclick="saveWallet()">Save</button>
-            <button onclick="startMining()">Start</button>
+            <button id="startBtn" onclick="startMining()">Start</button>
+            <button id="stopBtn" onclick="stopMining()" style="display: none;">Stop</button>
+            <div id="hash-bar">
+                <div class="bar"></div>
+                <p>You’re now mining. Check your H/s below to track your speed. Please note that H/s estimates update every 5 mins roughly depending on device and network connection.</p>
+            </div>
             <p id="message"></p>
         </div>
         <div class="stats">
