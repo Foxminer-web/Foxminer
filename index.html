@@ -33,6 +33,10 @@
             object-fit: contain;
             margin-left: -25px; /* Nudge left by 10px */
         }
+        nav {
+            display: flex;
+            align-items: center;
+        }
         nav a {
             color: #F7F7F7;
             text-decoration: none;
@@ -42,6 +46,26 @@
         }
         nav a:hover {
             color: #E94560;
+        }
+        .user-info {
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        .user-info button {
+            padding: 5px 10px;
+            background: #E94560;
+            border: none;
+            border-radius: 5px;
+            color: #F7F7F7;
+            cursor: pointer;
+        }
+        .user-info button:hover {
+            background: #FF6F61;
+        }
+        .hamburger {
+            display: none;
+            font-size: 2em;
+            cursor: pointer;
         }
         .hero {
             text-align: center;
@@ -171,91 +195,44 @@
             font-size: 0.9em;
         }
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            nav a {
-                margin-left: 10px;
-                font-size: 0.9em;
-            }
-            .hero h1 {
-                font-size: 1.8em;
-            }
-            .hero p {
-                font-size: 1em;
-                padding: 0 10px;
-            }
-            .start-box {
-                padding: 10px;
-            }
-            .start-box input {
-                width: 100%;
-                border-radius: 5px;
-                margin-bottom: 10px;
-            }
-            .start-box button {
-                width: 100%;
-                border-radius: 5px;
-            }
-            .features {
-                padding: 20px 0;
-            }
-            .feature {
-                width: 100%;
-                margin: 10px 0;
-            }
-            .stats {
-                padding: 20px 10px;
-            }
-            .stats p {
-                font-size: 1em;
-                word-wrap: break-word;
-                padding: 0 10px;
-            }
-            .about {
-                padding: 20px 0;
-            }
-            .about p {
-                padding: 0 15px;
-            }
-            .comparison table {
-                font-size: 0.8em;
-                width: 100%;
-                max-width: 100%;
-                overflow-x: auto;
-                display: block;
-            }
+            .hamburger { display: block; }
+            nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
+            nav.active { display: flex; }
+            nav a { margin: 10px 0; }
+            .user-info { margin: 10px 0; }
+            .container { padding: 15px; }
+            .hero h1 { font-size: 1.8em; }
+            .hero p { font-size: 1em; padding: 0 10px; }
+            .start-box { padding: 10px; }
+            .start-box input { width: 100%; border-radius: 5px; margin-bottom: 10px; }
+            .start-box button { width: 100%; border-radius: 5px; }
+            .features { padding: 20px 0; }
+            .feature { width: 100%; margin: 10px 0; }
+            .stats { padding: 20px 10px; }
+            .stats p { font-size: 1em; word-wrap: break-word; padding: 0 10px; }
+            .about { padding: 20px 0; }
+            .about p { padding: 0 15px; }
+            .comparison table { font-size: 0.8em; width: 100%; max-width: 100%; overflow-x: auto; display: block; }
         }
         @media (min-width: 769px) {
-            .features {
-                flex-wrap: nowrap;
-            }
-            .start-box {
-                display: flex; /* Fix button layout */
-                justify-content: center; /* Center contents */
-                align-items: center; /* Vertically align */
-                max-width: 400px;
-                margin: 0 auto; /* Center the box in hero */
-            }
-            .start-box input {
-                width: 300px; /* Match max-width for consistency */
-                margin: 0; /* Remove default spacing */
-            }
-            .start-box button {
-                margin: 0; /* Remove default spacing */
-            }
+            nav.logged-in a { margin-left: 10px; } /* Match dashboard nudge */
+            .features { flex-wrap: nowrap; }
+            .start-box { display: flex; justify-content: center; align-items: center; max-width: 400px; margin: 0 auto; }
+            .start-box input { width: 300px; margin: 0; }
+            .start-box button { margin: 0; }
         }
     </style>
 </head>
 <body>
     <header class="container">
         <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="docs.html">Docs</a>
-            <a href="signup.html">Sign Up</a>
-            <a href="signin.html">Sign In</a>
+            <a href="/Foxminer/index.html">Home</a>
+            <a href="/Foxminer/dashboard.html">Dashboard</a>
+            <a href="/Foxminer/docs.html">Docs</a>
+            <a href="/Foxminer/signup.html">Sign Up</a>
+            <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
         </nav>
     </header>
 
@@ -335,6 +312,53 @@
     </footer>
 
     <script>
+        const server = 'https://foxminer-server.onrender.com';
+        let isSignedIn = false;
+        let userEmail = '';
+
+        async function checkSession() {
+            console.log('checkSession started');
+            try {
+                const response = await fetch(`${server}/check-session`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                console.log('Fetch response:', response);
+                const data = await response.json();
+                console.log('Session data:', JSON.stringify(data, null, 2));
+                const userInfo = document.getElementById('user-info');
+                const nav = document.querySelector('nav');
+                if (data.signedIn) {
+                    isSignedIn = true;
+                    userEmail = data.email;
+                    userInfo.innerHTML = `${data.email} <button onclick="logout()">Logout</button>`;
+                    nav.classList.add('logged-in');
+                } else {
+                    isSignedIn = false;
+                    userEmail = '';
+                    userInfo.innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
+                    nav.classList.remove('logged-in');
+                }
+            } catch (error) {
+                console.error('Session check failed:', error);
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch(`${server}/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                isSignedIn = false;
+                userEmail = '';
+                document.getElementById('user-info').innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
+                document.querySelector('nav').classList.remove('logged-in');
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        }
+
         function startMining() {
             let wallet = document.getElementById('walletInput').value;
             if (wallet) {
@@ -343,6 +367,16 @@
                 alert('Enter a Monero wallet address!');
             }
         }
+
+        function toggleMenu() {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
+
+        window.onload = () => {
+            console.log('Window loaded, calling checkSession');
+            checkSession();
+        };
     </script>
 </body>
 </html>
