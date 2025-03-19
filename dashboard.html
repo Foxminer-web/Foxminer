@@ -25,6 +25,25 @@
         input { width: 80%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
         button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
         button:hover { background: #FF6F61; }
+        .global-stats { text-align: center; margin: 20px 0; }
+        .global-stats span { font-size: 1.2em; margin: 0 20px; }
+        .pulse { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .hamburger { display: none; font-size: 2em; cursor: pointer; }
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
+            nav.active { display: flex; }
+            nav a { margin: 10px 0; }
+            .user-info { margin: 10px 0; }
+        }
+        @media (min-width: 769px) {
+            nav.logged-in a { margin-left: 15px; } /* Shift left when logged in */
+        }
     </style>
     <script>
         const server = 'https://foxminer-server.onrender.com';
@@ -44,11 +63,13 @@
                 const status = document.getElementById('status');
                 const message = document.getElementById('message');
                 const userInfo = document.getElementById('user-info');
+                const nav = document.querySelector('nav');
                 if (data.signedIn) {
                     isSignedIn = true;
                     userEmail = data.email;
                     status.textContent = `Welcome, ${data.email}!`;
                     userInfo.innerHTML = `${data.email} <button onclick="logout()">Logout</button>`;
+                    nav.classList.add('logged-in');
                     if (!data.wallet) {
                         message.textContent = 'Welcome you young, Foxminer! Please enter your XMR wallet address and click "save" to start mining. Please note that live stats will start updating from MoneroOcean within 5-10 mins in most cases. Happy Mining.';
                     } else {
@@ -60,6 +81,7 @@
                     userEmail = '';
                     status.textContent = 'Not signed in? Sign up to track your stats!';
                     userInfo.innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
+                    nav.classList.remove('logged-in');
                     message.textContent = '';
                 }
             } catch (error) {
@@ -111,6 +133,7 @@
                 document.getElementById('user-info').innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
                 document.getElementById('message').textContent = '';
                 document.getElementById('wallet').value = '';
+                document.querySelector('nav').classList.remove('logged-in');
             } catch (error) {
                 console.error('Logout failed:', error);
             }
@@ -124,6 +147,11 @@
             console.log(`Stats update triggered for wallet: ${wallet}`);
         }
 
+        function toggleMenu() {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
+
         window.onload = () => {
             console.log('Window loaded, calling checkSession');
             checkSession();
@@ -133,6 +161,7 @@
 <body>
     <header class="container">
         <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
         <nav>
             <a href="/Foxminer/index.html">Home</a>
             <a href="/Foxminer/dashboard.html">Dashboard</a>
@@ -140,6 +169,10 @@
             <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
         </nav>
     </header>
+    <div class="global-stats">
+        <span class="pulse">Miners online: 1,267</span>
+        <span class="pulse">Hashes: 229 MH/s</span>
+    </div>
     <div class="dashboard">
         <h1>FOXMINER Dashboard</h1>
         <p id="status">Checking session...</p>
