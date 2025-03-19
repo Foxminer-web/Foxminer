@@ -49,6 +49,7 @@
         .cashout-section button { padding: 12px 25px; background: linear-gradient(45deg, #E94560, #FF6F61); font-size: 1em; }
         .cashout-section button:hover { background: linear-gradient(45deg, #FF6F61, #E94560); }
         #cashout-message { font-size: 0.9em; color: #F7F7F7; margin-top: 10px; }
+        .fee-info { font-size: 0.9em; color: #B0B0B0; margin-top: 10px; }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
@@ -218,7 +219,8 @@
                 message.textContent = 'Unpaid balance must be at least 0.1 XMR to cash out.';
                 return;
             }
-            if (confirm(`Cash out ${balance} XMR to ${wallet}?`)) {
+            const cashoutAmount = (balance - 0.0005).toFixed(6);
+            if (confirm(`Cash out ${cashoutAmount} XMR to ${wallet}? (0.0005 XMR fee)`)) {
                 message.textContent = 'Processing cashout...';
                 try {
                     const resp = await fetch(`${server}/cashout`, {
@@ -230,7 +232,7 @@
                     const data = await resp.json();
                     if (data.success) {
                         message.textContent = `Cashed out successfully! TXID: ${data.txid}`;
-                        updateStats(wallet); // Refresh stats
+                        updateStats(wallet);
                     } else {
                         message.textContent = data.error || 'Cashout failed.';
                     }
@@ -310,6 +312,7 @@
             <h2>Cashout Your Earnings</h2>
             <p>Withdraw your unpaid XMR balance to your wallet.</p>
             <button onclick="requestCashout()">Cashout Now</button>
+            <p class="fee-info">Fee: 0.0005 XMR per cashout</p>
             <p id="cashout-message"></p>
         </div>
     </div>
