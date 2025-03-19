@@ -18,6 +18,11 @@
         th, td { padding: 10px; border: 1px solid #E94560; text-align: left; }
         th { background: #E94560; color: #F7F7F7; font-weight: bold; }
         td { color: #F7F7F7; }
+        #login-form { display: block; text-align: center; margin: 20px 0; }
+        #login-form input { padding: 10px; margin: 5px; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
+        #login-form button, #export-btn { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin: 5px; }
+        #login-form button:hover, #export-btn:hover { background: #FF6F61; }
+        #user-table { display: none; }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
@@ -28,8 +33,22 @@
     </style>
     <script>
         const server = 'https://foxminer-server.onrender.com';
-        const secretKey = 'fox123'; // Match server.js secret
-        
+        const secretKey = 'brodysecret2025'; // Match server.js
+        const adminUsername = 'admin'; // Hardcoded admin
+        const adminPassword = 'foxminer2025'; // Hardcoded password - change this!
+
+        function checkAdminLogin() {
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            if (username === adminUsername && password === adminPassword) {
+                document.getElementById('login-form').style.display = 'none';
+                document.getElementById('user-table').style.display = 'block';
+                loadUsers();
+            } else {
+                alert('Invalid username or password');
+            }
+        }
+
         async function loadUsers() {
             try {
                 const response = await fetch(`${server}/users?key=${secretKey}`, {
@@ -51,14 +70,35 @@
             }
         }
 
+        function exportUsers() {
+            fetch(`${server}/users?key=${secretKey}`, {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(users => {
+                const csv = "email,wallet\n" + users.map(user => `${user.email},${user.wallet || 'N/A'}`).join("\n");
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'foxminer-users.csv';
+                a.click();
+            })
+            .catch(error => {
+                console.error('Export failed:', error);
+                alert('Failed to export users');
+            });
+        }
+
         function toggleMenu() {
             const nav = document.querySelector('nav');
             nav.classList.toggle('active');
         }
 
         window.onload = () => {
-            console.log('Loading users');
-            loadUsers();
+            console.log('Page loaded');
+            // Show login form by default, users table hidden
         };
     </script>
 </head>
@@ -75,15 +115,23 @@
     </header>
     <div class="container">
         <h1>FOXMINER Users</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Wallet</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div id="login-form">
+            <input type="text" id="admin-username" placeholder="Username">
+            <input type="password" id="admin-password" placeholder="Password">
+            <button onclick="checkAdminLogin()">Login</button>
+        </div>
+        <div id="user-table">
+            <button id="export-btn" onclick="exportUsers()">Export Users</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Wallet</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>
