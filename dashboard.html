@@ -13,8 +13,11 @@
         nav a:hover { color: #E94560; }
         .dashboard { max-width: 800px; margin: 50px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
         h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
-        p { font-size: 1.2em; }
-        input { width: 80%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; font-size: 1em; }
+        .stats { display: flex; justify-content: space-around; flex-wrap: wrap; }
+        .stat-box { background: #0F3460; padding: 20px; margin: 10px; border-radius: 5px; width: 200px; }
+        .stat-box h2 { font-size: 1.2em; margin: 0 0 10px; color: #E94560; }
+        .stat-box p { font-size: 1.5em; margin: 0; }
+        input { width: 80%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
         button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
         button:hover { background: #FF6F61; }
     </style>
@@ -25,14 +28,17 @@
             try {
                 const response = await fetch(`${server}/check-session`, {
                     method: 'GET',
-                    credentials: 'include' // Send cookies
+                    credentials: 'include'
                 });
                 const data = await response.json();
                 const status = document.getElementById('status');
                 if (data.signedIn) {
                     status.textContent = `Welcome, ${data.email}!`;
                     document.getElementById('wallet-form').style.display = 'block';
-                    if (data.wallet) document.getElementById('wallet').value = data.wallet;
+                    if (data.wallet) {
+                        document.getElementById('wallet').value = data.wallet;
+                        updateStats(data.wallet); // Update stats if wallet exists
+                    }
                 } else {
                     status.textContent = 'Not signed in. Redirecting to Sign In...';
                     setTimeout(() => window.location.href = '/signin.html', 2000);
@@ -55,6 +61,7 @@
                 const data = await response.json();
                 if (data.success) {
                     document.getElementById('message').textContent = 'Please allow up to 5 mins for stats from Monero Ocean to reflect.';
+                    updateStats(wallet); // Update stats after saving
                 } else {
                     document.getElementById('message').textContent = 'Failed to save wallet.';
                 }
@@ -62,6 +69,15 @@
                 console.error('Save wallet failed:', error);
                 document.getElementById('message').textContent = 'Error saving wallet.';
             }
+        }
+
+        function updateStats(wallet) {
+            // Placeholder for Monero Ocean API stats - we'll flesh this out next
+            document.getElementById('hashrate').textContent = 'N/A';
+            document.getElementById('balance').textContent = 'N/A';
+            document.getElementById('workers').textContent = 'N/A';
+            document.getElementById('earnings').textContent = 'N/A';
+            console.log(`Stats update triggered for wallet: ${wallet}`);
         }
 
         window.onload = checkSession;
@@ -84,6 +100,24 @@
             <input type="text" id="wallet" placeholder="Enter XMR Wallet Address">
             <button onclick="saveWallet()">Save</button>
             <p id="message"></p>
+        </div>
+        <div class="stats">
+            <div class="stat-box">
+                <h2>Hashrate</h2>
+                <p id="hashrate">N/A</p>
+            </div>
+            <div class="stat-box">
+                <h2>Balance</h2>
+                <p id="balance">N/A</p>
+            </div>
+            <div class="stat-box">
+                <h2>Workers</h2>
+                <p id="workers">N/A</p>
+            </div>
+            <div class="stat-box">
+                <h2>Earnings</h2>
+                <p id="earnings">N/A</p>
+            </div>
         </div>
     </div>
 </body>
