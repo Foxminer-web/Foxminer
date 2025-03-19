@@ -37,17 +37,25 @@
         .block:nth-child(5) { animation: pulse 2.5s infinite 1s; }
         @keyframes pulse {
             0% { opacity: 0; }
-            20% { opacity: 1; } /* Flash on */
-            80% { opacity: 1; } /* Hold */
-            100% { opacity: 0; } /* Fade off */
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
         }
         #hash-bar p { font-size: 0.9em; margin: 5px 0 0; color: #B0B0B0; }
+        /* Cashout Section */
+        .cashout-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        .cashout-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
+        .cashout-section p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; }
+        .cashout-section button { padding: 12px 25px; background: linear-gradient(45deg, #E94560, #FF6F61); font-size: 1em; }
+        .cashout-section button:hover { background: linear-gradient(45deg, #FF6F61, #E94560); }
+        #cashout-message { font-size: 0.9em; color: #F7F7F7; margin-top: 10px; }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
             nav.active { display: flex; }
             nav a { margin: 10px 0; }
             .user-info { margin: 10px 0; }
+            .cashout-section { padding: 15px; }
         }
         @media (min-width: 769px) {
             nav.logged-in a { margin-left: 10px; }
@@ -193,6 +201,46 @@
             document.getElementById('message').textContent = 'Mining stopped.';
         }
 
+        async function requestCashout() {
+            const wallet = document.getElementById('wallet').value;
+            const message = document.getElementById('cashout-message');
+            if (!isSignedIn) {
+                message.textContent = 'Please sign in to cash out.';
+                return;
+            }
+            if (!wallet) {
+                message.textContent = 'Please save a wallet address first.';
+                return;
+            }
+            const balanceText = document.getElementById('balance').textContent;
+            const balance = parseFloat(balanceText.split(' ')[0]);
+            if (isNaN(balance) || balance < 0.1) {
+                message.textContent = 'Unpaid balance must be at least 0.1 XMR to cash out.';
+                return;
+            }
+            if (confirm(`Cash out ${balance} XMR to ${wallet}?`)) {
+                message.textContent = 'Processing cashout...';
+                try {
+                    const resp = await fetch(`${server}/cashout`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ wallet })
+                    });
+                    const data = await resp.json();
+                    if (data.success) {
+                        message.textContent = `Cashed out successfully! TXID: ${data.txid}`;
+                        updateStats(wallet); // Refresh stats
+                    } else {
+                        message.textContent = data.error || 'Cashout failed.';
+                    }
+                } catch (error) {
+                    console.error('Cashout Error:', error);
+                    message.textContent = 'Error processing cashout.';
+                }
+            }
+        }
+
         function toggleMenu() {
             const nav = document.querySelector('nav');
             nav.classList.toggle('active');
@@ -256,6 +304,13 @@
                 <p id="earnings">N/A</p>
                 <span>Total XMR earned</span>
             </div>
+        </div>
+        <!-- Cashout Section -->
+        <div class="cashout-section">
+            <h2>Cashout Your Earnings</h2>
+            <p>Withdraw your unpaid XMR balance to your wallet.</p>
+            <button onclick="requestCashout()">Cashout Now</button>
+            <p id="cashout-message"></p>
         </div>
     </div>
 </body>
