@@ -7,8 +7,8 @@
     <style>
         body { font-family: Arial, sans-serif; background: #1A1A2E; color: #F7F7F7; margin: 0; padding: 0; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #E94560; }
-        header img { height: 125px; width: auto; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; max-height: 60px; border-bottom: 1px solid #E94560; }
+        header img { height: 125px; max-height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
         nav { display: flex; align-items: center; }
         nav a { color: #F7F7F7; text-decoration: none; margin-left: 20px; font-weight: bold; }
         nav a:hover { color: #E94560; }
@@ -34,7 +34,7 @@
             .user-info { margin: 10px 0; }
         }
         @media (min-width: 769px) {
-            nav.logged-in a { margin-left: 10px; } /* More nudge left */
+            nav.logged-in a { margin-left: 10px; }
         }
     </style>
     <script>
