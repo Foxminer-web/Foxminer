@@ -49,7 +49,7 @@
         .cashout-section button { padding: 12px 25px; background: linear-gradient(45deg, #E94560, #FF6F61); font-size: 1em; }
         .cashout-section button:hover { background: linear-gradient(45deg, #FF6F61, #E94560); }
         #cashout-message { font-size: 0.9em; color: #F7F7F7; margin-top: 10px; }
-        .fee-info { font-size: 0.9em; color: #B0B0B0; margin-top: 10px; }
+        .fee-info { font-size: 0.9em; color: #B0B0B0; margin-top: 15px; line-height: 1.4; }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
@@ -312,7 +312,11 @@
             <h2>Cashout Your Earnings</h2>
             <p>Withdraw your unpaid XMR balance to your wallet.</p>
             <button onclick="requestCashout()">Cashout Now</button>
-            <p class="fee-info">Fee: 0.0005 XMR per cashout</p>
+            <div class="fee-info">
+                <p>Cashout Fee: 0.0005 XMR</p>
+                <p>Example: 0.1 XMR = 0.0995 XMR to you</p>
+                <p>Minimum: 0.1 XMR</p>
+            </div>
             <p id="cashout-message"></p>
         </div>
     </div>
