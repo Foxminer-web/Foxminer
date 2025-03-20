@@ -95,7 +95,7 @@
                 }
             } catch (error) {
                 console.error('Session check failed:', error);
-                document.getElementById('status').textContent = 'Error checking session';
+                document.getElementById('status').textContent = `Error checking session: ${error.message}`;
             }
         }
 
@@ -199,7 +199,7 @@
         }
 
         window.onload = () => {
-            console.log('Window loaded, calling checkSession');
+            console.log('Window loaded, calling checkSession after redirect');
             checkSession();
         };
     </script>
