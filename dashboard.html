@@ -173,11 +173,11 @@
         function startMining() {
             const wallet = document.getElementById('wallet').value;
             if (!wallet) {
-                document.getElementById('message').textContent = 'Please save a wallet address first.';
+                alert('Please save a wallet address first.');
                 return;
             }
-            console.log('Start mining for wallet:', wallet);
-            // Miner script goes here - placeholder for now
+            console.log('Start mining clicked for wallet:', wallet);
+            alert('You’re now mining. Check your H/s below to track your speed. Please note that H/s estimates update every 5 mins roughly depending on device and network connection.');
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('stopBtn').style.display = 'inline-block';
             document.getElementById('hash-bar').style.display = 'block';
@@ -185,12 +185,12 @@
         }
 
         function stopMining() {
-            console.log('Stop mining');
-            // Miner stop logic goes here - placeholder for now
+            console.log('Stop mining clicked');
+            alert('Mining stopped.');
             document.getElementById('startBtn').style.display = 'inline-block';
             document.getElementById('stopBtn').style.display = 'none';
             document.getElementById('hash-bar').style.display = 'none';
-            document.getElementById('message').textContent = 'Mining stopped.';
+            document.getElementById('message').textContent = '';
         }
 
         function toggleMenu() {
@@ -221,8 +221,8 @@
         <div>
             <input type="text" id="wallet" placeholder="Enter XMR Wallet Address">
             <button onclick="saveWallet()">Save</button>
-            <button id="startBtn" onclick="startMining()">Start</button>
-            <button id="stopBtn" onclick="stopMining()" style="display: none;">Stop</button>
+            <button id="startBtn" onclick="startMining()">Start Mining</button>
+            <button id="stopBtn" onclick="stopMining()" style="display: none;">Stop Mining</button>
             <div id="hash-bar">
                 <div class="bar">
                     <div class="block"></div>
