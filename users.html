@@ -33,29 +33,49 @@
     </style>
     <script>
         const server = 'https://foxminer-server.onrender.com';
-        const ADMIN_USERNAME = 'admin';
-        const ADMIN_PASSWORD = 'foxminer2025'; // Change this to your preferred password!
 
-        function checkAdminLogin() {
-            const loggedIn = sessionStorage.getItem('adminLoggedIn'); // Session-only, resets on browser close
-            if (!loggedIn) {
+        async function checkAdminSession() {
+            try {
+                const response = await fetch(`${server}/users`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    document.getElementById('login-container').style.display = 'none';
+                    document.getElementById('users-container').style.display = 'block';
+                    loadUsers();
+                } else {
+                    document.getElementById('login-container').style.display = 'block';
+                    document.getElementById('users-container').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Session check failed:', error);
                 document.getElementById('login-container').style.display = 'block';
                 document.getElementById('users-container').style.display = 'none';
-            } else {
-                document.getElementById('login-container').style.display = 'none';
-                document.getElementById('users-container').style.display = 'block';
-                loadUsers();
             }
         }
 
-        function login() {
+        async function login() {
             const username = document.getElementById('admin-username').value;
             const password = document.getElementById('admin-password').value;
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-                sessionStorage.setItem('adminLoggedIn', 'true');
-                checkAdminLogin();
-            } else {
-                alert('Incorrect username or password');
+            try {
+                const response = await fetch(`${server}/admin-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }),
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('login-container').style.display = 'none';
+                    document.getElementById('users-container').style.display = 'block';
+                    loadUsers();
+                } else {
+                    alert('Invalid admin credentials');
+                }
+            } catch (error) {
+                console.error('Admin login failed:', error);
+                alert('Login error');
             }
         }
 
@@ -63,7 +83,7 @@
             try {
                 const response = await fetch(`${server}/users`, {
                     method: 'GET',
-                    credentials: 'include' // Still sends JWT if present, but server will ignore for now
+                    credentials: 'include'
                 });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
@@ -111,7 +131,7 @@
 
         window.onload = () => {
             console.log('Loading admin dashboard');
-            checkAdminLogin();
+            checkAdminSession();
         };
     </script>
 </head>
