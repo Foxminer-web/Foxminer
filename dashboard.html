@@ -193,6 +193,37 @@
             document.getElementById('message').textContent = 'Mining stopped.';
         }
 
+        async function cashout() {
+            const wallet = document.getElementById('wallet').value;
+            const message = document.getElementById('message');
+            if (!wallet) {
+                message.textContent = 'Please save a wallet address first.';
+                return;
+            }
+            if (!isSignedIn) {
+                message.textContent = 'Please sign in to cash out.';
+                return;
+            }
+            try {
+                const response = await fetch(`${server}/cashout`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ wallet })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    message.textContent = `Cashout requested! Transaction ID: ${data.txid}`;
+                    updateStats(wallet); // Refresh balance after cashout
+                } else {
+                    message.textContent = 'Cashout failed.';
+                }
+            } catch (error) {
+                console.error('Cashout failed:', error);
+                message.textContent = 'Error requesting cashout.';
+            }
+        }
+
         function toggleMenu() {
             const nav = document.querySelector('nav');
             nav.classList.toggle('active');
@@ -223,6 +254,7 @@
             <button onclick="saveWallet()">Save</button>
             <button id="startBtn" onclick="startMining()">Start</button>
             <button id="stopBtn" onclick="stopMining()" style="display: none;">Stop</button>
+            <button onclick="cashout()">Cashout</button>
             <div id="hash-bar">
                 <div class="bar">
                     <div class="block"></div>
