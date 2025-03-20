@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FOXMINER - Users</title>
+    <title>FOXMINER - Admin Dashboard</title>
     <style>
         body { font-family: Arial, sans-serif; background: #1A1A2E; color: #F7F7F7; margin: 0; padding: 0; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
@@ -18,6 +18,11 @@
         th, td { padding: 10px; border: 1px solid #E94560; text-align: left; }
         th { background: #E94560; color: #F7F7F7; font-weight: bold; }
         td { color: #F7F7F7; }
+        #login-container { max-width: 400px; margin: 50px auto; text-align: center; }
+        input { width: 80%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
+        button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        button:hover { background: #FF6F61; }
+        #export-btn { margin: 20px auto; display: none; }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
@@ -28,15 +33,40 @@
     </style>
     <script>
         const server = 'https://foxminer-server.onrender.com';
-        
+        const ADMIN_PASSWORD = 'admin2025'; // Hardcoded for now - replace with your own!
+
+        function checkAdminLogin() {
+            const loggedIn = localStorage.getItem('adminLoggedIn');
+            if (!loggedIn) {
+                document.getElementById('login-container').style.display = 'block';
+                document.getElementById('users-container').style.display = 'none';
+            } else {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('users-container').style.display = 'block';
+                loadUsers();
+            }
+        }
+
+        function login() {
+            const password = document.getElementById('admin-password').value;
+            if (password === ADMIN_PASSWORD) {
+                localStorage.setItem('adminLoggedIn', 'true');
+                checkAdminLogin();
+            } else {
+                alert('Incorrect password');
+            }
+        }
+
         async function loadUsers() {
             try {
                 const response = await fetch(`${server}/users`, {
                     method: 'GET',
-                    credentials: 'include' // Include cookies if we add auth later
+                    credentials: 'include' // Use existing session token
                 });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const users = await response.json();
+                const data = await response.json();
+                if (!data.success) throw new Error('Failed to fetch users');
+                const users = data.users;
                 const tbody = document.querySelector('tbody');
                 tbody.innerHTML = users.map(user => `
                     <tr>
@@ -44,10 +74,32 @@
                         <td>${user.wallet || 'N/A'}</td>
                     </tr>
                 `).join('');
+                document.getElementById('export-btn').style.display = 'block';
             } catch (error) {
                 console.error('Error loading users:', error);
-                document.querySelector('tbody').innerHTML = '<tr><td colspan="2">Error loading users</td></tr>';
+                document.querySelector('tbody').innerHTML = '<tr><td colspan="2">Failed to load users</td></tr>';
             }
+        }
+
+        function exportUsers() {
+            fetch(`${server}/users`, {
+                method: 'GET',
+                credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const csv = 'Email,Wallet\n' + data.users.map(user => `${user.email},${user.wallet || 'N/A'}`).join('\n');
+                    const blob = new Blob([csv], { type: 'text/csv' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'foxminer-users.csv';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                }
+            })
+            .catch(error => console.error('Export failed:', error));
         }
 
         function toggleMenu() {
@@ -56,8 +108,8 @@
         }
 
         window.onload = () => {
-            console.log('Loading users');
-            loadUsers();
+            console.log('Page loaded');
+            checkAdminLogin();
         };
     </script>
 </head>
@@ -72,8 +124,13 @@
             <a href="/Foxminer/signin.html">Sign In</a>
         </nav>
     </header>
-    <div class="container">
-        <h1>FOXMINER Users</h1>
+    <div id="login-container" class="container">
+        <h1>Admin Login</h1>
+        <input type="password" id="admin-password" placeholder="Enter Admin Password">
+        <button onclick="login()">Login</button>
+    </div>
+    <div id="users-container" class="container" style="display: none;">
+        <h1>FOXMINER Admin Dashboard</h1>
         <table>
             <thead>
                 <tr>
@@ -83,6 +140,7 @@
             </thead>
             <tbody></tbody>
         </table>
+        <button id="export-btn" onclick="exportUsers()">Export Users</button>
     </div>
 </body>
 </html>
