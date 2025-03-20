@@ -18,11 +18,9 @@
         th, td { padding: 10px; border: 1px solid #E94560; text-align: left; }
         th { background: #E94560; color: #F7F7F7; font-weight: bold; }
         td { color: #F7F7F7; }
-        #login-container { max-width: 400px; margin: 50px auto; text-align: center; }
-        input { width: 80%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
         button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
         button:hover { background: #FF6F61; }
-        #export-btn { margin: 20px auto; display: none; }
+        #export-btn { margin: 20px auto; display: none; text-align: center; }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
@@ -33,27 +31,22 @@
     </style>
     <script>
         const server = 'https://foxminer-server.onrender.com';
-        const ADMIN_PASSWORD = 'admin2025'; // Hardcoded for now - replace with your own!
 
-        function checkAdminLogin() {
-            const loggedIn = localStorage.getItem('adminLoggedIn');
-            if (!loggedIn) {
-                document.getElementById('login-container').style.display = 'block';
-                document.getElementById('users-container').style.display = 'none';
-            } else {
-                document.getElementById('login-container').style.display = 'none';
-                document.getElementById('users-container').style.display = 'block';
+        async function checkSessionAndLoad() {
+            try {
+                const response = await fetch(`${server}/check-session`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                if (!data.signedIn) {
+                    window.location.href = '/Foxminer/signin.html';
+                    return;
+                }
                 loadUsers();
-            }
-        }
-
-        function login() {
-            const password = document.getElementById('admin-password').value;
-            if (password === ADMIN_PASSWORD) {
-                localStorage.setItem('adminLoggedIn', 'true');
-                checkAdminLogin();
-            } else {
-                alert('Incorrect password');
+            } catch (error) {
+                console.error('Session check failed:', error);
+                window.location.href = '/Foxminer/signin.html';
             }
         }
 
@@ -61,11 +54,11 @@
             try {
                 const response = await fetch(`${server}/users`, {
                     method: 'GET',
-                    credentials: 'include' // Use existing session token
+                    credentials: 'include'
                 });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const data = await response.json();
-                if (!data.success) throw new Error('Failed to fetch users');
+                if (!data.success) throw new Error(data.error || 'Failed to fetch users');
                 const users = data.users;
                 const tbody = document.querySelector('tbody');
                 tbody.innerHTML = users.map(user => `
@@ -77,7 +70,7 @@
                 document.getElementById('export-btn').style.display = 'block';
             } catch (error) {
                 console.error('Error loading users:', error);
-                document.querySelector('tbody').innerHTML = '<tr><td colspan="2">Failed to load users</td></tr>';
+                document.querySelector('tbody').innerHTML = '<tr><td colspan="2">Failed to load users: ' + error.message + '</td></tr>';
             }
         }
 
@@ -108,8 +101,8 @@
         }
 
         window.onload = () => {
-            console.log('Page loaded');
-            checkAdminLogin();
+            console.log('Loading admin dashboard');
+            checkSessionAndLoad();
         };
     </script>
 </head>
@@ -124,12 +117,7 @@
             <a href="/Foxminer/signin.html">Sign In</a>
         </nav>
     </header>
-    <div id="login-container" class="container">
-        <h1>Admin Login</h1>
-        <input type="password" id="admin-password" placeholder="Enter Admin Password">
-        <button onclick="login()">Login</button>
-    </div>
-    <div id="users-container" class="container" style="display: none;">
+    <div class="container">
         <h1>FOXMINER Admin Dashboard</h1>
         <table>
             <thead>
@@ -140,7 +128,7 @@
             </thead>
             <tbody></tbody>
         </table>
-        <button id="export-btn" onclick="exportUsers()">Export Users</button>
+        <div id="export-btn"><button onclick="exportUsers()">Export Users</button></div>
     </div>
 </body>
 </html>
