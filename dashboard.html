@@ -26,6 +26,7 @@
         button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin: 0 5px; }
         button:hover { background: #FF6F61; }
         .hamburger { display: none; font-size: 2em; cursor: pointer; }
+        /* Pulse Blocks Animation */
         #hash-bar { display: none; margin: 10px 0; text-align: center; }
         .bar { width: 60%; height: 10px; background: #16213E; border-radius: 5px; margin: 0 auto; overflow: hidden; position: relative; display: flex; justify-content: space-between; padding: 2px; box-sizing: border-box; }
         .block { width: 10%; height: 100%; background: #E94560; border-radius: 2px; opacity: 0; }
@@ -36,9 +37,9 @@
         .block:nth-child(5) { animation: pulse 2.5s infinite 1s; }
         @keyframes pulse {
             0% { opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { opacity: 0; }
+            20% { opacity: 1; } /* Flash on */
+            80% { opacity: 1; } /* Hold */
+            100% { opacity: 0; } /* Fade off */
         }
         #hash-bar p { font-size: 0.9em; margin: 5px 0 0; color: #B0B0B0; }
         @media (max-width: 768px) {
@@ -53,7 +54,7 @@
         }
     </style>
     <script>
-        const server = 'https://foxminer-server.fly.dev'; // Update after Fly.io deploy
+        const server = 'https://foxminer-server.onrender.com';
         const moApi = 'https://api.moneroocean.stream';
         let isSignedIn = false;
         let userEmail = '';
@@ -65,6 +66,7 @@
                     method: 'GET',
                     credentials: 'include'
                 });
+                console.log('Fetch response:', response);
                 const data = await response.json();
                 console.log('Session data:', JSON.stringify(data, null, 2));
                 const status = document.getElementById('status');
@@ -78,7 +80,7 @@
                     userInfo.innerHTML = `${data.email} <button onclick="logout()">Logout</button>`;
                     nav.classList.add('logged-in');
                     if (!data.wallet) {
-                        message.textContent = 'Please enter your XMR wallet address and click "Save" to start mining.';
+                        message.textContent = 'Welcome you young, Foxminer! Please enter your XMR wallet address and click "save" to start mining. Please note that live stats will start updating from MoneroOcean within 5-10 mins in most cases. Happy Mining.';
                     } else {
                         document.getElementById('wallet').value = data.wallet;
                         updateStats(data.wallet);
@@ -117,7 +119,7 @@
                 });
                 const data = await response.json();
                 if (data.success) {
-                    message.textContent = 'Wallet saved! Stats will update within 5-10 mins.';
+                    message.textContent = 'Please allow up to 5 mins for stats from Monero Ocean to reflect.';
                     updateStats(wallet);
                 } else {
                     message.textContent = 'Failed to save wallet.';
@@ -148,17 +150,17 @@
 
         async function updateStats(wallet) {
             try {
-                const cacheBuster = new Date().getTime();
-                const statsResp = await fetch(`${moApi}/miner/${wallet}/stats?cb=${cacheBuster}`);
+                const statsResp = await fetch(`${moApi}/miner/${wallet}/stats`);
                 const stats = await statsResp.json();
-                const workersResp = await fetch(`${moApi}/miner/${wallet}/identifiers?cb=${cacheBuster}`);
+                const workersResp = await fetch(`${moApi}/miner/${wallet}/identifiers`);
                 const workers = await workersResp.json();
 
-                console.log('Stats for wallet:', wallet, 'Hashrate:', stats.hash);
                 document.getElementById('hashrate').textContent = stats.hash ? `${stats.hash} H/s` : '0 H/s';
                 document.getElementById('balance').textContent = stats.total ? (stats.total / 1e12).toFixed(6) + ' XMR' : '0 XMR';
                 document.getElementById('workers').textContent = workers.length || '0';
                 document.getElementById('earnings').textContent = stats.paid ? (stats.paid / 1e12).toFixed(6) + ' XMR' : '0 XMR';
+
+                console.log(`Stats updated for wallet: ${wallet}`, { stats, workers });
             } catch (error) {
                 console.error('Stats update failed:', error);
                 document.getElementById('hashrate').textContent = 'N/A';
@@ -175,7 +177,7 @@
                 return;
             }
             console.log('Start mining clicked for wallet:', wallet);
-            alert('You’re now mining. Check your H/s below to track your speed.');
+            alert('You’re now mining. Check your H/s below to track your speed. Please note that H/s estimates update every 5 mins roughly depending on device and network connection.');
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('stopBtn').style.display = 'inline-block';
             document.getElementById('hash-bar').style.display = 'block';
@@ -197,7 +199,7 @@
         }
 
         window.onload = () => {
-            console.log('Window loaded, calling checkSession');
+            console.log('Window loaded, calling checkSession after redirect');
             checkSession();
         };
     </script>
@@ -229,7 +231,7 @@
                     <div class="block"></div>
                     <div class="block"></div>
                 </div>
-                <p>You’re now mining. Check your H/s below to track your speed.</p>
+                <p>You’re now mining. Check your H/s below to track your speed. Please note that H/s estimates update every 5 mins roughly depending on device and network connection.</p>
             </div>
             <p id="message"></p>
         </div>
