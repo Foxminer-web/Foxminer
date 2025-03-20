@@ -201,6 +201,13 @@
         window.onload = () => {
             console.log('Window loaded, calling checkSession after redirect');
             checkSession();
+            setInterval(() => {
+                const wallet = document.getElementById('wallet').value;
+                if (isSignedIn && wallet) {
+                    console.log('Auto-refreshing stats for:', wallet);
+                    updateStats(wallet);
+                }
+            }, 300000); // 5 mins
         };
     </script>
 </head>
