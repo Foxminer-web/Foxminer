@@ -31,22 +31,17 @@
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            try {
-                const response = await fetch(`${server}/signin`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
-                    credentials: 'include'
-                });
-                const data = await response.json();
-                if (data.success) {
-                    window.location.href = '/Foxminer/dashboard.html';
-                } else {
-                    document.getElementById('message').textContent = 'Sign in failed. Check your email or password.';
-                }
-            } catch (error) {
-                console.error('Signin Error:', error);
-                document.getElementById('message').textContent = 'Error signing in. Please try again.';
+            const response = await fetch(`${server}/signin`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+                credentials: 'include'
+            });
+            const data = await response.json();
+            if (data.success) {
+                window.location.replace('https://foxminer-web.github.io/Foxminer/dashboard.html');
+            } else {
+                document.getElementById('message').textContent = 'Sign in failed. Check your credentials.';
             }
         });
     </script>
