@@ -42,6 +42,13 @@
             100% { opacity: 0; } /* Fade off */
         }
         #hash-bar p { font-size: 0.9em; margin: 5px 0 0; color: #B0B0B0; }
+        /* Estimated Hashrate Box */
+        #hash-ticker { background: #0F3460; padding: 10px; margin: 10px auto; border-radius: 5px; width: 150px; display: inline-block; }
+        #hash-ticker p { font-size: 1.2em; margin: 0; color: #E94560; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
         /* Payout and Fee Structure Section */
         .payout-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
         .payout-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
@@ -52,7 +59,7 @@
             nav.active { display: flex; }
             nav a { margin: 10px 0; }
             .user-info { margin: 10px 0; }
-            .payout-section { padding: 15px; } /* Updated for responsiveness */
+            .payout-section { padding: 15px; }
         }
         @media (min-width: 769px) {
             nav.logged-in a { margin-left: 10px; }
@@ -189,8 +196,13 @@
             document.getElementById('message').textContent = '';
             // Hash ticker
             hashRate = Math.floor(Math.random() * (120 - 40 + 1)) + 40; // 40-120 H/s
-            document.getElementById('hash-bar').querySelector('p').innerHTML = 
-                `You’re now mining! Track hashrate and earnings below. Daily rewards to pool—wallet payout at 0.3 XMR. <br><span>Estimated Hashrate: ${hashRate} H/s</span>`;
+            document.getElementById('hash-ticker').querySelector('p').textContent = `Estimated Hashrate: ${hashRate} H/s`;
+            setInterval(() => {
+                hashRate += Math.floor(Math.random() * 11) - 5; // Fluctuate ±5
+                if (hashRate < 40) hashRate = 40;
+                if (hashRate > 120) hashRate = 120;
+                document.getElementById('hash-ticker').querySelector('p').textContent = `Estimated Hashrate: ${hashRate} H/s`;
+            }, 5000); // 5s
         }
 
         function stopMining() {
@@ -199,12 +211,49 @@
             document.getElementById('startBtn').style.display = 'inline-block';
             document.getElementById('stopBtn').style.display = 'none';
             document.getElementById('hash-bar').style.display = 'none';
-            document.getElementById('message').textContent = '';
+            document.getElementById('message').textContent = 'Mining stopped.';
         }
 
-        /* Cashout Function - Removed, kept for reference */
+        /* Cashout Function - Kept for reference, not used */
         async function requestCashout() {
-            // Old function - not used anymore
+            const wallet = document.getElementById('wallet').value;
+            const message = document.getElementById('cashout-message');
+            if (!isSignedIn) {
+                message.textContent = 'Please sign in to cash out.';
+                return;
+            }
+            if (!wallet) {
+                message.textContent = 'Please save a wallet address first.';
+                return;
+            }
+            const balanceText = document.getElementById('balance').textContent;
+            const balance = parseFloat(balanceText.split(' ')[0]);
+            if (isNaN(balance) || balance < 0.1) {
+                message.textContent = 'Unpaid balance must be at least 0.1 XMR to cash out.';
+                return;
+            }
+            const cashoutAmount = (balance - 0.0005).toFixed(6);
+            if (confirm(`Cash out ${cashoutAmount} XMR to ${wallet}? (0.0005 XMR fee)`)) {
+                message.textContent = 'Processing cashout...';
+                try {
+                    const resp = await fetch(`${server}/cashout`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ wallet })
+                    });
+                    const data = await resp.json();
+                    if (data.success) {
+                        message.textContent = `Cashed out successfully! TXID: ${data.txid}`;
+                        updateStats(wallet);
+                    } else {
+                        message.textContent = data.error || 'Cashout failed.';
+                    }
+                } catch (error) {
+                    console.error('Cashout Error:', error);
+                    message.textContent = 'Error processing cashout.';
+                }
+            }
         }
 
         function toggleMenu() {
@@ -252,7 +301,10 @@
                     <div class="block"></div>
                     <div class="block"></div>
                 </div>
-                <p></p> <!-- Updated dynamically in startMining -->
+                <p>You’re now mining! Track hashrate and earnings below. Daily rewards to pool—wallet payout at 0.3 XMR.</p>
+                <div id="hash-ticker">
+                    <p>Estimated Hashrate: 0 H/s</p>
+                </div>
             </div>
             <p id="message"></p>
         </div>
