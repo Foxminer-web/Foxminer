@@ -178,7 +178,7 @@
                 const workers = await workersResp.json();
 
                 document.getElementById('hashrate').textContent = stats.hash2 ? `${stats.hash2} H/s` : '0 H/s';
-                document.getElementById('balance').textContent = stats.total ? (stats.total / 1e12).toFixed(6) + ' XMR' : '0 XMR';
+                document.getElementById('balance').textContent = stats.amtDue ? (stats.total / 1e12).toFixed(6) + ' XMR' : '0 XMR';
                 document.getElementById('workers').textContent = workers.length || '0';
                 document.getElementById('earnings').textContent = stats.paid ? (stats.paid / 1e12).toFixed(6) + ' XMR' : '0 XMR';
 
