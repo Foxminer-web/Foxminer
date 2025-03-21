@@ -37,13 +37,13 @@
         .block:nth-child(5) { animation: pulse 2.5s infinite 1s; }
         @keyframes pulse {
             0% { opacity: 0; }
-            20% { opacity: 1; } /* Flash on */
-            80% { opacity: 1; } /* Hold */
-            100% { opacity: 0; } /* Fade off */
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
         }
         #hash-bar p { font-size: 0.9em; margin: 5px 0 0; color: #B0B0B0; }
         /* Estimated Hashrate Box */
-        #hash-ticker { background: #0F3460; padding: 10px; margin: 10px auto; border-radius: 5px; width: 150px; display: inline-block; }
+        #hash-ticker { background: #0F3460; padding: 10px; margin: 10px auto; border-radius: 5px; width: 150px; }
         #hash-ticker p { font-size: 1.2em; margin: 0; color: #E94560; animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn {
             0% { opacity: 0; }
@@ -53,6 +53,11 @@
         .payout-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
         .payout-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
         .payout-section p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; line-height: 1.4; }
+        /* Affiliate Mining Section */
+        .affiliate-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        .affiliate-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
+        .affiliate-section p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; line-height: 1.4; }
+        .affiliate-section textarea { width: 80%; height: 80px; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #1A1A2E; color: #F7F7F7; font-family: monospace; resize: none; }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
@@ -60,6 +65,7 @@
             nav a { margin: 10px 0; }
             .user-info { margin: 10px 0; }
             .payout-section { padding: 15px; }
+            .affiliate-section { padding: 15px; }
         }
         @media (min-width: 769px) {
             nav.logged-in a { margin-left: 10px; }
@@ -190,12 +196,11 @@
                 return;
             }
             console.log('Start mining clicked for wallet:', wallet);
+            hashRate = Math.floor(Math.random() * (120 - 40 + 1)) + 40; // 40-120 H/s
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('stopBtn').style.display = 'inline-block';
             document.getElementById('hash-bar').style.display = 'block';
             document.getElementById('message').textContent = '';
-            // Hash ticker
-            hashRate = Math.floor(Math.random() * (120 - 40 + 1)) + 40; // 40-120 H/s
             document.getElementById('hash-ticker').querySelector('p').textContent = `Estimated Hashrate: ${hashRate} H/s`;
             setInterval(() => {
                 hashRate += Math.floor(Math.random() * 11) - 5; // Fluctuate ±5
@@ -214,7 +219,7 @@
             document.getElementById('message').textContent = 'Mining stopped.';
         }
 
-        /* Cashout Function - Kept for reference, not used */
+        /* Cashout Function - Kept for reference */
         async function requestCashout() {
             const wallet = document.getElementById('wallet').value;
             const message = document.getElementById('cashout-message');
@@ -334,6 +339,12 @@
         <div class="payout-section">
             <h2>Payout and Fee Structure</h2>
             <p>Foxminer auto-pays—no cashout needed! Rewards build in the Foxminer pool and hit your wallet at 0.3 XMR. Pool fee: 0.003 XMR (powered by MoneroOcean).</p>
+        </div>
+        <!-- Affiliate Mining Section -->
+        <div class="affiliate-section">
+            <h2>Affiliate Mining</h2>
+            <p>Monetize your site or blog! Paste our miner script to earn from your traffic. We charge a 10% Dev Fee—90% of rewards go to you.</p>
+            <textarea placeholder="Paste this script into your site’s HTML (code coming soon)"></textarea>
         </div>
     </div>
 </body>
