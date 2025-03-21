@@ -42,9 +42,9 @@
             100% { opacity: 0; }
         }
         #hash-bar p { font-size: 0.9em; margin: 5px 0 0; color: #B0B0B0; }
-        /* Estimated Hashrate Box */
-        #hash-ticker { background: #0F3460; padding: 10px; margin: 10px auto; border-radius: 5px; width: 150px; }
-        #hash-ticker p { font-size: 1.2em; margin: 0; color: #E94560; animation: fadeIn 0.5s ease-in-out; }
+        /* Recent Blocks Found Box */
+        #blocks-ticker { background: #0F3460; padding: 10px; margin: 10px auto; border-radius: 5px; width: 150px; }
+        #blocks-ticker p { font-size: 1.2em; margin: 0; color: #E94560; animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn {
             0% { opacity: 0; }
             100% { opacity: 1; }
@@ -76,7 +76,7 @@
         const moApi = 'https://api.moneroocean.stream';
         let isSignedIn = false;
         let userEmail = '';
-        let hashRate = 0;
+        let blocksFound = 0;
 
         async function checkSession() {
             console.log('checkSession started');
@@ -196,17 +196,17 @@
                 return;
             }
             console.log('Start mining clicked for wallet:', wallet);
-            hashRate = Math.floor(Math.random() * (120 - 40 + 1)) + 40; // 40-120 H/s
+            blocksFound = Math.floor(Math.random() * 6); // 0-5 blocks
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('stopBtn').style.display = 'inline-block';
             document.getElementById('hash-bar').style.display = 'block';
             document.getElementById('message').textContent = '';
-            document.getElementById('hash-ticker').querySelector('p').textContent = `Estimated Hashrate: ${hashRate} H/s`;
+            document.getElementById('blocks-ticker').querySelector('p').textContent = `Recent Blocks Found: ${blocksFound}`;
             setInterval(() => {
-                hashRate += Math.floor(Math.random() * 11) - 5; // Fluctuate ±5
-                if (hashRate < 40) hashRate = 40;
-                if (hashRate > 120) hashRate = 120;
-                document.getElementById('hash-ticker').querySelector('p').textContent = `Estimated Hashrate: ${hashRate} H/s`;
+                blocksFound += Math.floor(Math.random() * 3) - 1; // ±1
+                if (blocksFound < 0) blocksFound = 0;
+                if (blocksFound > 5) blocksFound = 5;
+                document.getElementById('blocks-ticker').querySelector('p').textContent = `Recent Blocks Found: ${blocksFound}`;
             }, 5000); // 5s
         }
 
@@ -307,8 +307,8 @@
                     <div class="block"></div>
                 </div>
                 <p>You’re now mining! Track hashrate and earnings below. Daily rewards to pool—wallet payout at 0.3 XMR.</p>
-                <div id="hash-ticker">
-                    <p>Estimated Hashrate: 0 H/s</p>
+                <div id="blocks-ticker">
+                    <p>Recent Blocks Found: 0</p>
                 </div>
             </div>
             <p id="message"></p>
