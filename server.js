@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3');
 const cookieParser = require('cookie-parser');
+const { exec } = require('child_process'); // Added for Monero CLI
 const app = express();
 
 // Middleware
@@ -32,6 +33,11 @@ db.run(
   }
 );
 
+// Monero CLI Config - Adjust post-$7 upgrade
+const WALLET_PATH = './wallet/foxminer-wallet'; // Change to '/opt/render/wallet/foxminer-wallet' on $7 plan
+const RPC_HOST = 'localhost';
+const RPC_PORT = 18081;
+
 // Root route
 app.get('/', (req, res) => {
   res.send('Foxminer server is alive');
@@ -48,7 +54,7 @@ app.post('/signup', async (req, res) => {
         console.error('Signup DB Error:', err);
         return res.status(400).send('Email exists');
       }
-      console.log('User signed up:', email); // Log success
+      console.log('User signed up:', email);
       const token = jwt.sign({ email }, 'secret', { expiresIn: '1h' });
       console.log('Signup Token Set:', token);
       res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
@@ -144,6 +150,41 @@ app.post('/set-wallet', (req, res) => {
     });
   } catch (err) {
     console.error('Set Wallet Error:', err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// Cashout route - Added Here
+app.post('/cashout', (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) return res.status(401).json({ error: 'Not signed in' });
+    jwt.verify(token, 'secret', (err, decoded) => {
+      if (err) return res.status(401).json({ error: 'Invalid token' });
+      const { wallet } = req.body;
+      if (!wallet) return res.status(400).json({ error: 'No wallet provided' });
+
+      // Monero CLI transfer command
+      const amount = 0.0995; // Hardcoded for now; dashboard.html checks balance >= 0.1 XMR
+      const command = `monero-wallet-cli --wallet-file ${WALLET_PATH} --password "your_wallet_password" --daemon-host ${RPC_HOST}:${RPC_PORT} transfer ${wallet} ${amount}`;
+
+      exec(command, (error, stdout, stderr) => {
+        if (error) {
+          console.error('Cashout Exec Error:', error, stderr);
+          return res.status(500).json({ error: 'Cashout failed - server error' });
+        }
+        const txidMatch = stdout.match(/Transaction ID: ([a-f0-9]{64})/);
+        if (!txidMatch) {
+          console.error('Cashout No TXID:', stdout, stderr);
+          return res.status(500).json({ error: 'Cashout failed - no transaction ID' });
+        }
+        const txid = txidMatch[1];
+        console.log(`Cashout successful for ${decoded.email} to ${wallet}: TXID ${txid}`);
+        res.json({ success: true, txid });
+      });
+    });
+  } catch (err) {
+    console.error('Cashout Error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 });
