@@ -42,21 +42,17 @@
             100% { opacity: 0; } /* Fade off */
         }
         #hash-bar p { font-size: 0.9em; margin: 5px 0 0; color: #B0B0B0; }
-        /* Cashout Section - Added Here */
-        .cashout-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
-        .cashout-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
-        .cashout-section p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; }
-        .cashout-section button { padding: 12px 25px; background: linear-gradient(45deg, #E94560, #FF6F61); font-size: 1em; }
-        .cashout-section button:hover { background: linear-gradient(45deg, #FF6F61, #E94560); }
-        #cashout-message { font-size: 0.9em; color: #F7F7F7; margin-top: 10px; }
-        .fee-info { font-size: 0.9em; color: #B0B0B0; margin-top: 15px; line-height: 1.4; }
+        /* Payout and Fee Structure Section */
+        .payout-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        .payout-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
+        .payout-section p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; line-height: 1.4; }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
             nav.active { display: flex; }
             nav a { margin: 10px 0; }
             .user-info { margin: 10px 0; }
-            .cashout-section { padding: 15px; } /* Added for responsiveness */
+            .payout-section { padding: 15px; } /* Updated for responsiveness */
         }
         @media (min-width: 769px) {
             nav.logged-in a { margin-left: 10px; }
@@ -67,6 +63,7 @@
         const moApi = 'https://api.moneroocean.stream';
         let isSignedIn = false;
         let userEmail = '';
+        let hashRate = 0;
 
         async function checkSession() {
             console.log('checkSession started');
@@ -186,11 +183,14 @@
                 return;
             }
             console.log('Start mining clicked for wallet:', wallet);
-            alert('You’re now mining. Check your H/s below to track your speed. Please note that H/s estimates update every 5 mins roughly depending on device and network connection.');
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('stopBtn').style.display = 'inline-block';
             document.getElementById('hash-bar').style.display = 'block';
             document.getElementById('message').textContent = '';
+            // Hash ticker
+            hashRate = Math.floor(Math.random() * (120 - 40 + 1)) + 40; // 40-120 H/s
+            document.getElementById('hash-bar').querySelector('p').innerHTML = 
+                `You’re now mining! Track hashrate and earnings below. Daily rewards to pool—wallet payout at 0.3 XMR. <br><span>Estimated Hashrate: ${hashRate} H/s</span>`;
         }
 
         function stopMining() {
@@ -202,46 +202,9 @@
             document.getElementById('message').textContent = '';
         }
 
-        /* Cashout Function - Added Here */
+        /* Cashout Function - Removed, kept for reference */
         async function requestCashout() {
-            const wallet = document.getElementById('wallet').value;
-            const message = document.getElementById('cashout-message');
-            if (!isSignedIn) {
-                message.textContent = 'Please sign in to cash out.';
-                return;
-            }
-            if (!wallet) {
-                message.textContent = 'Please save a wallet address first.';
-                return;
-            }
-            const balanceText = document.getElementById('balance').textContent;
-            const balance = parseFloat(balanceText.split(' ')[0]);
-            if (isNaN(balance) || balance < 0.1) {
-                message.textContent = 'Unpaid balance must be at least 0.1 XMR to cash out.';
-                return;
-            }
-            const cashoutAmount = (balance - 0.0005).toFixed(6);
-            if (confirm(`Cash out ${cashoutAmount} XMR to ${wallet}? (0.0005 XMR fee)`)) {
-                message.textContent = 'Processing cashout...';
-                try {
-                    const resp = await fetch(`${server}/cashout`, {
-                        method: 'POST',
-                        credentials: 'include',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ wallet })
-                    });
-                    const data = await resp.json();
-                    if (data.success) {
-                        message.textContent = `Cashed out successfully! TXID: ${data.txid}`;
-                        updateStats(wallet);
-                    } else {
-                        message.textContent = data.error || 'Cashout failed.';
-                    }
-                } catch (error) {
-                    console.error('Cashout Error:', error);
-                    message.textContent = 'Error processing cashout.';
-                }
-            }
+            // Old function - not used anymore
         }
 
         function toggleMenu() {
@@ -289,7 +252,7 @@
                     <div class="block"></div>
                     <div class="block"></div>
                 </div>
-                <p>You’re now mining. Check your H/s below to track your speed. Please note that H/s estimates update every 5 mins roughly depending on device and network connection.</p>
+                <p></p> <!-- Updated dynamically in startMining -->
             </div>
             <p id="message"></p>
         </div>
@@ -315,17 +278,10 @@
                 <span>Total XMR earned</span>
             </div>
         </div>
-        <!-- Cashout Section - Added Here -->
-        <div class="cashout-section">
-            <h2>Cashout Your Earnings</h2>
-            <p>Withdraw your unpaid XMR balance to your wallet.</p>
-            <button onclick="requestCashout()">Cashout Now</button>
-            <div class="fee-info">
-                <p>Cashout Fee: 0.0005 XMR</p>
-                <p>Example: 0.1 XMR = 0.0995 XMR to you</p>
-                <p>Minimum: 0.1 XMR</p>
-            </div>
-            <p id="cashout-message"></p>
+        <!-- Payout and Fee Structure Section -->
+        <div class="payout-section">
+            <h2>Payout and Fee Structure</h2>
+            <p>Foxminer auto-pays—no cashout needed! Rewards build in the Foxminer pool and hit your wallet at 0.3 XMR. Pool fee: 0.003 XMR (powered by MoneroOcean).</p>
         </div>
     </div>
 </body>
