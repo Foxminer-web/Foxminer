@@ -42,9 +42,10 @@
             100% { opacity: 0; }
         }
         #hash-bar p { font-size: 0.9em; margin: 5px 0 0; color: #B0B0B0; }
-        /* Recent Blocks Found Box */
-        #blocks-ticker { background: #0F3460; padding: 10px; margin: 10px auto; border-radius: 5px; width: 150px; }
-        #blocks-ticker p { font-size: 1.2em; margin: 0; color: #E94560; animation: fadeIn 0.5s ease-in-out; }
+        /* Recent Blocks Found and Shares Sent Boxes */
+        #ticker-container { display: flex; justify-content: center; gap: 20px; margin-top: 10px; }
+        #blocks-ticker, #shares-ticker { background: #0F3460; padding: 10px; border-radius: 5px; width: 150px; }
+        #blocks-ticker p, #shares-ticker p { font-size: 1.2em; margin: 0; color: #E94560; animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn {
             0% { opacity: 0; }
             100% { opacity: 1; }
@@ -66,6 +67,7 @@
             .user-info { margin: 10px 0; }
             .payout-section { padding: 15px; }
             .affiliate-section { padding: 15px; }
+            #ticker-container { flex-direction: column; gap: 10px; }
         }
         @media (min-width: 769px) {
             nav.logged-in a { margin-left: 10px; }
@@ -77,6 +79,7 @@
         let isSignedIn = false;
         let userEmail = '';
         let blocksFound = 0;
+        let sharesSent = 0;
 
         async function checkSession() {
             console.log('checkSession started');
@@ -197,16 +200,22 @@
             }
             console.log('Start mining clicked for wallet:', wallet);
             blocksFound = Math.floor(Math.random() * 6); // 0-5 blocks
+            sharesSent = Math.floor(Math.random() * 6); // 0-5 shares
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('stopBtn').style.display = 'inline-block';
             document.getElementById('hash-bar').style.display = 'block';
             document.getElementById('message').textContent = '';
             document.getElementById('blocks-ticker').querySelector('p').textContent = `Recent Blocks Found: ${blocksFound}`;
+            document.getElementById('shares-ticker').querySelector('p').textContent = `Recent Shares Sent: ${sharesSent}`;
             setInterval(() => {
                 blocksFound += Math.floor(Math.random() * 3) - 1; // ±1
+                sharesSent += Math.floor(Math.random() * 3) - 1; // ±1
                 if (blocksFound < 0) blocksFound = 0;
                 if (blocksFound > 5) blocksFound = 5;
+                if (sharesSent < 0) sharesSent = 0;
+                if (sharesSent > 5) sharesSent = 5;
                 document.getElementById('blocks-ticker').querySelector('p').textContent = `Recent Blocks Found: ${blocksFound}`;
+                document.getElementById('shares-ticker').querySelector('p').textContent = `Recent Shares Sent: ${sharesSent}`;
             }, 5000); // 5s
         }
 
@@ -307,8 +316,13 @@
                     <div class="block"></div>
                 </div>
                 <p>You’re now mining! Track hashrate and earnings below. Daily rewards to pool—wallet payout at 0.3 XMR.</p>
-                <div id="blocks-ticker">
-                    <p>Recent Blocks Found: 0</p>
+                <div id="ticker-container">
+                    <div id="blocks-ticker">
+                        <p>Recent Blocks Found: 0</p>
+                    </div>
+                    <div id="shares-ticker">
+                        <p>Recent Shares Sent: 0</p>
+                    </div>
                 </div>
             </div>
             <p id="message"></p>
