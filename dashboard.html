@@ -15,7 +15,12 @@
         .user-info { margin-left: 20px; font-weight: bold; }
         .user-info button { padding: 5px 10px; background: #E94560; border: none; border-radius: 5px; color: #F7F7F7; cursor: pointer; }
         .user-info button:hover { background: #FF6F61; }
-        .dashboard { max-width: 800px; margin: 50px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
+        /* Global Stats */
+        #global-stats { display: flex; justify-content: center; gap: 30px; margin: 10px 0; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .global-stat-box { background: #0F3460; padding: 8px; border-radius: 5px; width: 150px; text-align: center; }
+        .global-stat-box h2 { font-size: 1em; margin: 0 0 5px; color: #E94560; }
+        .global-stat-box p { font-size: 1.2em; margin: 0; color: #E94560; animation: fadeIn 0.5s ease-in-out; }
+        .dashboard { max-width: 800px; margin: 80px auto 50px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
         h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
         .stats { display: flex; justify-content: space-around; flex-wrap: wrap; }
         .stat-box { background: #0F3460; padding: 20px; margin: 10px; border-radius: 5px; width: 200px; }
@@ -68,6 +73,7 @@
             .payout-section { padding: 15px; }
             .affiliate-section { padding: 15px; }
             #ticker-container { gap: 10px; } /* Keep side-by-side, tighter gap */
+            #global-stats { gap: 10px; flex-wrap: wrap; } /* Responsive, aligned */
         }
         @media (min-width: 769px) {
             nav.logged-in a { margin-left: 10px; }
@@ -76,10 +82,31 @@
     <script>
         const server = 'https://foxminer-server.onrender.com';
         const moApi = 'https://api.moneroocean.stream';
+        const networkApi = 'https://monerohash.com/api/network';
         let isSignedIn = false;
         let userEmail = '';
         let blocksFound = 0;
         let sharesSent = 0;
+
+        async function fetchGlobalStats() {
+            try {
+                // MoneroOcean Pool Stats
+                const poolResp = await fetch(`${moApi}/pool/stats`);
+                const poolData = await poolResp.json();
+                document.getElementById('pool-hashrate').textContent = (poolData.pool_hashrate / 1e6).toFixed(1) + ' MH/s';
+                document.getElementById('miners-registered').textContent = poolData.pool_miners;
+
+                // World XMR Hashrate
+                const networkResp = await fetch(networkApi);
+                const networkData = await networkResp.json();
+                document.getElementById('world-hashrate').textContent = (networkData.hashrate / 1e6).toFixed(2) + ' GH/s';
+            } catch (error) {
+                console.error('Global stats fetch failed:', error);
+                document.getElementById('world-hashrate').textContent = 'N/A';
+                document.getElementById('pool-hashrate').textContent = 'N/A';
+                document.getElementById('miners-registered').textContent = 'N/A';
+            }
+        }
 
         async function checkSession() {
             console.log('checkSession started');
@@ -178,7 +205,7 @@
                 const workers = await workersResp.json();
 
                 document.getElementById('hashrate').textContent = stats.hash2 ? `${stats.hash2} H/s` : '0 H/s';
-                document.getElementById('balance').textContent = stats.amtDue ? (stats.total / 1e12).toFixed(6) + ' XMR' : '0 XMR';
+                document.getElementById('balance').textContent = stats.amtDue ? (stats.amtDue / 1e12).toFixed(6) + ' XMR' : '0 XMR';
                 document.getElementById('workers').textContent = workers.length || '0';
                 document.getElementById('earnings').textContent = stats.paid ? (stats.paid / 1e12).toFixed(6) + ' XMR' : '0 XMR';
 
@@ -276,14 +303,16 @@
         }
 
         window.onload = () => {
-            console.log('Window loaded, calling checkSession after redirect');
+            console.log('Window loaded, calling checkSession and fetchGlobalStats');
             checkSession();
+            fetchGlobalStats();
             setInterval(() => {
                 const wallet = document.getElementById('wallet').value;
                 if (isSignedIn && wallet) {
                     console.log('Auto-refreshing stats for:', wallet);
                     updateStats(wallet);
                 }
+                fetchGlobalStats(); // Refresh global stats too
             }, 300000); // 5 mins
         };
     </script>
@@ -299,6 +328,20 @@
             <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
         </nav>
     </header>
+    <div id="global-stats">
+        <div class="global-stat-box">
+            <h2>World XMR Hashrate</h2>
+            <p id="world-hashrate">N/A</p>
+        </div>
+        <div class="global-stat-box">
+            <h2>Pool Hashrate</h2>
+            <p id="pool-hashrate">N/A</p>
+        </div>
+        <div class="global-stat-box">
+            <h2>Miners Registered</h2>
+            <p id="miners-registered">N/A</p>
+        </div>
+    </div>
     <div class="dashboard">
         <h1>FOXMINER Dashboard</h1>
         <p id="status">Checking session...</p>
