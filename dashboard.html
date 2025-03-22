@@ -15,12 +15,7 @@
         .user-info { margin-left: 20px; font-weight: bold; }
         .user-info button { padding: 5px 10px; background: #E94560; border: none; border-radius: 5px; color: #F7F7F7; cursor: pointer; }
         .user-info button:hover { background: #FF6F61; }
-        /* Global Stats */
-        #global-stats { display: flex; justify-content: center; gap: 10px; margin: 5px 0; max-width: 800px; margin-left: auto; margin-right: auto; }
-        .global-stat-box { background: #0F3460; padding: 6px; border-radius: 5px; width: 150px; text-align: center; }
-        .global-stat-box h2 { font-size: 1em; margin: 0 0 4px; color: #E94560; }
-        .global-stat-box p { font-size: 1.2em; margin: 0; color: #E94560; animation: fadeIn 0.5s ease-in-out; }
-        .dashboard { max-width: 800px; margin: 60px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
+        .dashboard { max-width: 800px; margin: 50px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
         h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
         .stats { display: flex; justify-content: space-around; flex-wrap: wrap; }
         .stat-box { background: #0F3460; padding: 20px; margin: 10px; border-radius: 5px; width: 200px; }
@@ -72,8 +67,7 @@
             .user-info { margin: 10px 0; }
             .payout-section { padding: 15px; }
             .affiliate-section { padding: 15px; }
-            #ticker-container { gap: 10px; }
-            #global-stats { gap: 10px; } /* Tight row, no wrap */
+            #ticker-container { gap: 10px; } /* Keep side-by-side, tighter gap */
         }
         @media (min-width: 769px) {
             nav.logged-in a { margin-left: 10px; }
@@ -86,22 +80,6 @@
         let userEmail = '';
         let blocksFound = 0;
         let sharesSent = 0;
-
-        async function fetchGlobalStats() {
-            try {
-                const resp = await fetch(`${moApi}/pool/stats`, {
-                    headers: { 'User-Agent': 'FOXMINER' }
-                });
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                const data = await resp.json();
-                document.getElementById('pool-hashrate').textContent = (data.pool_hashrate / 1e6).toFixed(1) + ' MH/s';
-                document.getElementById('miners-registered').textContent = data.pool_miners;
-            } catch (error) {
-                console.error('Global stats fetch failed:', error);
-                document.getElementById('pool-hashrate').textContent = 'N/A';
-                document.getElementById('miners-registered').textContent = 'N/A';
-            }
-        }
 
         async function checkSession() {
             console.log('checkSession started');
@@ -200,7 +178,7 @@
                 const workers = await workersResp.json();
 
                 document.getElementById('hashrate').textContent = stats.hash2 ? `${stats.hash2} H/s` : '0 H/s';
-                document.getElementById('balance').textContent = stats.amtDue ? (stats.amtDue / 1e12).toFixed(6) + ' XMR' : '0 XMR';
+                document.getElementById('balance').textContent = stats.amtDue ? (stats.total / 1e12).toFixed(6) + ' XMR' : '0 XMR';
                 document.getElementById('workers').textContent = workers.length || '0';
                 document.getElementById('earnings').textContent = stats.paid ? (stats.paid / 1e12).toFixed(6) + ' XMR' : '0 XMR';
 
@@ -221,8 +199,8 @@
                 return;
             }
             console.log('Start mining clicked for wallet:', wallet);
-            blocksFound = 0;
-            sharesSent = 0;
+            blocksFound = 0; // Start at 0
+            sharesSent = 0; // Start at 0
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('stopBtn').style.display = 'inline-block';
             document.getElementById('hash-bar').style.display = 'block';
@@ -230,18 +208,18 @@
             document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
             document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
             setInterval(() => {
-                blocksFound += Math.floor(Math.random() * 3) + 1;
-                sharesSent += Math.floor(Math.random() * 3) + 1;
+                blocksFound += Math.floor(Math.random() * 3) + 1; // +1 to +3
+                sharesSent += Math.floor(Math.random() * 3) + 1; // +1 to +3
                 document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
                 document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
-            }, 5000);
+            }, 5000); // 5s
         }
 
         function stopMining() {
             console.log('Stop mining clicked');
             alert('Mining stopped.');
-            blocksFound = 0;
-            sharesSent = 0;
+            blocksFound = 0; // Reset to 0
+            sharesSent = 0; // Reset to 0
             document.getElementById('startBtn').style.display = 'inline-block';
             document.getElementById('stopBtn').style.display = 'none';
             document.getElementById('hash-bar').style.display = 'none';
@@ -250,6 +228,7 @@
             document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
         }
 
+        /* Cashout Function - Kept for reference */
         async function requestCashout() {
             const wallet = document.getElementById('wallet').value;
             const message = document.getElementById('cashout-message');
@@ -297,17 +276,15 @@
         }
 
         window.onload = () => {
-            console.log('Window loaded, calling checkSession and fetchGlobalStats');
+            console.log('Window loaded, calling checkSession after redirect');
             checkSession();
-            fetchGlobalStats();
             setInterval(() => {
                 const wallet = document.getElementById('wallet').value;
                 if (isSignedIn && wallet) {
                     console.log('Auto-refreshing stats for:', wallet);
                     updateStats(wallet);
                 }
-                fetchGlobalStats();
-            }, 300000);
+            }, 300000); // 5 mins
         };
     </script>
 </head>
@@ -322,16 +299,6 @@
             <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
         </nav>
     </header>
-    <div id="global-stats">
-        <div class="global-stat-box">
-            <h2>Pool Hashrate</h2>
-            <p id="pool-hashrate">N/A</p>
-        </div>
-        <div class="global-stat-box">
-            <h2>Miners Registered</h2>
-            <p id="miners-registered">N/A</p>
-        </div>
-    </div>
     <div class="dashboard">
         <h1>FOXMINER Dashboard</h1>
         <p id="status">Checking session...</p>
@@ -382,10 +349,12 @@
                 <span>Total XMR earned</span>
             </div>
         </div>
+        <!-- Payout and Fee Structure Section -->
         <div class="payout-section">
             <h2>Payout and Fee Structure</h2>
             <p>Foxminer auto-pays—no cashout needed! Rewards build in the Foxminer pool and hit your wallet at 0.3 XMR. Pool fee: 0.003 XMR (powered by MoneroOcean).</p>
         </div>
+        <!-- Affiliate Mining Section -->
         <div class="affiliate-section">
             <h2>Affiliate Mining</h2>
             <p>Monetize your site or blog! Paste our miner script to earn from your traffic. We charge a 10% Dev Fee—90% of rewards go to you.</p>
