@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOXMINER v1.0 - Affiliate Mining Program</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1A1A2E; color: #F7F7F7; margin: 0; padding: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; max-height: 60px; border-bottom: 1px solid #E94560; }
+        header img { height: 125px; max-height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
+        nav { display: flex; align-items: center; }
+        nav a { color: #F7F7F7; text-decoration: none; margin-left: 20px; font-weight: bold; }
+        nav a:hover { color: #E94560; }
+        .user-info { margin-left: 20px; font-weight: bold; }
+        .user-info button { padding: 5px 10px; background: #E94560; border: none; border-radius: 5px; color: #F7F7F7; cursor: pointer; }
+        .user-info button:hover { background: #FF6F61; }
+        .hamburger { display: none; font-size: 2em; cursor: pointer; }
+        main { max-width: 800px; margin: 35px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
+        h1 { font-size: 2.5em; color: #E94560; margin-bottom: 10px; }
+        .tagline { font-size: 1.2em; color: #B0B0B0; margin-bottom: 20px; }
+        .intro { font-size: 1.1em; color: #F7F7F7; line-height: 1.6; margin-bottom: 20px; }
+        .script-box { width: 80%; margin: 20px auto; padding: 15px; background: #0F3460; border-radius: 5px; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        .script-box textarea { width: 100%; height: 80px; padding: 10px; border: none; border-radius: 5px; background: #1A1A2E; color: #F7F7F7; font-family: monospace; resize: none; box-sizing: border-box; }
+        .features { text-align: left; max-width: 600px; margin: 0 auto; }
+        .feature { display: flex; align-items: center; margin: 15px 0; }
+        .checkmark { width: 24px; height: 24px; background: #E94560; border-radius: 50%; margin-right: 15px; position: relative; flex-shrink: 0; }
+        .checkmark::after { content: '✔'; color: #F7F7F7; font-size: 16px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .feature-text { font-size: 1em; color: #F7F7F7; }
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
+            nav.active { display: flex; }
+            nav a { margin: 10px 0; }
+            .user-info { margin: 10px 0; }
+            main { padding: 15px; }
+            h1 { font-size: 2em; }
+            .tagline { font-size: 1em; }
+            .intro { font-size: 1em; }
+            .script-box { width: 90%; }
+            .feature-text { font-size: 0.9em; }
+        }
+        @media (min-width: 769px) {
+            nav.logged-in a { margin-left: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="container">
+        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <nav>
+            <a href="/Foxminer/index.html">Home</a>
+            <a href="/Foxminer/dashboard.html">Dashboard</a>
+            <a href="/Foxminer/signup.html">Sign Up</a>
+            <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
+        </nav>
+    </header>
+    <main>
+        <h1>Affiliate Mining Program</h1>
+        <div class="tagline">Your Website, Your Crypto—Earn More with Less Fees!</div>
+        <div class="intro">
+            Turn your website, blog, or app into a Monero (XMR) goldmine with FOXMINER v1.0’s Affiliate Mining Program. Paste our script, and your visitors’ CPUs join the RandomFOX-powered party—mining XMR while you rake in 95% of the hashrate. Solo miners on our dashboard pay a 10% Dev fee, but affiliates? We drop it to 5%. More rewards, less cut—monetize your traffic the smart way.
+        </div>
+        <div class="intro">
+            Why settle for ads when you can harness silent, seamless mining? Our affiliate script’s lightweight, powered by the same RandomFOX v1.1 tech that’s rewriting web mining rules—delivering 30-50% higher yields than the competition. No pop-ups, no fuss—just pure XMR flowing to your wallet via MoneroOcean’s auto-payouts at 0.3 XMR. Plug in, cash out, and watch your site work harder than ever.
+        </div>
+        <div class="script-box">
+            <textarea placeholder="Your affiliate mining script goes here—coming soon! Paste this into your site’s HTML to start earning."></textarea>
+        </div>
+        <div class="features">
+            <div class="feature">
+                <div class="checkmark"></div>
+                <div class="feature-text">Keep 95% of hashrate—5% Dev fee vs. 10% for solo mining.</div>
+            </div>
+            <div class="feature">
+                <div class="checkmark"></div>
+                <div class="feature-text">Boosted XMR yields with RandomFOX v1.1 efficiency.</div>
+            </div>
+            <div class="feature">
+                <div class="checkmark"></div>
+                <div class="feature-text">No setup—drop the script and start monetizing instantly.</div>
+            </div>
+            <div class="feature">
+                <div class="checkmark"></div>
+                <div class="feature-text">Auto-payouts at 0.3 XMR via MoneroOcean integration.</div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function toggleMenu() {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
 
+        window.onload = () => {
+            console.log('Affiliate Mining page loaded');
+        };
+    </script>
+</body>
+</html>
