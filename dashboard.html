@@ -172,6 +172,11 @@
                 if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
                 const data = await resp.json();
                 console.log('Global Stats:', data);
+                if (!data.pool_hashrate || !data.pool_miners) {
+                    console.log('Empty data, retrying in 5s...');
+                    setTimeout(fetchGlobalStats, 5000);
+                    return;
+                }
                 document.getElementById('pool-hashrate').textContent = data.pool_hashrate ? (data.pool_hashrate / 1e6).toFixed(1) + ' MH/s' : '0 MH/s';
                 document.getElementById('miners-registered').textContent = data.pool_miners ? data.pool_miners : '0';
             } catch (error) {
