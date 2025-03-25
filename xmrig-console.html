@@ -1,0 +1,103 @@
+Skip to content
+ 
+Search Gists
+Search...
+All gists
+Back to GitHub
+@xmrig
+xmrig/api.html
+Last active 2 months ago • Report abuse
+Code
+Revisions
+2
+Stars
+12
+Forks
+8
+Clone this repository at &lt;script src=&quot;https://gist.github.com/xmrig/c75fdd1f8e0f3bac05500be2ab718f8e.js&quot;&gt;&lt;/script&gt;
+<script src="https://gist.github.com/xmrig/c75fdd1f8e0f3bac05500be2ab718f8e.js"></script>
+api.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous" />
+    <title>XMRig API test</title>
+  </head>
+  <body>
+    <div class="container">
+      <form style="margin-top: 12px">
+        <div class="form-group">
+          <label for="address">API address and endpoint</label>
+          <input type="text" class="form-control" id="address" required placeholder="http://127.0.0.1:<port>/2/summary">
+        </div>
+        <div class="form-group">
+          <label for="token">Access Token</label>
+          <input type="password" class="form-control" id="token" placeholder="Optional">
+        </div>
+        <button id="submit" type="submit" class="btn btn-primary">Get API data</button>
+      </form>
+
+      <pre id="result" style="margin-top: 12px; border: 1px solid rgba(0,0,0,.15); padding: 12px"></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+    <script>
+        $(function() {
+            $('#address').val(localStorage.getItem('address'));
+            $('#token').val(localStorage.getItem('token'));
+
+            $('#submit').on('click', function(event) {
+                var address = $('#address').val();
+                if (!address) {
+                    return;
+                }
+
+                event.preventDefault();
+                getData(address, $('#token').val());
+            });
+
+
+            function getData(address, token) {
+                var headers = {};
+                if (token) {
+                    headers.Authorization = 'Bearer ' + token
+                }
+
+                $.ajax({
+                    method: 'get',
+                    url: address,
+                    headers: headers
+                })
+                  .done(function(data, textStatus, jqXHR) {
+                      $('#result').text(jqXHR.responseText);
+                      localStorage.setItem('address', address);
+                      localStorage.setItem('token',   token);
+                  })
+                  .fail(function(jqXHR, textStatus) {
+                      $('#result').text('Failed to get data (' + jqXHR.status + ')');
+                  });
+            }
+        });
+    </script>
+  </body>
+</html>
+@Foxminer-web
+Comment
+ 
+Leave a comment
+ 
+Footer
+© 2025 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact
+Manage cookies
+Do not share my personal information
