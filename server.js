@@ -11,7 +11,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://foxminer-web.github.io');
+  const allowedOrigins = ['https://foxminer-web.github.io', 'http://192.168.0.30:8080', 'http://localhost:8080'];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Methods', 'GET, POST');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
@@ -47,23 +51,23 @@ app.get('/', (req, res) => {
 app.post('/signup', async (req, res) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) return res.status(400).send('Missing email or password');
+    if (!email || !password) return res.status(400).json({ success: false, error: 'Missing email or password' });
     const hash = await bcrypt.hash(password, 10);
     db.run('INSERT INTO users (email, password, wallet) VALUES (?, ?, ?)', [email, hash, ''], (err) => {
       if (err) {
         console.error('Signup DB Error:', err);
-        return res.status(400).send('Email exists');
+        return res.status(400).json({ success: false, error: 'Email exists' });
       }
       console.log('User signed up:', email);
       const token = jwt.sign({ email }, 'secret', { expiresIn: '1h' });
       console.log('Signup Token Set:', token);
       res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
       console.log('Signup Response Headers:', res.getHeaders());
-      res.redirect('https://foxminer-web.github.io/Foxminer/dashboard.html');
+      res.json({ success: true });
     });
   } catch (err) {
     console.error('Signup Error:', err);
-    res.status(500).send('Server error');
+    res.status(500).json({ success: false, error: 'Server error' });
   }
 });
 
@@ -71,24 +75,24 @@ app.post('/signup', async (req, res) => {
 app.post('/signin', async (req, res) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) return res.status(400).send('Missing email or password');
+    if (!email || !password) return res.status(400).json({ success: false, error: 'Missing email or password' });
     db.get('SELECT email, password FROM users WHERE email = ?', [email], async (err, user) => {
       if (err) {
         console.error('Signin DB Error:', err);
-        return res.status(500).send('Database error');
+        return res.status(500).json({ success: false, error: 'Database error' });
       }
-      if (!user) return res.status(400).send('User not found');
+      if (!user) return res.status(400).json({ success: false, error: 'User not found' });
       const match = await bcrypt.compare(password, user.password);
-      if (!match) return res.status(400).send('Invalid password');
+      if (!match) return res.status(400).json({ success: false, error: 'Invalid password' });
       const token = jwt.sign({ email }, 'secret', { expiresIn: '1h' });
       console.log('Signin Token Set:', token);
       res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'none' });
       console.log('Signin Response Headers:', res.getHeaders());
-      res.redirect('https://foxminer-web.github.io/Foxminer/dashboard.html');
+      res.json({ success: true });
     });
   } catch (err) {
     console.error('Signin Error:', err);
-    res.status(500).send('Server error');
+    res.status(500).json({ success: false, error: 'Server error' });
   }
 });
 
@@ -109,7 +113,7 @@ app.get('/check-session', (req, res) => {
       db.get('SELECT email, wallet FROM users WHERE email = ?', [decoded.email], (err, user) => {
         if (err) {
           console.error('DB Query Error:', err);
-          return res.status(500).send('Database error');
+          return res.status(500).json({ success: false, error: 'Database error' });
         }
         if (!user) {
           console.log('User not found for email:', decoded.email);
@@ -121,7 +125,7 @@ app.get('/check-session', (req, res) => {
     });
   } catch (err) {
     console.error('Check-Session Error:', err);
-    res.status(500).send('Server error');
+    res.status(500).json({ success: false, error: 'Server error' });
   }
 });
 
@@ -154,7 +158,7 @@ app.post('/set-wallet', (req, res) => {
   }
 });
 
-// Cashout route - Added Here
+// Cashout route
 app.post('/cashout', (req, res) => {
   try {
     const token = req.cookies.token;
