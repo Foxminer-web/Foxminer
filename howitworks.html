@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOXMINER - How It Works</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1A1A2E; color: #F7F7F7; margin: 0; padding: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 0; max-height: 60px; border-bottom: 1px solid #E94560; }
+        header img { height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
+        nav { display: flex; gap: 15px; }
+        nav button { padding: 8px 16px; background: #E94560; border: none; border-radius: 5px; cursor: pointer; color: #F7F7F7; }
+        nav button:hover { background: #FF6F61; }
+        .content { max-width: 800px; margin: 35px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
+        h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
+        p { font-size: 1.1em; color: #B0B0B0; margin: 20px 0; line-height: 1.6; }
+        ul { list-style: none; padding: 0; text-align: left; margin: 30px auto; max-width: 600px; }
+        li { font-size: 1.1em; color: #F7F7F7; margin: 15px 0; }
+        li:before { content: "✔"; color: #E94560; margin-right: 15px; }
+        .section { margin-top: 40px; padding: 20px; background: #0F3460; border-radius: 10px; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        .section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 15px; }
+        .steps { display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 20px; }
+        .step { background: #16213E; padding: 15px; margin: 10px; border-radius: 5px; width: 200px; text-align: center; }
+        .step h3 { font-size: 1.2em; color: #E94560; margin: 0 0 10px; }
+        .step p { font-size: 1em; color: #B0B0B0; margin: 0; }
+    </style>
+</head>
+<body>
+    <header class="container">
+        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <nav>
+            <button onclick="window.location.href='dashboard.html'">Dashboard</button>
+            <button onclick="window.location.href='installers.html'">Installers</button>
+            <button onclick="showSignIn()">Sign In</button>
+            <button onclick="showSignUp()">Sign Up</button>
+        </nav>
+    </header>
+    <div class="content">
+        <h1>How It Works</h1>
+        <p>FOXMINER is your gateway to mining Monero (XMR) with ease, starting with macOS ARM64 and expanding to older macOS models, Windows, and Linux by Q4 2025. No pool setup, no complicated scripts—just pure, optimized CPU power at your fingertips. This streamlined app runs quietly in the background, delivering top-tier performance with minimal RAM usage and low CPU strain, thanks to our finely tuned, open-source mining engine. Skip the setup headaches: download the DMG, launch the app, sign up, enter your wallet address, hit “Save,” and click “Start Mining” to unleash the magic. It’s built to keep going even if you close the window, pausing only when you choose “Stop” or restart your system. Before Foxminer, CPU mining was a puzzle for newcomers; now, our dedicated team has transformed it into a free, seamless experience that maximizes your rig’s potential with style and precision.</p>
+        <ul>
+            <li>Lightning-Fast Setup—install and mine in under a minute, no tech wizardry required.</li>
+            <li>Wallet Simplicity—paste your XMR address, save it, and you’re ready to roll.</li>
+            <li>Background Powerhouse—keeps mining strong, even with the app closed, until you hit stop.</li>
+            <li>Efficiency Unleashed—squeezes out more hashrate with less resource drag.</li>
+            <li>Live Insights—track hashrate, earnings, and workers in real time on the dashboard.</li>
+            <li>macOS Excellence—crafted for ARM64, with legacy support included.</li>
+            <li>Future Ready—Windows and Linux versions arrive in Q4 2025.</li>
+            <li>No Entry Cost—start mining for free, powered by a team that values accessibility.</li>
+        </ul>
+
+        <div class="section">
+            <h2>4-Step Mining Process</h2>
+            <div class="steps">
+                <div class="step">
+                    <h3>Step 1</h3>
+                    <p>Sign up for a free Foxminer account to join the action.</p>
+                </div>
+                <div class="step">
+                    <h3>Step 2</h3>
+                    <p>Enter your XMR wallet address or create one instantly in-app.</p>
+                </div>
+                <div class="step">
+                    <h3>Step 3</h3>
+                    <p>Input your wallet in the app and hit “Start Mining” to begin.</p>
+                </div>
+                <div class="step">
+                    <h3>Step 4</h3>
+                    <p>Watch your rewards grow as Foxminer does the heavy lifting!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Fee Structure</h2>
+            <p>At Foxminer, we keep it fair and transparent with a lean fee structure designed to maximize your rewards. We leverage MoneroOcean’s ecosystem with a modest <strong>0.003 XMR pool fee</strong>, tapping into their auto-algo switching to boost your mining efficiency. On top, our <strong>5% dev fee</strong> keeps our servers humming while staying light on your earnings—split as 3% to the Foxminer wallet and 2% to honor the original coder of this open-source CPU mining script. Compare that to giants like CoinIMP, CryptoTab, or MinerGate, where fees often soar to 20-30%. With Foxminer, our 5% dev fee is locked in stone—never creeping higher—ensuring you keep more of what you mine.</p>
+        </div>
+    </div>
+    <script>
+        function showSignIn() {
+            window.location.href = 'dashboard.html'; // Redirect to dashboard for auth
+        }
+        function showSignUp() {
+            window.location.href = 'dashboard.html'; // Redirect to dashboard for auth
+        }
+    </script>
+</body>
+</html>
