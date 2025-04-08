@@ -206,6 +206,63 @@
             .features { flex-wrap: nowrap; }
             .start-box { display: flex; justify-content: center; align-items: center; max-width: 400px; margin: 0 auto; }
         }
+        .footer {
+    background: #0A0A1A;
+    color: #F7F7F7;
+    padding: 40px 0;
+    border-top: 2px solid #E94560;
+}
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 0 20px;
+}
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+    margin: 20px 0;
+}
+.footer-section h3 {
+    color: #E94560;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+.footer-section p {
+    font-size: 0.9em;
+    color: #B0B0B0;
+    margin: 5px 0;
+}
+.footer-section a {
+    display: block;
+    color: #F7F7F7;
+    text-decoration: none;
+    font-size: 0.9em;
+    margin: 8px 0;
+    transition: color 0.3s;
+}
+.footer-section a:hover {
+    color: #FF6F61;
+}
+.legal-red {
+    color: #E94560;
+    font-weight: bold;
+}
+.legal-red:hover {
+    color: #FF6F61;
+}
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-section {
+        margin: 15px 0;
+    }
+}
     </style>
 </head>
 <body>
@@ -290,9 +347,27 @@
         </table>
     </section>
 
-    <footer>
-        FOXMINER © 2025 - Monero Mining, Fox Style
-    </footer>
+    <footer class="footer">
+    <div class="footer-container">
+        <div class="footer-section company-info">
+            <h3>FOXMINER</h3>
+            <p>Revolutionizing Monero CPU Mining Since 2025</p>
+            <p>© 2025 FOXMINER. All rights reserved.</p>
+        </div>
+        <div class="footer-section social-links">
+            <h3>Connect With Us</h3>
+            <a href="https://twitter.com/foxminer" target="_blank">Twitter</a>
+            <a href="https://discord.gg/foxminer" target="_blank">Discord</a>
+            <a href="https://github.com/foxminer-web" target="_blank">GitHub</a>
+        </div>
+        <div class="footer-section legal-links">
+            <h3>Legal</h3>
+            <a href="/Foxminer/faq.html" class="legal-red">FAQ</a>
+            <a href="/Foxminer/termsofuse.html" class="legal-red">Terms of Use</a>
+            <a href="/Foxminer/privacypolicy.html" class="legal-red">Privacy Policy</a>
+        </div>
+    </div>
+</footer>
 
     <script>
         const server = 'https://foxminer-server.onrender.com';
