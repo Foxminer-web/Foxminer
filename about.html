@@ -7,40 +7,57 @@
     <style>
         body { font-family: Arial, sans-serif; background: #1A1A2E; color: #F7F7F7; margin: 0; padding: 0; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        /* New index.html menu CSS */
         header { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; border-bottom: 1px solid #E94560; max-height: 60px; }
-header img { height: 125px; max-height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
-nav { display: flex; align-items: center; background: #E94560; padding: 10px 20px; border-radius: 5px; }
-nav a { color: #F7F7F7; text-decoration: none; margin: 0 15px; font-weight: bold; padding: 5px 10px; transition: background 0.3s; }
-nav a:hover { background: #FF6F61; border-radius: 3px; }
-.user-info { margin-left: 15px; font-weight: bold; }
-.user-info a { color: #F7F7F7; text-decoration: none; padding: 5px 10px; }
-.user-info a:hover { background: #FF6F61; border-radius: 3px; }
-.hamburger { display: none; font-size: 2em; cursor: pointer; color: #E94560; }
-@media (max-width: 768px) {
-    .hamburger { display: block; }
-    nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #E94560; padding: 20px; border-radius: 5px; }
-    nav.active { display: flex; }
-    nav a { margin: 10px 0; }
-    .user-info { margin: 10px 0; }
-}
-@media (min-width: 769px) {
-    nav.logged-in a { margin-left: 10px; }
-}
+        header img { height: 125px; max-height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
+        nav { display: flex; align-items: center; background: #E94560; padding: 10px 20px; border-radius: 5px; }
+        nav a { color: #F7F7F7; text-decoration: none; margin: 0 15px; font-weight: bold; padding: 5px 10px; transition: background 0.3s; }
+        nav a:hover { background: #FF6F61; border-radius: 3px; }
+        .user-info { margin-left: 15px; font-weight: bold; }
+        .user-info a { color: #F7F7F7; text-decoration: none; padding: 5px 10px; }
+        .user-info a:hover { background: #FF6F61; border-radius: 3px; }
+        .hamburger { display: none; font-size: 2em; cursor: pointer; color: #E94560; }
+        /* Restored original content CSS */
+        main { max-width: 800px; margin: 35px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
+        h1 { font-size: 2.5em; color: #E94560; margin-bottom: 10px; }
+        .tagline { font-size: 1.2em; color: #B0B0B0; margin-bottom: 20px; }
+        .intro { font-size: 1.1em; color: #F7F7F7; line-height: 1.6; margin-bottom: 20px; }
+        .features { text-align: left; max-width: 600px; margin: 0 auto; }
+        .feature { display: flex; align-items: center; margin: 15px 0; }
+        .checkmark { width: 24px; height: 24px; background: #E94560; border-radius: 50%; margin-right: 15px; position: relative; flex-shrink: 0; }
+        .checkmark::after { content: '✔'; color: #F7F7F7; font-size: 16px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .feature-text { font-size: 1em; color: #F7F7F7; }
+        /* Media queries for both menu and content */
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #E94560; padding: 20px; border-radius: 5px; }
+            nav.active { display: flex; }
+            nav a { margin: 10px 0; }
+            .user-info { margin: 10px 0; }
+            main { padding: 15px; }
+            h1 { font-size: 2em; }
+            .tagline { font-size: 1em; }
+            .intro { font-size: 1em; }
+            .feature-text { font-size: 0.9em; }
+        }
+        @media (min-width: 769px) {
+            nav.logged-in a { margin-left: 10px; }
+        }
     </style>
 </head>
 <body>
     <header class="container">
-    <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
-    <div class="hamburger" onclick="toggleMenu()">☰</div>
-    <nav>
-        <a href="/Foxminer/index.html">Home</a>
-        <a href="/Foxminer/howitworks.html">How It Works</a>
-        <a href="/Foxminer/about.html">About</a>
-        <a href="/Foxminer/dashboard.html">Dashboard</a>
-        <a href="/Foxminer/signup.html">Sign Up</a>
-        <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
-    </nav>
-</header>
+        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <nav>
+            <a href="/Foxminer/index.html">Home</a>
+            <a href="/Foxminer/howitworks.html">How It Works</a>
+            <a href="/Foxminer/about.html">About</a>
+            <a href="/Foxminer/dashboard.html">Dashboard</a>
+            <a href="/Foxminer/signup.html">Sign Up</a>
+            <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
+        </nav>
+    </header>
     <main>
         <h1>About FOXMINER v1.0</h1>
         <div class="tagline">Mining Monero, Made Simple</div>
@@ -78,7 +95,6 @@ nav a:hover { background: #FF6F61; border-radius: 3px; }
             const nav = document.querySelector('nav');
             nav.classList.toggle('active');
         }
-
         window.onload = () => {
             console.log('About page loaded');
         };
