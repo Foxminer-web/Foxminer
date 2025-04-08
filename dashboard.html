@@ -201,7 +201,7 @@
                     userInfo.innerHTML = `${data.email} <button onclick="logout()">Logout</button>`;
                     nav.classList.add('logged-in');
                     if (!data.wallet) {
-                        message.textContent = 'Welcome you young, Foxminer! Please enter your XMR wallet address and click "save" to start mining. Please note that live stats will start updating from MoneroOcean within 5-10 mins in most cases. Happy Mining.';
+                        message.textContent = 'Welcome you young, Foxminer! Please enter your XMR wallet address and click "save." To start mining please download our app from the Installers tab. Please note that live stats will start updating from MoneroOcean within 5-10 mins in most cases. Happy Mining.';
                     } else {
                         document.getElementById('wallet').value = data.wallet;
                         updateStats(data.wallet);
@@ -209,7 +209,7 @@
                 } else {
                     isSignedIn = false;
                     userEmail = '';
-                    status.textContent = 'Not signed in? Sign up to track your stats!';
+                    status.textContent = 'Not signed in? Sign up to track your stats! Download the app from the Installers tab to start mining with your spare CPU resources';
                     userInfo.innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
                     nav.classList.remove('logged-in');
                     message.textContent = '';
