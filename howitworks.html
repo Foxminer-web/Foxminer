@@ -7,11 +7,25 @@
     <style>
         body { font-family: Arial, sans-serif; background: #1A1A2E; color: #F7F7F7; margin: 0; padding: 0; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 0; max-height: 60px; border-bottom: 1px solid #E94560; }
-        header img { height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
-        nav { display: flex; gap: 15px; }
-        nav button { padding: 8px 16px; background: #E94560; border: none; border-radius: 5px; cursor: pointer; color: #F7F7F7; }
-        nav button:hover { background: #FF6F61; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; max-height: 60px; border-bottom: 1px solid #E94560; }
+header img { height: 125px; max-height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
+nav { display: flex; align-items: center; }
+nav a { color: #F7F7F7; text-decoration: none; margin-left: 20px; font-weight: bold; }
+nav a:hover { color: #E94560; }
+.user-info { margin-left: 20px; font-weight: bold; }
+.user-info button { padding: 5px 10px; background: #E94560; border: none; border-radius: 5px; color: #F7F7F7; cursor: pointer; }
+.user-info button:hover { background: #FF6F61; }
+.hamburger { display: none; font-size: 2em; cursor: pointer; }
+@media (max-width: 768px) {
+    .hamburger { display: block; }
+    nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
+    nav.active { display: flex; }
+    nav a { margin: 10px 0; }
+    .user-info { margin: 10px 0; }
+}
+@media (min-width: 769px) {
+    nav.logged-in a { margin-left: 10px; }
+}
         .content { max-width: 800px; margin: 35px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
         h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
         p { font-size: 1.1em; color: #B0B0B0; margin: 20px 0; line-height: 1.6; }
@@ -28,15 +42,17 @@
 </head>
 <body>
     <header class="container">
-        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
-        <nav>
-            <a href="/Foxminer/index.html">Home</a>
-            <button onclick="window.location.href='dashboard.html'">Dashboard</button>
-            <button onclick="window.location.href='installers.html'">Installers</button>
-            <button onclick="showSignIn()">Sign In</button>
-            <button onclick="showSignUp()">Sign Up</button>
-        </nav>
-    </header>
+    <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <nav>
+        <a href="/Foxminer/index.html">Home</a>
+        <a href="/Foxminer/howitworks.html">How It Works</a>
+        <a href="/Foxminer/ahout.html">About</a>
+        <a href="/Foxminer/dashboard.html">Dashboard</a>
+        <a href="/Foxminer/signup.html">Sign Up</a>
+        <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
+    </nav>
+</header>
     <div class="content">
         <h1>How It Works</h1>
         <p>FOXMINER is your gateway to mining Monero (XMR) with ease, starting with macOS ARM64 and expanding to older macOS models, Windows, and Linux by Q4 2025. No pool setup, no complicated scripts—just pure, optimized CPU power at your fingertips. This streamlined app runs quietly in the background, delivering top-tier performance with minimal RAM usage and low CPU strain, thanks to our finely tuned, open-source mining engine. Skip the setup headaches: download the DMG, launch the app, sign up, enter your wallet address, hit “Save,” and click “Start Mining” to unleash the magic. It’s built to keep going even if you close the window, pausing only when you choose “Stop” or restart your system. Before Foxminer, CPU mining was a puzzle for newcomers; now, our dedicated team has transformed it into a free, seamless experience that maximizes your rig’s potential with style and precision.</p>
@@ -86,5 +102,11 @@
             window.location.href = 'dashboard.html'; // Redirect to dashboard for auth
         }
     </script>
+    <script>
+    function toggleMenu() {
+        const nav = document.querySelector('nav');
+        nav.classList.toggle('active');
+    }
+</script>
 </body>
 </html>
