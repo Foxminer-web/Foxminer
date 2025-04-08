@@ -18,7 +18,6 @@
             margin: 0 auto;
             padding: 20px;
         }
-        /* Menu from index.html */
         header {
             display: flex;
             justify-content: space-between;
@@ -72,7 +71,6 @@
             cursor: pointer;
             color: #E94560;
         }
-        /* Content theme from about.html */
         main {
             max-width: 800px;
             margin: 35px auto;
@@ -98,7 +96,6 @@
             margin: 10px 0;
             text-align: left;
         }
-        /* Media queries */
         @media (max-width: 768px) {
             .hamburger {
                 display: block;
@@ -163,56 +160,42 @@
     <main>
         <h1>FOXMINER Documentation</h1>
         <h2>Introduction</h2>
-        <p>Welcome to FOXMINER, the next evolution in browser-based cryptocurrency mining! Built from the ground up to maximize Monero (XMR) profits, FOXMINER leverages our custom RandomFOX algorithm—a high-performance fork of Monero’s RandomX—optimized for CPU web mining. Whether you’re a solo miner or looking to embed mining on your site, this documentation will guide you through everything you need to know.</p>
-        
+        <p>Welcome to FOXMINER, the world’s first frontend CPU miner built from scratch for Monero (XMR) mining on Mac ARM64 systems (M1/M2). Launched in 2025 after 18 months of relentless optimization, FOXMINER redefines CPU mining by stripping away the complexity of traditional setups—no pool configs, no command-line tinkering, just a sleek app that maximizes your profits. Powered by RandomX with auto-algo switching via MoneroOcean integration, we’re here to squeeze every ounce of hashrate from your CPU while keeping resource usage low. Currently rocking ARM64 Macs, with Intel Mac support live and Windows/Linux versions dropping by Q4 2025—this is Monero mining, reborn.</p>
+
         <h2>Getting Started</h2>
-        <p>To start mining with FOXMINER, you’ve got two options: jump in directly or sign up for enhanced tracking. No account? No problem—just head to the homepage, enter your Monero wallet address, and click "Start Mining." Want to monitor your hashrate and earnings? Sign up with your email and wallet, then check your stats on the dashboard. It’s that simple.</p>
-        
+        <p>Getting up and running with FOXMINER is a breeze. Download the DMG from our Installers page (coming soon), install it, and launch the app. Sign up with your email, paste your Monero wallet address (44-88 characters, starting with 4 or 8), hit “Save,” and click “Start Mining.” That’s it—your CPU’s now churning out XMR. No account yet? You’ll need one to track your stats on the dashboard, but the app’s free and open to all Mac users (ARM64 or Intel). Check the Dashboard page after signing in to monitor your hashrate, shares, and earnings in real time.</p>
+
         <h2>How It Works</h2>
-        <p>FOXMINER runs entirely in your browser using JavaScript, powered by RandomFOX—our custom RandomX fork. Unlike traditional mining setups, we’ve fine-tuned it for web efficiency, with an auto-switching algorithm that adapts to network conditions, boosting profits by 30-50% over competitors like CoinIMP. Enter your wallet on the homepage, hit "Start Mining," and let our tech do the heavy lifting. For site owners, embed our script (see Dashboard) to turn your visitors’ CPUs into XMR-earning machines.</p>
-        
+        <p>FOXMINER is a native macOS app that runs locally on your CPU—no browser nonsense here. It taps into Monero’s RandomX algorithm, fine-tuned with auto-algo switching through MoneroOcean’s pool, dynamically adapting to network conditions for up to 20-30% higher profits than static miners. Once launched, it runs quietly in the background, even if you close the window—stopping only when you hit “Stop” or reboot. Optimized for ARM64 (M1/M2 chips), it delivers 1-3 kH/s on high-end Macs (think MacBook Pro 16” M2 Max) and 500-1500 H/s on Intel models, all while sipping RAM (under 200 MB) and keeping CPU load balanced. Future Windows/Linux builds will bring the same power to every rig by Q4 2025.</p>
+
         <h2>Features</h2>
-        <p><strong>Auto Algo-Switching:</strong> RandomFOX dynamically adjusts to optimize hashrate, squeezing out more XMR than static algos.</p>
-        <p><strong>Browser-Optimized:</strong> Lightweight JS means no downloads, no fuss—just pure mining power.</p>
-        <p><strong>Dashboard Stats:</strong> Track hashes per second, total hashes, and estimated earnings in real-time (signup required).</p>
-        <p><strong>Site Integration:</strong> Embed FOXMINER on your site with a simple script—8% dev fee applies, but your visitors do the work.</p>
-        
+        <p><strong>Auto Algo-Switching:</strong> RandomX adapts on the fly via MoneroOcean, targeting the most profitable algos for your CPU.</p>
+        <p><strong>ARM64 Optimization:</strong> Built for M1/M2 Macs—max hashrate, minimal strain (Intel Macs supported too).</p>
+        <p><strong>Dashboard Insights:</strong> Live hashrate, worker stats, and payout tracking—signup unlocks it all.</p>
+        <p><strong>Background Mining:</strong> Runs silently even when minimized—pause or stop anytime.</p>
+        <p><strong>Multi-Platform Future:</strong> Windows and Linux versions coming Q4 2025—same app, broader reach.</p>
+
         <h2>Technical Details</h2>
-        <p>RandomFOX is a leaner, meaner RandomX, stripped down for browser constraints while keeping Monero’s security. It hashes at 500-1000 H/s on modern CPUs (varies by device). Payouts tie into MoneroOcean’s pool—0.00000005 XMR per 1M hashes, adjusted for difficulty (120G) and a 1% orphan block rate. We take a 8% dev fee and MoneroOcean adds a 0.12% cashout fee. Your earnings hit your wallet automatically via their system.</p>
-        
+        <p>FOXMINER’s core is an open-source RandomX engine, compiled natively for macOS ARM64 and Intel, hitting 1-3 kH/s on M1/M2 (e.g., 2.5 kH/s on M2 Max, 16 cores) and 0.5-1.5 kH/s on Intel i7/i9 rigs. It connects to MoneroOcean’s pool—payouts kick in at 0.3 XMR (configurable), with a tiny 0.003 XMR pool fee. Our dev fee’s a flat 5% (3% to FOXMINER, 2% to the original coder), way leaner than the 20-30% you’d see elsewhere. Expect 1 XMR per 20-40 MH of shares (difficulty ~120G, 1% orphan rate)—your Mac’s earning potential depends on cores and clock speed. All payouts land in your wallet automatically via MoneroOcean.</p>
+
         <h2>FAQ</h2>
-        <p><strong>Q: Do I need to sign up?</strong> Nope! Mining’s open to all—just add a wallet. Signing up unlocks the dashboard.</p>
-        <p><strong>Q: What’s the minimum payout?</strong> No minimum here—it’s all handled by MoneroOcean’s pool settings.</p>
-        <p><strong>Q: Can I mine on mobile?</strong> Yep, but expect lower hashrates (50-200 H/s) due to CPU limits.</p>
-        <p><strong>Q: What are the fees?</strong> 2% dev fee to keep us running, plus MoneroOcean’s 0.12% cashout fee.</p>
-        
+        <p><strong>Q: Do I need an account?</strong> Yes—to use the app and track stats. Sign up free on the site.</p>
+        <p><strong>Q: What’s the payout threshold?</strong> 0.3 XMR default via MoneroOcean—adjustable in their system.</p>
+        <p><strong>Q: Will it work on my Intel Mac?</strong> Yep—full support for older models, just lower hashrates.</p>
+        <p><strong>Q: What about Windows/Linux?</strong> Coming Q4 2025—ARM64 Macs are the priority now.</p>
+        <p><strong>Q: Fees?</strong> 5% dev fee (3% us, 2% coder) + 0.003 XMR pool fee—keeps us lean and mean.</p>
+
         <h2>Troubleshooting</h2>
-        <p><strong>Mining not starting?</strong> Check your wallet address—44-88 characters, starts with 4 or 8. Still stuck? Refresh and try again.</p>
-        <p><strong>Low hashrate?</strong> Older CPUs or throttled browsers (e.g., Chrome on mobile) might cap you. Test on a desktop for max power.</p>
-        <p><strong>Dashboard blank?</strong> Sign in first—stats need an account to sync.</p>
+        <p><strong>Mining won’t start?</strong> Double-check your wallet address—44-88 chars, starts with 4 or 8. Re-enter and save.</p>
+        <p><strong>Low hashrate?</strong> Older Macs or fewer cores limit output—test on a beefy M1/M2 for peak results.</p>
+        <p><strong>App crashing?</strong> Ensure macOS is updated (14.0+ recommended). Restart and reinstall if needed.</p>
+        <p><strong>Dashboard empty?</strong> Sign in first—stats sync with your account, not the app alone.</p>
     </main>
 
     <script>
         function toggleMenu() {
             const nav = document.querySelector('nav');
             nav.classList.toggle('active');
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const isSignedIn = localStorage.getItem('isSignedIn');
-            const userEmail = localStorage.getItem('userEmail');
-            const nav = document.querySelector('nav');
-
-            if (isSignedIn === 'true' && userEmail) {
-                nav.innerHTML = `Welcome, ${userEmail} | <a href="#" onclick="signOut()">Sign Out</a>`;
-            }
-        });
-
-        function signOut() {
-            localStorage.removeItem('isSignedIn');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('wallet');
-            window.location.href = 'https://foxminer.glitch.me/';
         }
     </script>
 </body>
