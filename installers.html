@@ -6,31 +6,16 @@
     <title>FOXMINER - Installers</title>
     <style>
         body { font-family: Arial, sans-serif; background: #1A1A2E; color: #F7F7F7; margin: 0; padding: 0; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; border-bottom: 1px solid #E94560; max-height: 60px; }
-header img { height: 125px; max-height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
-nav { display: flex; align-items: center; background: #E94560; padding: 10px 20px; border-radius: 5px; }
-nav a { color: #F7F7F7; text-decoration: none; margin: 0 15px; font-weight: bold; padding: 5px 10px; transition: background 0.3s; }
-nav a:hover { background: #FF6F61; border-radius: 3px; }
-.user-info { margin-left: 15px; font-weight: bold; }
-.user-info a { color: #F7F7F7; text-decoration: none; padding: 5px 10px; }
-.user-info a:hover { background: #FF6F61; border-radius: 3px; }
-.hamburger { display: none; font-size: 2em; cursor: pointer; color: #E94560; }
-@media (max-width: 768px) {
-    .hamburger { display: block; }
-    nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #E94560; padding: 20px; border-radius: 5px; }
-    nav.active { display: flex; }
-    nav a { margin: 10px 0; }
-    .user-info { margin: 10px 0; }
-}
-@media (min-width: 769px) {
-    nav.logged-in a { margin-left: 10px; }
-}
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 0; max-height: 60px; border-bottom: 1px solid #E94560; }
-        header img { height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
-        nav { display: flex; gap: 15px; }
-        nav button { padding: 8px 16px; background: #E94560; border: none; border-radius: 5px; cursor: pointer; color: #F7F7F7; }
-        nav button:hover { background: #FF6F61; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; border-bottom: 1px solid #E94560; max-height: 60px; }
+        header img { height: 125px; max-height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
+        nav { display: flex; align-items: center; background: #E94560; padding: 10px 20px; border-radius: 5px; }
+        nav a { color: #F7F7F7; text-decoration: none; margin: 0 15px; font-weight: bold; padding: 5px 10px; transition: background 0.3s; }
+        nav a:hover { background: #FF6F61; border-radius: 3px; }
+        .user-info { margin-left: 15px; font-weight: bold; }
+        .user-info a { color: #F7F7F7; text-decoration: none; padding: 5px 10px; }
+        .user-info a:hover { background: #FF6F61; border-radius: 3px; }
+        .hamburger { display: none; font-size: 2em; cursor: pointer; color: #E94560; }
         .installers { max-width: 800px; margin: 35px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
         h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
         .installer-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
@@ -40,23 +25,95 @@ nav a:hover { background: #FF6F61; border-radius: 3px; }
         .installer-section button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; cursor: pointer; }
         .installer-section button:hover { background: #FF6F61; }
         .warning { font-size: 0.9em; color: #FF6F61; font-weight: bold; margin-top: 10px; }
+        .coming-soon { font-size: 0.9em; color: #FF6F61; font-weight: bold; margin-top: 10px; }
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #E94560; padding: 20px; border-radius: 5px; }
+            nav.active { display: flex; }
+            nav a { margin: 10px 0; }
+            .user-info { margin: 10px 0; }
+        }
+        @media (min-width: 769px) {
+            nav.logged-in a { margin-left: 10px; }
+        }
+        .footer {
+            background: #0A0A1A;
+            color: #F7F7F7;
+            padding: 40px 0;
+            border-top: 2px solid #E94560;
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin: 20px 0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .footer-section h3 {
+            color: #E94560;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .footer-section p {
+            font-size: 0.9em;
+            color: #B0B0B0;
+            margin: 5px 0;
+        }
+        .footer-section a {
+            display: block;
+            color: #F7F7F7;
+            text-decoration: none;
+            font-size: 0.9em;
+            margin: 8px 0;
+            transition: color 0.3s;
+        }
+        .footer-section a:hover {
+            color: #FF6F61;
+        }
+        .legal-red {
+            color: #E94560;
+            font-weight: bold;
+        }
+        .legal-red:hover {
+            color: #FF6F61;
+        }
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-section {
+                margin: 15px 0;
+            }
+        }
     </style>
 </head>
 <body>
     <header class="container">
-    <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
-    <div class="hamburger" onclick="toggleMenu()">☰</div>
-    <nav>
-        <a href="/Foxminer/index.html">Home</a>
-        <a href="/Foxminer/docs.html">Docs</a>
-        <a href="/Foxminer/howitworks.html">How It Works</a>
-        <a href="/Foxminer/about.html">About</a>
-        <a href="/Foxminer/installers.html">Installers</a>
-        <a href="/Foxminer/dashboard.html">Dashboard</a>
-        <a href="/Foxminer/signup.html">Sign Up</a>
-        <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
-    </nav>
-</header>
+        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <nav>
+            <a href="/Foxminer/index.html">Home</a>
+            <a href="/Foxminer/docs.html">Docs</a>
+            <a href="/Foxminer/howitworks.html">How It Works</a>
+            <a href="/Foxminer/about.html">About</a>
+            <a href="/Foxminer/installers.html">Installers</a>
+            <a href="/Foxminer/dashboard.html">Dashboard</a>
+            <a href="/Foxminer/signup.html">Sign Up</a>
+            <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
+        </nav>
+    </header>
     <div class="installers">
         <h1>FOXMINER Installers</h1>
         <p style="font-size: 1em; color: #B0B0B0; margin-bottom: 20px;">Download the right Foxminer version for your system below!</p>
@@ -72,31 +129,56 @@ nav a:hover { background: #FF6F61; border-radius: 3px; }
             <h2>Intel x86_64 (10.9.5 and newer)</h2>
             <p>For Intel-based Macs running macOS 10.9.5 or later.</p>
             <a href="#" target="_blank"><button>Download Foxminer v1.0</button></a>
+            <p class="coming-soon">Support Coming Soon</p>
         </div>
 
         <div class="installer-section">
             <h2>Windows ARM</h2>
             <p>For Windows devices with ARM processors (e.g., Surface Pro X).</p>
             <a href="#" target="_blank"><button>Download Foxminer v1.0</button></a>
+            <p class="coming-soon">Support Coming Soon</p>
         </div>
 
         <div class="installer-section">
             <h2>Windows x86-64</h2>
             <p>For 64-bit Windows systems (most modern PCs).</p>
             <a href="#" target="_blank"><button>Download Foxminer v1.0</button></a>
+            <p class="coming-soon">Support Coming Soon</p>
         </div>
 
         <div class="installer-section">
             <h2>Linux</h2>
             <p>For Linux distributions (64-bit). Works on Ubuntu, Debian, etc.</p>
             <a href="#" target="_blank"><button>Download Foxminer v1.0</button></a>
+            <p class="coming-soon">Support Coming Soon</p>
         </div>
     </div>
     <script>
-    function toggleMenu() {
-        const nav = document.querySelector('nav');
-        nav.classList.toggle('active');
-    }
-</script>
+        function toggleMenu() {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
+    </script>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section company-info">
+                <h3>FOXMINER</h3>
+                <p>Revolutionizing Monero CPU Mining Since 2025</p>
+                <p>© 2025 FOXMINER. All rights reserved.</p>
+            </div>
+            <div class="footer-section social-links">
+                <h3>Connect With Us</h3>
+                <a href="https://twitter.com/foxminer" target="_blank">Twitter</a>
+                <a href="https://discord.gg/foxminer" target="_blank">Discord</a>
+                <a href="https://github.com/foxminer-web" target="_blank">GitHub</a>
+            </div>
+            <div class="footer-section legal-links">
+                <h3>Legal</h3>
+                <a href="/Foxminer/faq.html" class="legal-red">FAQ</a>
+                <a href="/Foxminer/termsofuse.html" class="legal-red">Terms of Use</a>
+                <a href="/Foxminer/privacypolicy.html" class="legal-red">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
