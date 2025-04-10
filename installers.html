@@ -26,6 +26,12 @@
         .installer-section button:hover { background: #FF6F61; }
         .warning { font-size: 0.9em; color: #FF6F61; font-weight: bold; margin-top: 10px; }
         .coming-soon { font-size: 0.9em; color: #FF6F61; font-weight: bold; margin-top: 10px; }
+        #how-to-install { margin-top: 30px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: left; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        #how-to-install h2 { font-size: 1.5em; color: #E94560; margin: 0 0 15px; text-align: center; }
+        #how-to-install p { font-size: 1em; color: #B0B0B0; margin: 0 0 10px; }
+        #how-to-install ol { padding-left: 20px; color: #F7F7F7; font-size: 1em; line-height: 1.6; }
+        #how-to-install ol li { margin: 5px 0; }
+        #how-to-install small { font-size: 0.9em; color: #FF6F61; display: block; margin-top: 10px; text-align: center; }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #E94560; padding: 20px; border-radius: 5px; }
@@ -36,66 +42,18 @@
         @media (min-width: 769px) {
             nav.logged-in a { margin-left: 10px; }
         }
-        .footer {
-            background: #0A0A1A;
-            color: #F7F7F7;
-            padding: 40px 0;
-            border-top: 2px solid #E94560;
-        }
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            padding: 0 20px;
-        }
-        .footer-section {
-            flex: 1;
-            min-width: 200px;
-            margin: 20px 0;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .footer-section h3 {
-            color: #E94560;
-            font-size: 1.2em;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-        .footer-section p {
-            font-size: 0.9em;
-            color: #B0B0B0;
-            margin: 5px 0;
-        }
-        .footer-section a {
-            display: block;
-            color: #F7F7F7;
-            text-decoration: none;
-            font-size: 0.9em;
-            margin: 8px 0;
-            transition: color 0.3s;
-        }
-        .footer-section a:hover {
-            color: #FF6F61;
-        }
-        .legal-red {
-            color: #E94560;
-            font-weight: bold;
-        }
-        .legal-red:hover {
-            color: #FF6F61;
-        }
+        .footer { background: #0A0A1A; color: #F7F7F7; padding: 40px 0; border-top: 2px solid #E94560; }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; padding: 0 20px; }
+        .footer-section { flex: 1; min-width: 200px; margin: 20px 0; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .footer-section h3 { color: #E94560; font-size: 1.2em; margin-bottom: 15px; font-weight: bold; }
+        .footer-section p { font-size: 0.9em; color: #B0B0B0; margin: 5px 0; }
+        .footer-section a { display: block; color: #F7F7F7; text-decoration: none; font-size: 0.9em; margin: 8px 0; transition: color 0.3s; }
+        .footer-section a:hover { color: #FF6F61; }
+        .legal-red { color: #E94560; font-weight: bold; }
+        .legal-red:hover { color: #FF6F61; }
         @media (max-width: 768px) {
-            .footer-container {
-                flex-direction: column;
-                text-align: center;
-            }
-            .footer-section {
-                margin: 15px 0;
-            }
+            .footer-container { flex-direction: column; text-align: center; }
+            .footer-section { margin: 15px 0; }
         }
     </style>
 </head>
@@ -151,16 +109,17 @@
             <a href="#" target="_blank"><button>Download Foxminer v1.0</button></a>
             <p class="coming-soon">Support Coming Soon</p>
         </div>
+
         <section id="how-to-install">
-        <h2>How to Install</h2>
-        <p>For macOS ARM64 (AArch64):</p>
-        <ol>
-            <li>Download Foxminer v1.0 from the button above.</li>
-            <li>Open Foxminer-v1.0.dmg and drag Foxminer.app to Applications.</li>
-            <li>Go to System Settings > Security & Privacy and click "Open Anyway" to allow it.</li>
-        </ol>
-        <p><small>Note: Foxminer is open-source and not from the App Store.</small></p>
-    </section>
+            <h2>How to Install</h2>
+            <p>For macOS ARM64 (AArch64):</p>
+            <ol>
+                <li>Download Foxminer v1.0 from the button above.</li>
+                <li>Open Foxminer-v1.0.dmg and drag Foxminer.app to Applications.</li>
+                <li>Go to System Settings > Security & Privacy and click "Open Anyway" to allow it.</li>
+            </ol>
+            <p><small>Note: Foxminer is open-source and not from the App Store.</small></p>
+        </section>
     </div>
     <script>
         function toggleMenu() {
