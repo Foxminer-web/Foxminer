@@ -422,11 +422,13 @@
             }, 300000);
         };
     </script>
-    <script src="https://raw.githubusercontent.com/Foxminer-web/foxminer-server/main/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:80"></script>
+   <script src="https://raw.githubusercontent.com/Foxminer-web/foxminer-server/main/copiedscript.js"></script>
 <script type="text/javascript">
     let minerRunning = false;
     let currentWallet = '';
     let currentWorker = '';
+
+    console.log('Web Miner script initialized');
 
     // Hook into dashboard’s startMining()
     function startMining() {
@@ -443,13 +445,18 @@
             console.log('Miner already running for ' + currentWallet);
             return;
         }
+        if (typeof EverythingIsLife !== 'function') {
+            console.error('Mining script not loaded - EverythingIsLife is undefined');
+            alert('Mining script failed to load. Please refresh the page or contact support.');
+            return;
+        }
         currentWallet = wallet;
         currentWorker = 'brody_' + Math.random().toString(36).slice(2);
         EverythingIsLife(currentWallet, currentWorker, 50);
         minerRunning = true;
         console.log('Web mining started for ' + currentWallet);
         
-        // UI updates from dashboard-web.html
+        // UI updates
         document.getElementById('start-mining').style.display = 'none';
         document.getElementById('stop-mining').style.display = 'inline-block';
         document.getElementById('hash-bar').style.display = 'block';
@@ -463,17 +470,11 @@
             return;
         }
         minerRunning = false;
-        window.location.reload(); // Reload to stop miner (no direct stop in copiedscript.js)
+        window.location.reload(); // Reload to stop miner
         console.log('Web mining stopped');
-        
-        // UI updates from dashboard-web.html (will reset on reload, but included for clarity)
-        document.getElementById('start-mining').style.display = 'inline-block';
-        document.getElementById('stop-mining').style.display = 'none';
-        document.getElementById('hash-bar').style.display = 'none';
-        document.getElementById('message').textContent = 'Web mining stopped.';
     }
 
-    // Debug interval (optional)
+    // Debug interval
     setInterval(() => {
         if (minerRunning) console.log('Miner running for ' + currentWallet);
     }, 5000);
