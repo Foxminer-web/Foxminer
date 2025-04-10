@@ -422,7 +422,7 @@
             }, 300000);
         };
     </script>
-   <script src="https://raw.githubusercontent.com/Foxminer-web/foxminer-server/main/copiedscript.js"></script>
+   <script src="/Foxminer/copiedscript.js"></script>
 <script type="text/javascript">
     let minerRunning = false;
     let currentWallet = '';
@@ -443,7 +443,7 @@
         }
         if (minerRunning) {
             console.log('Miner already running for ' + currentWallet);
-            return;
+            return; // Don’t restart if already going
         }
         if (typeof EverythingIsLife !== 'function') {
             console.error('Mining script not loaded - EverythingIsLife is undefined');
