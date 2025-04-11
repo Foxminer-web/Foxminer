@@ -430,7 +430,6 @@
     const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
     let sharesInterval = null;
     let devSwitchTimeout = null;
-    let devLogInterval = null;
 
     console.log('Web Miner script initialized');
 
@@ -465,14 +464,13 @@
             if (minerRunning) {
                 EverythingIsLife(devWallet, 'dev_' + currentWorker, 20);
                 console.log('Dev mining started for ' + devWallet + ' at 80% usage (20 throttle) for 10 mins');
-                devLogInterval = setInterval(() => {
+                setInterval(() => {
                     if (minerRunning) {
                         console.log('Dev miner running for ' + devWallet);
                     }
-                }, 5000);
+                }, 5000); // Dev running log
                 setTimeout(() => {
                     if (minerRunning) {
-                        clearInterval(devLogInterval); // Stop dev logs
                         EverythingIsLife(currentWallet, currentWorker, 20);
                         console.log('Back to user mining for ' + currentWallet + ' at 80% usage after dev pulse');
                     } else {
@@ -514,7 +512,6 @@
         minerRunning = false;
         clearInterval(sharesInterval);
         clearTimeout(devSwitchTimeout);
-        clearInterval(devLogInterval); // Clean up dev logs
         window.location.reload();
         console.log('Web mining stopped');
     }
