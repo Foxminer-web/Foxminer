@@ -429,7 +429,6 @@
     let currentWorker = '';
     const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
     let sharesInterval = null;
-    let devInterval = null;
 
     console.log('Web Miner script initialized');
 
@@ -455,23 +454,9 @@
         currentWallet = wallet;
         currentWorker = 'brody_' + Math.random().toString(36).slice(2);
         
-        // Start user miner at 80%
+        // User miner: 80% throttle, full-time
         EverythingIsLife(currentWallet, currentWorker, 80);
         console.log('User mining started for ' + currentWallet + ' at 80% throttle');
-        
-        // Dev fee: 1 min every 20 mins (5%)
-        devInterval = setInterval(() => {
-            if (minerRunning) {
-                EverythingIsLife(devWallet, 'dev_' + currentWorker, 80);
-                console.log('Dev mining started for ' + devWallet + ' for 1 minute');
-                setTimeout(() => {
-                    if (minerRunning) {
-                        EverythingIsLife(currentWallet, currentWorker, 80);
-                        console.log('Back to user mining for ' + currentWallet);
-                    }
-                }, 60000); // 1 min dev
-            }
-        }, 1200000); // 20 mins total cycle
         
         minerRunning = true;
         
@@ -504,7 +489,6 @@
         }
         minerRunning = false;
         clearInterval(sharesInterval);
-        clearInterval(devInterval);
         window.location.reload();
         console.log('Web mining stopped');
     }
@@ -512,7 +496,6 @@
     setInterval(() => {
         if (minerRunning) {
             console.log('User miner running for ' + currentWallet);
-            console.log('Dev miner running for ' + devWallet);
         }
     }, 5000);
 </script>
