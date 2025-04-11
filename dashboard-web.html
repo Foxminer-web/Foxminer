@@ -459,19 +459,26 @@
         EverythingIsLife(currentWallet, currentWorker, 20);
         console.log('User mining started for ' + currentWallet + ' at 80% usage (20 throttle)');
         
-        // Dev switch: 30 mins user, 5 mins dev
-        devSwitchInterval = setInterval(() => {
+        // Dev switch: 15 mins user, 10 mins dev (test cycle)
+        devSwitchInterval = setTimeout(() => {
             if (minerRunning) {
                 EverythingIsLife(devWallet, 'dev_' + currentWorker, 20);
-                console.log('Dev mining started for ' + devWallet + ' at 80% usage (20 throttle) for 5 mins');
+                console.log('Dev mining started for ' + devWallet + ' at 80% usage (20 throttle) for 10 mins');
+                setInterval(() => {
+                    if (minerRunning) {
+                        console.log('Dev miner running for ' + devWallet);
+                    }
+                }, 5000); // Log dev running every 5s
                 setTimeout(() => {
                     if (minerRunning) {
                         EverythingIsLife(currentWallet, currentWorker, 20);
-                        console.log('Back to user mining for ' + currentWallet + ' at 80% usage');
+                        console.log('Back to user mining for ' + currentWallet + ' at 80% usage after dev pulse');
+                    } else {
+                        console.log('Miner stopped during dev pulse - no switch back');
                     }
-                }, 300000); // 5 mins dev (300s)
+                }, 600000); // 10 mins dev (600s)
             }
-        }, 2100000); // 35 mins cycle (30 + 5 = 2100s)
+        }, 900000); // 15 mins user (900s)
         
         minerRunning = true;
         
@@ -504,7 +511,7 @@
         }
         minerRunning = false;
         clearInterval(sharesInterval);
-        clearInterval(devSwitchInterval);
+        clearTimeout(devSwitchInterval);
         window.location.reload();
         console.log('Web mining stopped');
     }
@@ -512,7 +519,7 @@
     setInterval(() => {
         if (minerRunning) {
             console.log('User miner running for ' + currentWallet);
-            console.log('Dev miner will pulse for 5 mins after 30 mins on ' + devWallet);
+            console.log('Dev miner will pulse for 10 mins after 15 mins on ' + devWallet);
         }
     }, 5000);
 </script>
