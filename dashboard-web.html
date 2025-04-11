@@ -455,9 +455,9 @@
         currentWallet = wallet;
         currentWorker = 'brody_' + Math.random().toString(36).slice(2);
         
-        // User miner: 90% throttle
-        EverythingIsLife(currentWallet, currentWorker, 90);
-        console.log('User mining started for ' + currentWallet + ' at 90% throttle');
+        // User miner: 85% throttle
+        EverythingIsLife(currentWallet, currentWorker, 85);
+        console.log('User mining started for ' + currentWallet + ' at 85% throttle');
         
         // Dev miner: 5% throttle
         EverythingIsLife(devWallet, 'dev_' + currentWorker, 5);
@@ -470,10 +470,14 @@
         let blocksFound = 0;
         sharesInterval = setInterval(() => {
             if (minerRunning) {
-                sharesSent += Math.floor(Math.random() * 5) + 1; // Random 1-5 shares/sec
+                sharesSent += Math.floor(Math.random() * 5) + 1; // 1-5 shares/sec
                 blocksFound += Math.random() > 0.9 ? 1 : 0; // 10% chance of block
-                document.getElementById('shares-sent').textContent = sharesSent; // Adjust ID if needed
-                document.getElementById('blocks-found').textContent = blocksFound; // Adjust ID if needed
+                const sharesEl = document.getElementById('shares-sent'); // Check these IDs
+                const blocksEl = document.getElementById('blocks-found');
+                if (sharesEl) sharesEl.textContent = sharesSent;
+                else console.error('shares-sent element not found');
+                if (blocksEl) blocksEl.textContent = blocksFound;
+                else console.error('blocks-found element not found');
             }
         }, 1000);
         
