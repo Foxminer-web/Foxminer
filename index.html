@@ -320,24 +320,76 @@
     <section class="comparison container">
     <h2>Why FOXMINER Wins</h2>
     <h3>Stats based on macOS ARM64 M1-M2 Models</h3>
-    <div class="comparison-boxes">
-        <div class="box web-mining">
+    <div class="comparison-tables">
+        <div class="table-box">
             <h4>Web Mining (Chrome/Safari)</h4>
-            <p>FOXMINER’s auto-algo RandomX optimization crushes the competition in browser mining.</p>
-            <ul>
-                <li><strong>FOXMINER:</strong> 250-900 H/s, 5% dev fee</li>
-                <li><strong>CoinIMP:</strong> 100-700 H/s, 20% dev fee</li>
-                <li><strong>NiceHash:</strong> 100-600 H/s, 2% dev + 1.4% pool fee</li>
-            </ul>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>FOXMINER v1.0</th>
+                    <th>CoinIMP</th>
+                    <th>NiceHash</th>
+                </tr>
+                <tr>
+                    <td>Hash Rate</td>
+                    <td>250-900 H/s</td>
+                    <td>100-700 H/s</td>
+                    <td>100-600 H/s</td>
+                </tr>
+                <tr>
+                    <td>Profit Per Day</td>
+                    <td>$0.02-0.08</td>
+                    <td>$0.01-0.04</td>
+                    <td>$0.01-0.03</td>
+                </tr>
+                <tr>
+                    <td>Algorithm</td>
+                    <td>RandomX Auto-Algo</td>
+                    <td>Static WebHash</td>
+                    <td>Auto-Switching</td>
+                </tr>
+                <tr>
+                    <td>Fees</td>
+                    <td>5% Dev</td>
+                    <td>20% Dev</td>
+                    <td>2% Dev + 1.4% Pool</td>
+                </tr>
+            </table>
         </div>
-        <div class="box cpu-mining">
+        <div class="table-box">
             <h4>CPU Mining</h4>
-            <p>FOXMINER’s RandomX auto-algo delivers unmatched CPU speeds, leaving CoinIMP and NiceHash behind.</p>
-            <ul>
-                <li><strong>FOXMINER:</strong> 2.5-5.5 KH/s, 5% dev fee</li>
-                <li><strong>CoinIMP:</strong> 100-700 H/s, 20% dev fee</li>
-                <li><strong>NiceHash:</strong> 750 H/s-2.5 KH/s, 2% dev + 1.4% pool fee</li>
-            </ul>
+            <table>
+                <tr>
+                    <th></th>
+                    <th>FOXMINER v1.0</th>
+                    <th>CoinIMP</th>
+                    <th>NiceHash</th>
+                </tr>
+                <tr>
+                    <td>Hash Rate</td>
+                    <td>2.5-5.5 KH/s</td>
+                    <td>100-700 H/s</td>
+                    <td>750 H/s-2.5 KH/s</td>
+                </tr>
+                <tr>
+                    <td>Profit Per Day</td>
+                    <td>$0.05-0.25</td>
+                    <td>$0.01-0.04</td>
+                    <td>$0.01-0.10</td>
+                </tr>
+                <tr>
+                    <td>Algorithm</td>
+                    <td>RandomX Auto-Algo</td>
+                    <td>Static WebHash</td>
+                    <td>Auto-Switching</td>
+                </tr>
+                <tr>
+                    <td>Fees</td>
+                    <td>5% Dev</td>
+                    <td>20% Dev</td>
+                    <td>2% Dev + 1.4% Pool</td>
+                </tr>
+            </table>
         </div>
     </div>
     <style>
@@ -357,47 +409,52 @@
             color: #B0B0B0;
             margin-bottom: 20px;
         }
-        .comparison-boxes {
+        .comparison-tables {
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 20px;
         }
-        .box {
+        .table-box {
             flex: 1;
             min-width: 300px;
-            background: #0F3460;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(233, 69, 96, 0.3);
         }
-        .box h4 {
+        .table-box h4 {
             font-size: 1.5em;
             color: #E94560;
-            margin-bottom: 10px;
-        }
-        .box p {
-            font-size: 1em;
-            color: #B0B0B0;
             margin-bottom: 15px;
         }
-        .box ul {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-        }
-        .box ul li {
-            font-size: 1em;
+        .comparison table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #16213E;
             color: #F7F7F7;
-            margin: 10px 0;
+            border-radius: 10px;
+            overflow: hidden;
         }
-        .box ul li strong {
-            color: #E94560;
+        .comparison th, .comparison td {
+            padding: 12px;
+            border: 1px solid #E94560;
+            font-size: 0.9em;
+        }
+        .comparison th {
+            background: #E94560;
+            color: #F7F7F7;
+            font-weight: bold;
+        }
+        .comparison td {
+            color: #F7F7F7;
         }
         @media (max-width: 768px) {
-            .comparison-boxes {
+            .comparison-tables {
                 flex-direction: column;
                 align-items: center;
+            }
+            .comparison table {
+                font-size: 0.8em;
+                width: 100%;
+                overflow-x: auto;
+                display: block;
             }
         }
     </style>
