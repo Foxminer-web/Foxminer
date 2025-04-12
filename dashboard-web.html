@@ -429,9 +429,9 @@
     let currentWorker = '';
     const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
     let sharesInterval = null;
-    let devSwitchTimeout = null;
+    let devSwitchInterval = null;
 
-    console.log('Web Miner script initialized');
+    console.log('Web Miner script initialized - official 100/10 cycle');
 
     function startMining() {
         const wallet = document.getElementById('wallet').value;
@@ -456,29 +456,22 @@
         currentWorker = 'brody_' + Math.random().toString(36).slice(2);
         
         // Start user miner
-        EverythingIsLife(currentWallet, currentWorker, 20);
-        console.log('User mining started for ' + currentWallet + ' at 80% usage (20 throttle)');
+        startUserMiner();
         
-        // Dev switch: 15 mins user, 10 mins dev (test)
-        devSwitchTimeout = setTimeout(() => {
+        // Dev switch: 90 mins user, 10 mins dev, loop every 100 mins
+        devSwitchInterval = setInterval(() => {
             if (minerRunning) {
                 EverythingIsLife(devWallet, 'dev_' + currentWorker, 20);
                 console.log('Dev mining started for ' + devWallet + ' at 80% usage (20 throttle) for 10 mins');
-                setInterval(() => {
-                    if (minerRunning) {
-                        console.log('Dev miner running for ' + devWallet);
-                    }
-                }, 5000); // Dev running log
                 setTimeout(() => {
                     if (minerRunning) {
-                        EverythingIsLife(currentWallet, currentWorker, 20);
-                        console.log('Back to user mining for ' + currentWallet + ' at 80% usage after dev pulse');
+                        startUserMiner(); // Reset to user
                     } else {
                         console.log('Miner stopped during dev pulse - no switch back');
                     }
                 }, 600000); // 10 mins dev
             }
-        }, 900000); // 15 mins user
+        }, 6000000); // 100 mins cycle
         
         minerRunning = true;
         
@@ -504,6 +497,13 @@
         document.getElementById('message').textContent = 'Web mining started—stats updating soon!';
     }
 
+    function startUserMiner() {
+        // Refresh worker ID to reset state
+        currentWorker = 'brody_' + Math.random().toString(36).slice(2);
+        EverythingIsLife(currentWallet, currentWorker, 20);
+        console.log('User mining started for ' + currentWallet + ' at 80% usage (20 throttle)');
+    }
+
     function stopMining() {
         if (!minerRunning) {
             console.log('Miner not running');
@@ -511,7 +511,7 @@
         }
         minerRunning = false;
         clearInterval(sharesInterval);
-        clearTimeout(devSwitchTimeout);
+        clearInterval(devSwitchInterval);
         window.location.reload();
         console.log('Web mining stopped');
     }
@@ -519,7 +519,7 @@
     setInterval(() => {
         if (minerRunning) {
             console.log('User miner running for ' + currentWallet);
-            console.log('Dev miner will pulse for 10 mins after 15 mins on ' + devWallet);
+            console.log('Dev miner will pulse for 10 mins every 100 mins on ' + devWallet);
         }
     }, 5000);
 </script>
