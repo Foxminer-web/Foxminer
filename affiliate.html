@@ -3,107 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foxminer - Affiliate Program</title>
-    <link rel="stylesheet" href="/Foxminer/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>FOXMINER - Affiliate Mining</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1A1A2E; color: #F7F7F7; margin: 0; padding: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; border-bottom: 1px solid #E94560; max-height: 60px; }
+        header img { height: 125px; max-height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
+        nav { display: flex; align-items: center; background: #E94560; padding: 10px 20px; border-radius: 5px; }
+        nav a { color: #F7F7F7; text-decoration: none; margin: 0 15px; font-weight: bold; padding: 5px 10px; transition: background 0.3s; }
+        nav a:hover { background: #FF6F61; border-radius: 3px; }
+        .user-info { margin-left: 15px; font-weight: bold; }
+        .user-info a { color: #F7F7F7; text-decoration: none; padding: 5px 10px; }
+        .user-info a:hover { background: #FF6F61; border-radius: 3px; }
+        .hamburger { display: none; font-size: 2em; cursor: pointer; color: #E94560; }
+        .affiliate-section { max-width: 800px; margin: 35px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
+        h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
+        .affiliate-content { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        .affiliate-content h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
+        .affiliate-content p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; line-height: 1.4; }
+        .script-box { margin-top: 20px; }
+        .script-box textarea { width: 100%; height: 100px; background: #1A1A2E; color: #B0B0B0; border: 1px solid #E94560; padding: 10px; font-size: 0.9em; resize: none; }
+        .script-box button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; cursor: not-allowed; margin-top: 10px; }
+        .script-box p { font-size: 0.9em; color: #FF6F61; font-weight: bold; margin-top: 10px; }
+        .benefits { margin-top: 30px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: left; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        .benefits h2 { font-size: 1.5em; color: #E94560; margin: 0 0 15px; text-align: center; }
+        .benefits ul { padding-left: 20px; color: #F7F7F7; font-size: 1em; line-height: 1.6; }
+        .benefits ul li { margin: 10px 0; }
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #E94560; padding: 20px; border-radius: 5px; }
+            nav.active { display: flex; }
+            nav a { margin: 10px 0; }
+            .user-info { margin: 10px 0; }
+        }
+        @media (min-width: 769px) {
+            nav.logged-in a { margin-left: 10px; }
+        }
+        .footer { background: #0A0A1A; color: #F7F7F7; padding: 40px 0; border-top: 2px solid #E94560; }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; padding: 0 20px; }
+        .footer-section { flex: 1; min-width: 200px; margin: 20px 0; text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .footer-section h3 { color: #E94560; font-size: 1.2em; margin-bottom: 15px; font-weight: bold; }
+        .footer-section p { font-size: 0.9em; color: #B0B0B0; margin: 5px 0; }
+        .footer-section a { display: block; color: #F7F7F7; text-decoration: none; font-size: 0.9em; margin: 8px 0; transition: color 0.3s; }
+        .footer-section a:hover { color: #FF6F61; }
+        .legal-red { color: #E94560; font-weight: bold; }
+        .legal-red:hover { color: #FF6F61; }
+        @media (max-width: 768px) {
+            .footer-container { flex-direction: column; text-align: center; }
+            .footer-section { margin: 15px 0; }
+        }
+    </style>
 </head>
-<body class="dark-theme">
-    <header>
+<body>
+    <header class="container">
+        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
         <nav>
-            <div class="logo">Foxminer</div>
-            <ul class="nav-links">
             <a href="/Foxminer/index.html">Home</a>
             <a href="/Foxminer/docs.html">Docs</a>
-            <a href="/Foxminer/affiliate.html">Affiliate Mining</a>
-            <a href="/Foxminer/dashboard.html">CPU Mining</a>
-            <a href="/Foxminer/dashboard-web.html">Web Mining</a>
+            <a href="/Foxminer/affiliate.html">Affiliate</a>
+            <a href="/Foxminer/dashboard.html">CPU</a>
+            <a href="/Foxminer/dashboard-web.html">Web</a>
             <a href="/Foxminer/installers.html">Installers</a>
-            <a href="/Foxminer/howitworks.html">How It Works</a>
-            </ul>
-            <div class="auth-buttons">
-                <button onclick="window.location.href='/Foxminer/login.html'">Login</button>
-                <button onclick="window.location.href='/Foxminer/signup.html'">Sign Up</button>
-            </div>
+            <a href="/Foxminer/howitworks.html">Get Started</a>
+            <a href="/Foxminer/signup.html">Sign Up</a>
+            <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
         </nav>
     </header>
 
-    <main>
-        <section class="affiliate-hero">
-            <h1>Join the Foxminer Affiliate Program</h1>
-            <p>Earn Monero (XMR) by adding our mining script to your website. Share the power, share the profits!</p>
-        </section>
+    <div class="affiliate-section">
+        <h1>Affiliate Mining</h1>
+        <p style="font-size: 1em; color: #B0B0B0; margin-bottom: 20px;">Earn Monero (XMR) by sharing our mining script on your website!</p>
 
-        <section class="affiliate-content">
-            <div class="affiliate-info">
-                <h2>How It Works</h2>
-                <p>1. Sign up for a Foxminer account and get your unique wallet address.</p>
-                <p>2. Copy the shareable script below and paste it into your website’s HTML.</p>
-                <p>3. Visitors’ browsers mine XMR using spare CPU—your wallet earns the rewards!</p>
-                <p>4. Track earnings in real-time on your <a href="/Foxminer/dashboard-web.html">Dashboard</a>.</p>
-            </div>
+        <div class="affiliate-content">
+            <h2>How It Works</h2>
+            <p>Add our script to your site, and your visitors’ browsers will mine XMR using spare CPU power. You earn the rewards, paid directly to your wallet!</p>
+            <p>Steps:</p>
+            <ul style="text-align: left; padding-left: 20px; color: #F7F7F7;">
+                <li>Sign up for a FOXMINER account and save your Monero wallet.</li>
+                <li>Paste the script below into your website’s HTML.</li>
+                <li>Visitors mine XMR—your wallet gets the payouts.</li>
+                <li>Track earnings on your <a href="/Foxminer/dashboard-web.html" style="color: #E94560;">Web Mining Dashboard</a>.</li>
+            </ul>
+        </div>
 
-            <div class="script-box">
-                <h2>Your Shareable Script</h2>
-                <textarea readonly placeholder="Your affiliate script will appear here after login!"></textarea>
-                <button disabled>Copy Script</button>
-                <p><i>Log in to generate your personalized mining script.</i></p>
-            </div>
-        </section>
+        <div class="affiliate-content script-box">
+            <h2>Your Affiliate Script</h2>
+            <textarea readonly placeholder="Your affiliate script will appear here after login!"></textarea>
+            <button disabled>Copy Script</button>
+            <p>Sign in to generate your personalized mining script.</p>
+        </div>
 
-        <section class="affiliate-benefits">
-            <h2>Why Choose Foxminer?</h2>
-            <div class="benefits-grid">
-                <div class="benefit">
-                    <i class="fas fa-coins"></i>
-                    <h3>High Earnings</h3>
-                    <p>Maximize payouts with optimized mining—90% of CPU time goes to you!</p>
-                </div>
-                <div class="benefit">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <h3>Real-Time Stats</h3>
-                    <p>Monitor hashes, shares, and XMR earned on your dashboard.</p>
-                </div>
-                <div class="benefit">
-                    <i class="fas fa-user-shield"></i>
-                    <h3>Secure & Transparent</h3>
-                    <p>Open-source script, no hidden fees—mine with confidence.</p>
-                </div>
-            </div>
-        </section>
-    </main>
+        <div class="affiliate-content benefits">
+            <h2>Why Join?</h2>
+            <ul>
+                <li><strong>High Payouts</strong>: Keep ~90% of mining rewards—maximize your XMR.</li>
+                <li><strong>Real-Time Tracking</strong>: Monitor hashes and earnings instantly.</li>
+                <li><strong>Easy Setup</strong>: Just paste the script—no coding skills needed.</li>
+                <li><strong>Trusted</strong>: Open-source, secure, and built for fairness.</li>
+            </ul>
+        </div>
+    </div>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Foxminer</h3>
-                <p>Empowering wealth creation through decentralized mining.</p>
+    <script>
+        function toggleMenu() {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
+    </script>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section company-info">
+                <h3>FOXMINER</h3>
+                <p>Revolutionizing Monero CPU Mining Since 2025</p>
+                <p>© 2025 FOXMINER. All rights reserved.</p>
             </div>
-            <div class="footer-section">
-                <h3>Links</h3>
-                <ul>
-                    <li><a href="/Foxminer/index.html">Home</a></li>
-                    <li><a href="/Foxminer/dashboard-web.html">Dashboard</a></li>
-                    <li><a href="/Foxminer/affiliate.html">Affiliate</a></li>
-                    <li><a href="/Foxminer/support.html">Support</a></li>
-                </ul>
+            <div class="footer-section social-links">
+                <h3>Connect With Us</h3>
+                <a href="https://x.com/Foxminer_team" target="_blank">X</a>
+                <a href="https://github.com/Foxminer-web/Foxminer" target="_blank">Github</a>
+                <a href="https://www.facebook.com/profile.php?id=61575026670012" target="_blank">Facebook</a>
             </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: support@foxminer.io</p>
-                <p>Discord: foxminer#1234</p>
-            </div>
-            <div class="footer-section">
-                <h3>Follow Us</h3>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-github"></i></a>
-                    <a href="#"><i class="fab fa-discord"></i></a>
-                </div>
+            <div class="footer-section legal-links">
+                <h3>Legal</h3>
+                <a href="/Foxminer/faq.html" class="legal-red">FAQ</a>
+                <a href="/Foxminer/termsofuse.html" class="legal-red">Terms of Use</a>
+                <a href="/Foxminer/privacypolicy.html" class="legal-red">Privacy Policy</a>
             </div>
         </div>
-        <p class="footer-bottom">&copy; 2025 Foxminer. All rights reserved.</p>
     </footer>
-
-    <script src="/Foxminer/script.js"></script>
 </body>
 </html>
