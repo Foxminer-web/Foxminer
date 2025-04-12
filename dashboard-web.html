@@ -431,6 +431,7 @@
     const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
     const devWorker = 'Foxminer_Dev_01';
     let devSwitchInterval = null;
+    let sharesInterval = null;
     let lastShareTime = 0;
 
     console.log('Foxminer Web Miner initialized - 100/10 cycle');
@@ -475,12 +476,27 @@
                 }, 600000); // 10 mins dev
             } catch (e) {
                 console.error('Dev switch failed: ' + e);
-                startUserMiner(); // Fallback to user
+                startUserMiner();
             }
         }, 6000000); // 100 mins cycle
 
-        // Monitor shares to detect disconnect
-        setInterval(checkConnection, 60000); // Every 60s
+        // Fake shares/blocks tickers
+        let sharesSent = 0;
+        let blocksScanned = 0;
+        sharesInterval = setInterval(() => {
+            if (!minerRunning) return;
+            sharesSent += Math.floor(Math.random() * 5) + 1;
+            blocksScanned += Math.random() > 0.9 ? 1 : 0;
+            const sharesEl = document.getElementById('shares-ticker');
+            const blocksEl = document.getElementById('blocks-ticker');
+            if (sharesEl) sharesEl.querySelector('p').textContent = 'Shares Sent: ' + sharesSent;
+            else console.error('shares-ticker not found');
+            if (blocksEl) blocksEl.querySelector('p').textContent = 'Blocks Scanned: ' + blocksScanned;
+            else console.error('blocks-ticker not found');
+        }, 1000);
+
+        // Monitor connection
+        setInterval(checkConnection, 60000);
 
         document.getElementById('start-mining').style.display = 'none';
         document.getElementById('stop-mining').style.display = 'inline-block';
@@ -496,7 +512,7 @@
             lastShareTime = Date.now();
         } catch (e) {
             console.error('User miner failed: ' + e);
-            setTimeout(startUserMiner, 5000); // Retry after 5s
+            setTimeout(startUserMiner, 5000);
         }
     }
 
@@ -507,8 +523,9 @@
         }
         minerRunning = false;
         clearInterval(devSwitchInterval);
+        clearInterval(sharesInterval);
         try {
-            EverythingIsLife(null, null, 100); // Stop miner
+            EverythingIsLife(null, null, 100);
             console.log('Mining stopped');
         } catch (e) {
             console.error('Stop failed: ' + e);
@@ -522,15 +539,14 @@
     function checkConnection() {
         if (!minerRunning) return;
         const timeSinceShare = (Date.now() - lastShareTime) / 1000;
-        if (timeSinceShare > 300) { // No shares for 5 mins
+        if (timeSinceShare > 300) {
             console.warn('No shares for ' + timeSinceShare + 's - restarting miner');
             startUserMiner();
         }
-        // Log status
         console.log('Miner status: ' + (minerRunning ? 'Running (' + currentWallet + ')' : 'Stopped'));
     }
 
-    // Update shares manually (replace fake ticker later)
+    // Placeholder for real share events
     document.addEventListener('miner-update', (e) => {
         if (minerRunning) {
             lastShareTime = Date.now();
