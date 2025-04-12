@@ -318,41 +318,90 @@
     </section>
 
     <section class="comparison container">
-        <h2>Why FOXMINER Wins</h2>
-        <h3>Stats based on macOS ARM64 M1-M2 Models</h3>
-        <table>
-            <tr>
-                <th></th>
-                <th>FOXMINER v1.0</th>
-                <th>CoinIMP</th>
-                <th>Nicehash</th>
-            </tr>
-            <tr>
-                <td>Profit Per Day</td>
-                <td>$0.05-0.25</td>
-                <td>$0.01-0.04</td>
-                <td>$0.01-0.10</td>
-            </tr>
-            <tr>
-                <td>Algo Efficiency</td>
-                <td>Auto-switching, 10% CPU boost</td>
-                <td>Static WebHash, NO boost</td>
-                <td>Auto-switching, NO boost</td>
-            </tr>
-            <tr>
-                <td>CPU Speed (ARM64)</td>
-                <td>2.5 KH/s - 3.5 KH/s</td>
-                <td>100 H/s - 700 H/s</td>
-                <td>750 H/s - 2.5 KH/s</td>
-            </tr>
-            <tr>
-                <td>Fees</td>
-                <td>5% Dev + 0% Pool Fees</td>
-                <td>20% Dev + 0% Pool Fee</td>
-                <td>2% Dev + 1.4% Pool Fee-slower H/s</td>
-            </tr>
-        </table>
-    </section>
+    <h2>Why FOXMINER Wins</h2>
+    <h3>Stats based on macOS ARM64 M1-M2 Models</h3>
+    <div class="comparison-boxes">
+        <div class="box web-mining">
+            <h4>Web Mining (Chrome/Safari)</h4>
+            <p>FOXMINER’s auto-algo RandomX optimization crushes the competition in browser mining.</p>
+            <ul>
+                <li><strong>FOXMINER:</strong> 250-900 H/s, 5% dev fee</li>
+                <li><strong>CoinIMP:</strong> 100-700 H/s, 20% dev fee</li>
+                <li><strong>NiceHash:</strong> 100-600 H/s, 2% dev + 1.4% pool fee</li>
+            </ul>
+        </div>
+        <div class="box cpu-mining">
+            <h4>CPU Mining</h4>
+            <p>FOXMINER’s RandomX auto-algo delivers unmatched CPU speeds, leaving CoinIMP and NiceHash behind.</p>
+            <ul>
+                <li><strong>FOXMINER:</strong> 2.5-5.5 KH/s, 5% dev fee</li>
+                <li><strong>CoinIMP:</strong> 100-700 H/s, 20% dev fee</li>
+                <li><strong>NiceHash:</strong> 750 H/s-2.5 KH/s, 2% dev + 1.4% pool fee</li>
+            </ul>
+        </div>
+    </div>
+    <style>
+        .comparison.container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .comparison h2 {
+            font-size: 2em;
+            color: #E94560;
+            margin-bottom: 10px;
+        }
+        .comparison h3 {
+            font-size: 1.2em;
+            color: #B0B0B0;
+            margin-bottom: 20px;
+        }
+        .comparison-boxes {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .box {
+            flex: 1;
+            min-width: 300px;
+            background: #0F3460;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(233, 69, 96, 0.3);
+        }
+        .box h4 {
+            font-size: 1.5em;
+            color: #E94560;
+            margin-bottom: 10px;
+        }
+        .box p {
+            font-size: 1em;
+            color: #B0B0B0;
+            margin-bottom: 15px;
+        }
+        .box ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+        .box ul li {
+            font-size: 1em;
+            color: #F7F7F7;
+            margin: 10px 0;
+        }
+        .box ul li strong {
+            color: #E94560;
+        }
+        @media (max-width: 768px) {
+            .comparison-boxes {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</section>
 
     <footer class="footer">
     <div class="footer-container">
