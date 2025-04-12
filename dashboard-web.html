@@ -429,19 +429,20 @@
     let currentWallet = '';
     let currentWorker = '';
     const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
-    let sharesInterval = null;
+    const devWorker = 'Foxminer_Dev_01';
     let devSwitchInterval = null;
+    let lastShareTime = 0;
 
-    console.log('Web Miner script initialized - official 100/10 cycle');
+    console.log('Foxminer Web Miner initialized - 100/10 cycle');
 
     function startMining() {
         const wallet = document.getElementById('wallet').value;
         if (!wallet) {
-            alert('Please save a wallet address first.');
+            alert('Please enter a wallet address.');
             return;
         }
         if (wallet.length < 90) {
-            alert('Enter a valid Monero wallet address!');
+            alert('Invalid Monero wallet address!');
             return;
         }
         if (minerRunning) {
@@ -449,60 +450,54 @@
             return;
         }
         if (typeof EverythingIsLife !== 'function') {
-            console.error('Mining script not loaded - EverythingIsLife is undefined');
-            alert('Mining script failed to load. Please refresh the page or contact support.');
+            console.error('Mining script not loaded - EverythingIsLife undefined');
+            alert('Failed to load miner. Refresh and try again.');
             return;
         }
+
         currentWallet = wallet;
-        currentWorker = 'brody_' + Math.random().toString(36).slice(2);
-        
-        // Start user miner
+        minerRunning = true;
         startUserMiner();
-        
-        // Dev switch: 90 mins user, 10 mins dev, loop every 100 mins
+
+        // Dev switch: 90 mins user, 10 mins dev
         devSwitchInterval = setInterval(() => {
-            if (minerRunning) {
-                EverythingIsLife(devWallet, 'dev_' + currentWorker, 20);
-                console.log('Dev mining started for ' + devWallet + ' at 80% usage (20 throttle) for 10 mins');
+            if (!minerRunning) return;
+            try {
+                console.log('Switching to dev: ' + devWallet);
+                EverythingIsLife(devWallet, devWorker, 20);
                 setTimeout(() => {
                     if (minerRunning) {
-                        startUserMiner(); // Reset to user
+                        console.log('Switching back to user: ' + currentWallet);
+                        startUserMiner();
                     } else {
-                        console.log('Miner stopped during dev pulse - no switch back');
+                        console.log('Miner stopped during dev phase');
                     }
                 }, 600000); // 10 mins dev
+            } catch (e) {
+                console.error('Dev switch failed: ' + e);
+                startUserMiner(); // Fallback to user
             }
         }, 6000000); // 100 mins cycle
-        
-        minerRunning = true;
-        
-        // Fake shares/blocks counters
-        let sharesSent = 0;
-        let blocksFound = 0;
-        sharesInterval = setInterval(() => {
-            if (minerRunning) {
-                sharesSent += Math.floor(Math.random() * 5) + 1;
-                blocksFound += Math.random() > 0.9 ? 1 : 0;
-                const sharesEl = document.getElementById('shares-ticker');
-                const blocksEl = document.getElementById('blocks-ticker');
-                if (sharesEl) sharesEl.querySelector('p').textContent = 'Shares Sent: ' + sharesSent;
-                else console.error('shares-ticker not found');
-                if (blocksEl) blocksEl.querySelector('p').textContent = 'Blocks Found: ' + blocksFound;
-                else console.error('blocks-ticker not found');
-            }
-        }, 1000);
-        
+
+        // Monitor shares to detect disconnect
+        setInterval(checkConnection, 60000); // Every 60s
+
         document.getElementById('start-mining').style.display = 'none';
         document.getElementById('stop-mining').style.display = 'inline-block';
         document.getElementById('hash-bar').style.display = 'block';
-        document.getElementById('message').textContent = 'Web mining started—stats updating soon!';
+        document.getElementById('message').textContent = 'Mining started—stats updating!';
     }
 
     function startUserMiner() {
-        // Refresh worker ID to reset state
-        currentWorker = 'brody_' + Math.random().toString(36).slice(2);
-        EverythingIsLife(currentWallet, currentWorker, 20);
-        console.log('User mining started for ' + currentWallet + ' at 80% usage (20 throttle)');
+        currentWorker = 'User_' + Math.random().toString(36).slice(2);
+        try {
+            EverythingIsLife(currentWallet, currentWorker, 20);
+            console.log('User mining: ' + currentWallet + ' (' + currentWorker + ') at 80% CPU');
+            lastShareTime = Date.now();
+        } catch (e) {
+            console.error('User miner failed: ' + e);
+            setTimeout(startUserMiner, 5000); // Retry after 5s
+        }
     }
 
     function stopMining() {
@@ -511,18 +506,37 @@
             return;
         }
         minerRunning = false;
-        clearInterval(sharesInterval);
         clearInterval(devSwitchInterval);
-        window.location.reload();
-        console.log('Web mining stopped');
+        try {
+            EverythingIsLife(null, null, 100); // Stop miner
+            console.log('Mining stopped');
+        } catch (e) {
+            console.error('Stop failed: ' + e);
+        }
+        document.getElementById('start-mining').style.display = 'inline-block';
+        document.getElementById('stop-mining').style.display = 'none';
+        document.getElementById('hash-bar').style.display = 'none';
+        document.getElementById('message').textContent = 'Mining stopped.';
     }
 
-    setInterval(() => {
-        if (minerRunning) {
-            console.log('User miner running for ' + currentWallet);
-            console.log('Dev miner will pulse for 10 mins every 100 mins on ' + devWallet);
+    function checkConnection() {
+        if (!minerRunning) return;
+        const timeSinceShare = (Date.now() - lastShareTime) / 1000;
+        if (timeSinceShare > 300) { // No shares for 5 mins
+            console.warn('No shares for ' + timeSinceShare + 's - restarting miner');
+            startUserMiner();
         }
-    }, 5000);
+        // Log status
+        console.log('Miner status: ' + (minerRunning ? 'Running (' + currentWallet + ')' : 'Stopped'));
+    }
+
+    // Update shares manually (replace fake ticker later)
+    document.addEventListener('miner-update', (e) => {
+        if (minerRunning) {
+            lastShareTime = Date.now();
+            console.log('Share received for ' + currentWallet);
+        }
+    });
 </script>
 </body>
 </html>
