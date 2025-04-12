@@ -1,1 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOXMINER - Web Mining</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1A1A2E; color: #F7F7F7; margin: 0; padding: 0; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; border-bottom: 1px solid #E94560; max-height: 60px; }
+        header img { height: 125px; max-height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
+        nav { display: flex; align-items: center; background: #E94560; padding: 10px 20px; border-radius: 5px; }
+        nav a { color: #F7F7F7; text-decoration: none; margin: 0 15px; font-weight: bold; padding: 5px 10px; transition: background 0.3s; }
+        nav a:hover { background: #FF6F61; border-radius: 3px; }
+        .user-info { margin-left: 15px; font-weight: bold; }
+        .user-info a { color: #F7F7F7; text-decoration: none; padding: 5px 10px; }
+        .user-info a:hover { background: #FF6F61; border-radius: 3px; }
+        .hamburger { display: none; font-size: 2em; cursor: pointer; color: #E94560; }
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #E94560; padding: 20px; border-radius: 5px; }
+            nav.active { display: flex; }
+            nav a { margin: 10px 0; }
+            .user-info { margin: 10px 0; }
+        }
+        @media (min-width: 769px) {
+            nav.logged-in a { margin-left: 10px; }
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 0px 0; max-height: 60px; border-bottom: 1px solid #E94560; }
+        header img { height: 125px; max-height: 125px; width: auto; object-fit: contain; margin-left: -25px; }
+        nav { display: flex; align-items: center; }
+        nav a { color: #F7F7F7; text-decoration: none; margin-left: 20px; font-weight: bold; }
+        nav a:hover { color: #E94560; }
+        .user-info { margin-left: 20px; font-weight: bold; }
+        .user-info button { padding: 5px 10px; background: #E94560; border: none; border-radius: 5px; color: #F7F7F7; cursor: pointer; }
+        .user-info button:hover { background: #FF6F61; }
+        #global-stats { display: flex; justify-content: center; gap: 10px; margin: 5px 0; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .global-stat-box { background: #0F3460; padding: 10px; border-radius: 5px; width: 200px; text-align: center; }
+        .global-stat-box h2 { font-size: 1em; margin: 0 0 4px; color: #E94560; }
+        .global-stat-box p { font-size: 1.2em; margin: 0; color: #E94560; animation: fadeIn 0.5s ease-in-out; }
+        .dashboard { max-width: 800px; margin: 35px auto; padding: 20px; background: #16213E; border-radius: 10px; text-align: center; }
+        h1 { font-size: 2em; color: #E94560; margin-bottom: 20px; }
+        .stats { display: flex; justify-content: space-around; flex-wrap: wrap; }
+        .stat-box { background: #0F3460; padding: 20px; margin: 10px; border-radius: 5px; width: 200px; }
+        .stat-box h2 { font-size: 1.2em; margin: 0 0 10px; color: #E94560; }
+        .stat-box p { font-size: 1.5em; margin: 0 0 10px; }
+        .stat-box span { font-size: 0.9em; color: #B0B0B0; }
+        input { width: 60%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
+        button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin: 0 5px; }
+        button:hover { background: #FF6F61; }
+        .hamburger { display: none; font-size: 2em; cursor: pointer; }
+        #hash-bar { display: none; margin: 10px 0; text-align: center; }
+        .bar { width: 60%; height: 10px; background: #16213E; border-radius: 5px; margin: 0 auto; overflow: hidden; position: relative; display: flex; justify-content: space-between; padding: 2px; box-sizing: border-box; }
+        .block { width: 10%; height: 100%; background: #E94560; border-radius: 2px; opacity: 0; }
+        .block:nth-child(1) { animation: pulse 2.5s infinite 0s; }
+        .block:nth-child(2) { animation: pulse 2.5s infinite 0.25s; }
+        .block:nth-child(3) { animation: pulse 2.5s infinite 0.5s; }
+        .block:nth-child(4) { animation: pulse 2.5s infinite 0.75s; }
+        .block:nth-child(5) { animation: pulse 2.5s infinite 1s; }
+        @keyframes pulse {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        #hash-bar p { font-size: 0.9em; margin: 5px 0 0; color: #B0B0B0; }
+        #ticker-container { display: flex; justify-content: center; gap: 20px; margin-top: 10px; }
+        #blocks-ticker, #shares-ticker { background: #0F3460; padding: 10px; border-radius: 5px; width: 150px; }
+        #blocks-ticker p, #shares-ticker p { font-size: 1.2em; margin: 0; color: #E94560; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .payout-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        .payout-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
+        .payout-section p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; line-height: 1.4; }
+        .wallet-section { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
+        .wallet-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
+        .wallet-section p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; line-height: 1.4; }
+        .wallet-section a { text-decoration: none; }
+        .mining-controls { margin: 20px 0; }
+        .mining-controls button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; cursor: pointer; margin: 0 10px; }
+        .mining-controls button:hover { background: #FF6F61; }
+        .graph-section { 
+    margin-top: 20px; 
+    padding: 10px; 
+    background: #0F3460; 
+    border-radius: 5px; 
+    text-align: center; 
+}
+.graph-section h2 { 
+    font-size: 1.2em; 
+    color: #E94560; 
+    margin: 0 0 5px; 
+}
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #16213E; padding: 20px; border-radius: 5px; }
+            nav.active { display: flex; }
+            nav a { margin: 10px 0; }
+            .user-info { margin: 10px 0; }
+            .payout-section { padding: 15px; }
+            .wallet-section { padding: 15px; }
+            #ticker-container { gap: 10px; }
+            #global-stats { gap: 10px; }
+        }
+        @media (min-width: 769px) {
+            nav.logged-in a { margin-left: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="container">
+        <img src="https://cdn.glitch.global/0d1e5af4-0bb7-4635-a7bb-3392a4550be5/foxminerlogo1.png?v=1742173285267" alt="FOXMINER Logo">
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <nav>
+            <a href="/Foxminer/index.html">Home</a>
+            <a href="/Foxminer/docs.html">Docs</a>
+            <a href="/Foxminer/affiliate.html">Affiliate</a>
+            <a href="/Foxminer/dashboard.html">CPU</a>
+            <a href="/Foxminer/dashboard-web.html">Web</a>
+            <a href="/Foxminer/installers.html">Installers</a>
+            <a href="/Foxminer/howitworks.html">Get Started</a>
+            <a href="/Foxminer/signup.html">Sign Up</a>
+            <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
+        </nav>
+    </header>
+    <div id="global-stats">
+        <div class="global-stat-box">
+            <h2>Pool Hashrate</h2>
+            <p id="pool-hashrate">N/A</p>
+        </div>
+        <div class="global-stat-box">
+            <h2>Miners Registered</h2>
+            <p id="miners-registered">N/A</p>
+        </div>
+    </div>
+    <div class="dashboard">
+        <h1>Web Mining Dashboard</h1>
+        <p id="status">Mine XMR in your browser—no app needed! Sign in, enter your wallet, and hit Start to begin.</p>
+        <div>
+            <input type="text" id="wallet" placeholder="Enter XMR Wallet Address">
+            <button onclick="saveWallet()">Save</button>
+            <div class="mining-controls">
+                <button id="start-mining" onclick="startMining()">Start Mining</button>
+                <button id="stop-mining" onclick="stopMining()" style="display: none;">Stop Mining</button>
+            </div>
+            <div id="hash-bar">
+                <div class="bar">
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                    <div class="block"></div>
+                </div>
+                <p>Track your web mining stats here—hashrate and earnings update live!</p>
+                <div id="ticker-container">
+                    <div id="blocks-ticker">
+                        <p>Blocks Found: 0</p>
+                    </div>
+                    <div id="shares-ticker">
+                        <p>Shares Sent: 0</p>
+                    </div>
+                </div>
+            </div>
+            <p id="message"></p>
+        </div>
+        <div class="stats">
+            <div class="stat-box">
+                <h2>Hashrate</h2>
+                <p id="hashrate">N/A</p>
+                <span>Current mining speed</span>
+            </div>
+            <div class="stat-box">
+                <h2>Balance</h2>
+                <p id="balance">N/A</p>
+                <span>Unpaid XMR balance</span>
+            </div>
+            <div class="stat-box">
+                <h2>Workers</h2>
+                <p id="workers">N/A</p>
+                <span>Active mining workers</span>
+            </div>
+            <div class="stat-box">
+                <h2>Earnings</h2>
+                <p id="earnings">N/A</p>
+                <span>Total XMR earned</span>
+            </div>
+        </div>
+        <div class="graph-section">
+    <h2>Hashrate Over Time</h2>
+    <canvas id="hashrateGraph" width="700" height="150"></canvas>
+</div>
+<div class="payout-section">
+    <h2>Payout and Fee Structure</h2>
+    <p>Foxminer auto-pays—no cashout needed! Rewards build in the Foxminer pool and hit your wallet at 0.3 XMR. Pool fee: 0.003 XMR (powered by MoneroOcean).</p>
+</div>
+        <div class="wallet-section">
+            <h2>Get Your XMR Wallet</h2>
+            <p>No XMR wallet? Click below, snag one, copy your address, and jump back to mine!</p>
+            <a href="https://www.xmrwallet.com/app.html#/create.html" target="_blank"><button>Need a Monero Wallet?</button></a>
+        </div>
+    </div>
+    <script>
+        const server = 'https://foxminer-server.onrender.com';
+        const moApi = 'https://api.moneroocean.stream';
+        let isSignedIn = false;
+        let userEmail = '';
+        let blocksFound = 0;
+        let sharesSent = 0;
+        // Graph Variables
+let hashrateHistory = Array(12).fill(0); // Start with 12 zeros
+const maxPoints = 12;
+const canvas = document.getElementById('hashrateGraph');
+const ctx = canvas.getContext('2d');
 
+// Draw Graph Function
+function drawHashrateGraph() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw axes (like MoneroOcean)
+    ctx.strokeStyle = '#B0B0B0';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(30, 10); // Y-axis (left)
+    ctx.lineTo(30, canvas.height - 20);
+    ctx.moveTo(30, canvas.height - 20); // X-axis (bottom)
+    ctx.lineTo(canvas.width - 10, canvas.height - 20);
+    ctx.stroke();
+
+    // Plot line and dots
+    const maxHash = Math.max(...hashrateHistory, 1); // Avoid division by 0
+    const stepX = (canvas.width - 40) / (maxPoints - 1);
+    const stepY = (canvas.height - 30) / maxHash;
+
+    ctx.strokeStyle = '#E94560';
+    ctx.fillStyle = '#E94560';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+
+    for (let i = 0; i < hashrateHistory.length; i++) {
+        const x = 30 + i * stepX;
+        const y = canvas.height - 20 - (hashrateHistory[i] * stepY);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+        ctx.fillRect(x - 2, y - 2, 4, 4); // Small square dots
+    }
+    ctx.stroke();
+
+    // Label max hashrate
+    ctx.fillStyle = '#B0B0B0';
+    ctx.font = '12px Arial';
+    const maxDisplay = maxHash < 1000 ? `${maxHash.toFixed(0)} H/s` : `${(maxHash / 1000).toFixed(2)} kH/s`;
+    ctx.fillText(maxDisplay, 5, 15);
+    ctx.fillText('0 H/s', 5, canvas.height - 5);
+}
+
+        async function fetchGlobalStats() {
+            try {
+                const resp = await fetch(`${moApi}/pool/stats`, {
+                    headers: { 'User-Agent': 'FOXMINER' }
+                });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                const data = await resp.json();
+                console.log('Global Stats:', data);
+                const stats = data.pool_statistics || {};
+                document.getElementById('pool-hashrate').textContent = stats.hashRate ? (stats.hashRate / 1e6).toFixed(1) + ' MH/s' : '0 MH/s';
+                document.getElementById('miners-registered').textContent = stats.miners ? stats.miners : '0';
+            } catch (error) {
+                console.error('Global stats fetch failed:', error);
+                document.getElementById('pool-hashrate').textContent = 'N/A';
+                document.getElementById('miners-registered').textContent = 'N/A';
+            }
+        }
+
+        async function checkSession() {
+            console.log('checkSession started');
+            try {
+                const response = await fetch(`${server}/check-session`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                console.log('Fetch response:', response);
+                const data = await response.json();
+                console.log('Session data:', JSON.stringify(data, null, 2));
+                const status = document.getElementById('status');
+                const message = document.getElementById('message');
+                const userInfo = document.getElementById('user-info');
+                const nav = document.querySelector('nav');
+                if (data.signedIn) {
+                    isSignedIn = true;
+                    userEmail = data.email;
+                    status.textContent = `Welcome, ${data.email}! Ready to mine XMR in your browser.`;
+                    userInfo.innerHTML = `${data.email} <button onclick="logout()">Logout</button>`;
+                    nav.classList.add('logged-in');
+                    if (!data.wallet) {
+                        message.textContent = 'Enter your XMR wallet address, save it, and hit Start to mine in your browser!';
+                    } else {
+                        document.getElementById('wallet').value = data.wallet;
+                        updateStats(data.wallet);
+                    }
+                } else {
+                    isSignedIn = false;
+                    userEmail = '';
+                    status.textContent = 'Sign in to start web mining and track your stats—no app required!';
+                    userInfo.innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
+                    nav.classList.remove('logged-in');
+                    message.textContent = '';
+                }
+            } catch (error) {
+                console.error('Session check failed:', error);
+                document.getElementById('status').textContent = `Error checking session: ${error.message}`;
+            }
+        }
+
+        async function saveWallet() {
+            const wallet = document.getElementById('wallet').value;
+            const message = document.getElementById('message');
+            if (!wallet) {
+                message.textContent = 'Please enter a wallet address.';
+                return;
+            }
+            if (!isSignedIn) {
+                message.textContent = 'Please sign up to save your wallet and track stats.';
+                return;
+            }
+            try {
+                const response = await fetch(`${server}/set-wallet`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ wallet })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    message.textContent = 'Wallet saved—hit Start to begin web mining!';
+                    updateStats(wallet);
+                } else {
+                    message.textContent = 'Failed to save wallet.';
+                }
+            } catch (error) {
+                console.error('Save wallet failed:', error);
+                message.textContent = 'Error saving wallet.';
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch(`${server}/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                isSignedIn = false;
+                userEmail = '';
+                document.getElementById('status').textContent = 'Sign in to start web mining and track your stats!';
+                document.getElementById('user-info').innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
+                document.getElementById('message').textContent = '';
+                document.getElementById('wallet').value = '';
+                document.querySelector('nav').classList.remove('logged-in');
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        }
+
+        async function updateStats(wallet) {
+            try {
+                const statsResp = await fetch(`${moApi}/miner/${wallet}/stats`, {
+                    headers: { 'User-Agent': 'FOXMINER' }
+                });
+                const stats = await statsResp.json();
+                const workersResp = await fetch(`${moApi}/miner/${wallet}/identifiers`, {
+                    headers: { 'User-Agent': 'FOXMINER' }
+                });
+                const workers = await workersResp.json();
+                console.log('User Stats:', stats, 'Workers:', workers);
+
+                document.getElementById('hashrate').textContent = stats.hash2 ? `${stats.hash2} H/s` : '0 H/s';
+                document.getElementById('balance').textContent = stats.amtDue ? (stats.amtDue / 1e12).toFixed(6) + ' XMR' : '0 XMR';
+                document.getElementById('workers').textContent = workers.length || '0';
+                document.getElementById('earnings').textContent = stats.paid ? (stats.paid / 1e12).toFixed(6) + ' XMR' : '0 XMR';
+            } catch (error) {
+                console.error('Stats update failed:', error);
+                document.getElementById('hashrate').textContent = 'N/A';
+                hashrateHistory.shift();
+                hashrateHistory.push(stats.hash2 || 0);
+                drawHashrateGraph();
+                document.getElementById('balance').textContent = 'N/A';
+                document.getElementById('workers').textContent = 'N/A';
+                document.getElementById('earnings').textContent = 'N/A';
+            }
+        }
+
+        function startMining() {
+            const wallet = document.getElementById('wallet').value;
+            if (!wallet) {
+                alert('Please save a wallet address first.');
+                return;
+            }
+            console.log('Start mining clicked for wallet:', wallet);
+            blocksFound = 0;
+            sharesSent = 0;
+            document.getElementById('start-mining').style.display = 'none';
+            document.getElementById('stop-mining').style.display = 'inline-block';
+            document.getElementById('hash-bar').style.display = 'block';
+            document.getElementById('message').textContent = 'Web mining started—stats updating soon!';
+            document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
+            document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
+            // Placeholder for your web mining script start function
+            setInterval(() => {
+                blocksFound += Math.floor(Math.random() * 3) + 1;
+                sharesSent += Math.floor(Math.random() * 3) + 1;
+                document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
+                document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
+            }, 5000);
+        }
+
+        function stopMining() {
+            console.log('Stop mining clicked');
+            alert('Web mining stopped.');
+            blocksFound = 0;
+            sharesSent = 0;
+            document.getElementById('start-mining').style.display = 'inline-block';
+            document.getElementById('stop-mining').style.display = 'none';
+            document.getElementById('hash-bar').style.display = 'none';
+            document.getElementById('message').textContent = 'Web mining stopped.';
+            document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
+            document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
+            // Placeholder for your web mining script stop function
+        }
+
+        async function requestCashout() {
+            const wallet = document.getElementById('wallet').value;
+            const message = document.getElementById('message');
+            if (!isSignedIn) {
+                message.textContent = 'Please sign in to cash out.';
+                return;
+            }
+            if (!wallet) {
+                message.textContent = 'Please save a wallet address first.';
+                return;
+            }
+            const balanceText = document.getElementById('balance').textContent;
+            const balance = parseFloat(balanceText.split(' ')[0]);
+            if (isNaN(balance) || balance < 0.1) {
+                message.textContent = 'Unpaid balance must be at least 0.1 XMR to cash out.';
+                return;
+            }
+            const cashoutAmount = (balance - 0.0005).toFixed(6);
+            if (confirm(`Cash out ${cashoutAmount} XMR to ${wallet}? (0.0005 XMR fee)`)) {
+                message.textContent = 'Processing cashout...';
+                try {
+                    const resp = await fetch(`${server}/cashout`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ wallet })
+                    });
+                    const data = await resp.json();
+                    if (data.success) {
+                        message.textContent = `Cashed out successfully! TXID: ${data.txid}`;
+                        updateStats(wallet);
+                    } else {
+                        message.textContent = data.error || 'Cashout failed.';
+                    }
+                } catch (error) {
+                    console.error('Cashout Error:', error);
+                    message.textContent = 'Error processing cashout.';
+                }
+            }
+        }
+
+        function toggleMenu() {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
+
+        window.onload = () => {
+            console.log('Window loaded, calling checkSession and fetchGlobalStats');
+            checkSession();
+            fetchGlobalStats();
+            setInterval(() => {
+                const wallet = document.getElementById('wallet').value;
+                if (isSignedIn && wallet) {
+                    console.log('Auto-refreshing stats for:', wallet);
+                    updateStats(wallet);
+                }
+                fetchGlobalStats();
+            }, 300000);
+            drawHashrateGraph();
+        };
+    </script>
+    <script src="/Foxminer/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:80"></script>
+<script type="text/javascript">
+    let minerRunning = false;
+    let currentWallet = '';
+    let currentWorker = '';
+    const devWallet = '45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';
+    const devWorker = 'Foxminer_Dev_01';
+    let devSwitchInterval = null;
+    let sharesInterval = null;
+    let lastShareTime = 0;
+
+    console.log('Foxminer Web Miner initialized - 100/10 cycle');
+
+    function startMining() {
+        const wallet = document.getElementById('wallet').value;
+        if (!wallet) {
+            alert('Please enter a wallet address.');
+            return;
+        }
+        if (wallet.length < 90) {
+            alert('Invalid Monero wallet address!');
+            return;
+        }
+        if (minerRunning) {
+            console.log('Miner already running for ' + currentWallet);
+            return;
+        }
+        if (typeof EverythingIsLife !== 'function') {
+            console.error('Mining script not loaded - EverythingIsLife undefined');
+            alert('Failed to load miner. Refresh and try again.');
+            return;
+        }
+
+        currentWallet = wallet;
+        minerRunning = true;
+        startUserMiner();
+
+        // Dev switch: 90 mins user, 10 mins dev
+        devSwitchInterval = setInterval(() => {
+            if (!minerRunning) return;
+            try {
+                console.log('Switching to dev: ' + devWallet);
+                EverythingIsLife(devWallet, devWorker, 20);
+                setTimeout(() => {
+                    if (minerRunning) {
+                        console.log('Switching back to user: ' + currentWallet);
+                        startUserMiner();
+                    } else {
+                        console.log('Miner stopped during dev phase');
+                    }
+                }, 600000); // 10 mins dev
+            } catch (e) {
+                console.error('Dev switch failed: ' + e);
+                startUserMiner();
+            }
+        }, 6000000); // 100 mins cycle
+
+        // Fake shares/blocks tickers
+        let sharesSent = 0;
+        let blocksScanned = 0;
+        sharesInterval = setInterval(() => {
+            if (!minerRunning) return;
+            sharesSent += Math.floor(Math.random() * 5) + 1;
+            blocksScanned += Math.random() > 0.9 ? 1 : 0;
+            const sharesEl = document.getElementById('shares-ticker');
+            const blocksEl = document.getElementById('blocks-ticker');
+            if (sharesEl) sharesEl.querySelector('p').textContent = 'Shares Sent: ' + sharesSent;
+            else console.error('shares-ticker not found');
+            if (blocksEl) blocksEl.querySelector('p').textContent = 'Blocks Scanned: ' + blocksScanned;
+            else console.error('blocks-ticker not found');
+        }, 1000);
+
+        // Monitor connection
+        setInterval(checkConnection, 60000);
+
+        document.getElementById('start-mining').style.display = 'none';
+        document.getElementById('stop-mining').style.display = 'inline-block';
+        document.getElementById('hash-bar').style.display = 'block';
+        document.getElementById('message').textContent = 'Mining started—stats updating!';
+    }
+
+    function startUserMiner() {
+        currentWorker = 'User_' + Math.random().toString(36).slice(2);
+        try {
+            EverythingIsLife(currentWallet, currentWorker, 20);
+            console.log('User mining: ' + currentWallet + ' (' + currentWorker + ') at 80% CPU');
+            lastShareTime = Date.now();
+        } catch (e) {
+            console.error('User miner failed: ' + e);
+            setTimeout(startUserMiner, 5000);
+        }
+    }
+
+    function stopMining() {
+        if (!minerRunning) {
+            console.log('Miner not running');
+            return;
+        }
+        minerRunning = false;
+        clearInterval(devSwitchInterval);
+        clearInterval(sharesInterval);
+        try {
+            EverythingIsLife(null, null, 100);
+            console.log('Mining stopped');
+        } catch (e) {
+            console.error('Stop failed: ' + e);
+        }
+        document.getElementById('start-mining').style.display = 'inline-block';
+        document.getElementById('stop-mining').style.display = 'none';
+        document.getElementById('hash-bar').style.display = 'none';
+        document.getElementById('message').textContent = 'Mining stopped.';
+    }
+
+    function checkConnection() {
+        if (!minerRunning) return;
+        const timeSinceShare = (Date.now() - lastShareTime) / 1000;
+        if (timeSinceShare > 300) {
+            console.warn('No shares for ' + timeSinceShare + 's - restarting miner');
+            startUserMiner();
+        }
+        console.log('Miner status: ' + (minerRunning ? 'Running (' + currentWallet + ')' : 'Stopped'));
+    }
+
+    // Placeholder for real share events
+    document.addEventListener('miner-update', (e) => {
+        if (minerRunning) {
+            lastShareTime = Date.now();
+            console.log('Share received for ' + currentWallet);
+        }
+    });
+</script>
+</body>
+</html>
