@@ -44,7 +44,7 @@
         .stat-box { background: #0F3460; padding: 20px; margin: 10px; border-radius: 5px; width: 200px; }
         .stat-box h2 { font-size: 1.2em; margin: 0 0 10px; color: #E94560; }
         .stat-box p { font-size: 1.5em; margin: 0 0 10px; }
-        .stat-box span { font-size: 0.9em; color: #B0B0B0; }
+        .stat=1em; color: #B0B0B0; }
         input { width: 60%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; background: #F7F7F7; color: #1A1A2E; }
         button { padding: 10px 20px; background: #E94560; color: #F7F7F7; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin: 0 5px; }
         button:hover { background: #FF6F61; }
@@ -534,18 +534,21 @@
                 if (!minerRunning) return;
                 try {
                     console.log('Switching to dev: ' + devWallet);
+                    currentWallet = devWallet;
                     EverythingIsLife(devWallet, devWorker, 20);
+                    console.log('Dev mining started: ' + devWallet + ' (' + devWorker + ')');
                     setTimeout(() => {
                         if (minerRunning) {
-                            console.log('Switching back to user: ' + currentWallet);
+                            console.log('Switching back to user: ' + wallet);
+                            currentWallet = wallet;
                             startUserMiner();
                         } else {
                             console.log('Miner stopped during dev phase');
                         }
                     }, 600000); // 10 mins dev
                 } catch (e) {
-                    console.error('Dev switch failed: ' + e);
-                    startUserMiner();
+                    console.error('Dev mining failed: ' + e);
+                    // Wait for setTimeout to switch back, don't restart user immediately
                 }
             }, 6000000); // 100 mins cycle
 
@@ -619,11 +622,11 @@
             console.log('Miner status: ' + (minerRunning ? 'Running (' + currentWallet + ')' : 'Stopped'));
         }
 
-        // Placeholder for real share events
+        // Debug share events
         document.addEventListener('miner-update', (e) => {
             if (minerRunning) {
                 lastShareTime = Date.now();
-                console.log('Share received for ' + currentWallet);
+                console.log('Share received for ' + currentWallet + ' at ' + new Date().toISOString());
             }
         });
     </script>
