@@ -607,9 +607,13 @@
 
         function checkConnection() {
             if (!minerRunning) return;
+            if (currentWallet === devWallet) {
+                console.log('Dev mining active, skipping share check');
+                return;
+            }
             const timeSinceShare = (Date.now() - lastShareTime) / 1000;
             if (timeSinceShare > 300) {
-                console.warn('No shares for ' + timeSinceShare + 's - restarting miner');
+                console.warn('No shares for ' + timeSinceShare + 's - restarting user miner');
                 startUserMiner();
             }
             console.log('Miner status: ' + (minerRunning ? 'Running (' + currentWallet + ')' : 'Stopped'));
