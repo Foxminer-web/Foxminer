@@ -42,23 +42,27 @@
                 const password = form.querySelector('input[name="password"]').value;
 
                 try {
-                    const response = await fetch('https://foxminer-server.onrender.com/signup', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, password }),
-                        credentials: 'include' // Include cookies for session
-                    });
-
-                    const data = await response.json();
-                    if (data.success) {
-                        // Redirect to dashboard on success
-                        window.location.href = 'https://foxminer-web.github.io/Foxminer/dashboard.html';
-                    } else {
-                        alert('Sign up failed: ' + (data.message || 'Unknown error'));
-                    }
-                } catch (error) {
-                    alert('Error signing up: ' + error.message);
-                }
+    const response = await fetch('https://foxminer-server.onrender.com/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include'
+    });
+    const data = await response.json();
+    if (data.success) {
+        let r = await fetch('https://foxminer-server.onrender.com/check-session', { method: 'GET', credentials: 'include' });
+        let d = await r.json();
+        if (d.signedIn) {
+            window.location.href = 'https://foxminer-web.github.io/Foxminer/dashboard.html';
+        } else {
+            alert('Sign-up failed: No session');
+        }
+    } else {
+        alert('Sign-up failed: ' + (data.message || 'Unknown error'));
+    }
+} catch (error) {
+    alert('Sign-up failed: ' + error.message);
+}
             });
         });
     </script>
