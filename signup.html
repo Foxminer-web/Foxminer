@@ -41,7 +41,7 @@
                 const email = form.querySelector('input[name="email"]').value;
                 const password = form.querySelector('input[name="password"]').value;
 
-                try {
+            try {
     const response = await fetch('https://foxminer-server.onrender.com/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -50,13 +50,17 @@
     });
     const data = await response.json();
     if (data.success) {
-        let r = await fetch('https://foxminer-server.onrender.com/check-session', { method: 'GET', credentials: 'include' });
-        let d = await r.json();
-        if (d.signedIn) {
-            window.location.href = 'https://foxminer-web.github.io/Foxminer/dashboard.html';
-        } else {
-            alert('Sign-up failed: No session');
+        let attempts = 2;
+        for (let i = 0; i < attempts; i++) {
+            let r = await fetch('https://foxminer-server.onrender.com/check-session', { method: 'GET', credentials: 'include' });
+            let d = await r.json();
+            if (d.signedIn) {
+                window.location.href = 'https://foxminer-web.github.io/Foxminer/dashboard.html';
+                return;
+            }
+            if (i < attempts - 1) await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms
         }
+        alert('Sign-up failed: No session');
     } else {
         alert('Sign-up failed: ' + (data.message || 'Unknown error'));
     }
