@@ -50,12 +50,17 @@
                     });
 
                     const data = await response.json();
-                    if (data.success) {
-                        // Redirect to dashboard on success
-                        window.location.href = 'https://foxminer-web.github.io/Foxminer/dashboard.html';
-                    } else {
-                        alert('Sign in failed: ' + (data.message || 'Unknown error'));
-                    }
+if (data.success) {
+    let r = await fetch('https://foxminer-server.onrender.com/check-session', { method: 'GET', credentials: 'include' });
+    let d = await r.json();
+    if (d.signedIn) {
+        window.location.href = 'https://foxminer-web.github.io/Foxminer/dashboard.html';
+    } else {
+        alert('Sign-in failed: No session');
+    }
+} else {
+    alert('Sign-in failed: ' + (data.message || 'Unknown error'));
+}
                 } catch (error) {
                     alert('Error signing in: ' + error.message);
                 }
