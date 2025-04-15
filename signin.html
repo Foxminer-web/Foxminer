@@ -50,18 +50,13 @@
     });
     const data = await response.json();
     if (data.success) {
-        const token = response.headers.get('set-cookie')?.match(/token=([^;]+)/)?.[1];
-        if (token) {
-            localStorage.setItem('tempToken', token);
-        }
-        let r = await fetch('https://foxminer-server.onrender.com/check-session', {
+        let r = await fetch(`https://foxminer-server.onrender.com/check-session?token=${encodeURIComponent(data.token)}`, {
             method: 'GET',
-            credentials: 'include',
-            headers: token ? { 'Cookie': `token=${token}` } : {}
+            credentials: 'include'
         });
         let d = await r.json();
         if (d.signedIn) {
-            localStorage.removeItem('tempToken');
+            window.history.replaceState({}, document.title, '/Foxminer/signin.html');
             window.location.href = 'https://foxminer-web.github.io/Foxminer/dashboard.html';
         } else {
             alert('Sign-in failed: No session');
