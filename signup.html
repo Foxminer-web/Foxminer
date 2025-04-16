@@ -60,7 +60,7 @@
                         console.log('Check-session response:', d); // Debug
                         if (d.signedIn) {
                             window.history.replaceState({}, document.title, '/Foxminer/signup.html');
-                            window.location.href = 'https://foxminer-web.github.io/Foxminer/dashboard.html';
+                            window.location.href = `https://foxminer-web.github.io/Foxminer/dashboard.html?token=${encodeURIComponent(data.token)}`;
                         } else {
                             alert('Sign-up failed: No session');
                         }
@@ -78,7 +78,7 @@
             }
         });
     });
-</script>
+    </script>
 </head>
 <body>
     <header class="container">
