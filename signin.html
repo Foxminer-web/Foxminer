@@ -27,58 +27,86 @@
         }
     </style>
     <script>
-        function toggleMenu() {
-            const nav = document.querySelector('nav');
-            nav.classList.toggle('active');
-        }
-
-        // Handle form submission
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.querySelector('form');
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault(); // Stop the default form submission
-
-                const email = form.querySelector('input[name="email"]').value;
-                const password = form.querySelector('input[name="password"]').value;
-
-                try {
-    const response = await fetch('https://foxminer-server.onrender.com/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include'
-    });
-    const data = await response.json();
-    console.log('Signin response:', data); // Debug
-    if (data.success && data.token) {
-        try {
-            let r = await fetch(`https://foxminer-server.onrender.com/check-session?token=${encodeURIComponent(data.token)}`, {
-                method: 'GET',
-                credentials: 'include'
-            });
-            let d = await r.json();
-            console.log('Check-session response:', d); // Debug
-            if (d.signedIn) {
-                window.history.replaceState({}, document.title, '/Foxminer/signin.html');
-                window.location.href = 'https://foxminer-web.github.io/Foxminer/dashboard.html';
-            } else {
-                alert('Sign-in failed: No session');
-            }
-        } catch (fetchError) {
-            console.error('Check-session fetch error:', fetchError); // Debug
-            alert('Sign-in failed: Check session failed');
-        }
-    } else {
-        console.log('Signin failed, data:', data); // Debug
-        alert('Sign in failed: ' + (data.message || 'Unknown error'));
+    function toggleMenu() {
+        const nav = document.querySelector('nav');
+        nav.classList.toggle('active');
     }
-} catch (error) {
-    console.error('Signin error:', error); // Debug
-    alert('Sign in failed: ' + error.message);
-}
-            });
+
+    // Handle form submission
+    console.log('Signin script loaded'); // Debug
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM loaded'); // Debug
+        const form = document.querySelector('form');
+        if (!form) {
+            console.error('Form not found');
+            alert('Error: Form not found');
+            return;
+        }
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log('Form submitted'); // Debug
+            const emailInput = form.querySelector('input[name="email"]');
+            const passwordInput = form.querySelector('input[name="password"]');
+            if (!emailInput || !passwordInput) {
+                console.error('Inputs missing');
+                alert('Error: Inputs missing');
+                return;
+            }
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            console.log('Email:', email); // Debug
+            try {
+                console.log('Fetching /signin'); // Debug
+                const response = await fetch('https://foxminer-server.onrender.com/signin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                    credentials: 'include'
+                });
+                console.log('Signin response status:', response.status); // Debug
+                let data;
+                try {
+                    data = await response.json();
+                } catch (jsonError) {
+                    console.error('JSON parse error:', jsonError); // Debug
+                    throw new Error('Invalid server response');
+                }
+                console.log('Signin response:', data); // Debug
+                if (data.success && data.token) {
+                    console.log('Token received:', data.token); // Debug
+                    try {
+                        const checkUrl = `https://foxminer-server.onrender.com/check-session?token=${encodeURIComponent(data.token)}`;
+                        console.log('Fetching:', checkUrl); // Debug
+                        const r = await fetch(checkUrl, {
+                            method: 'GET',
+                            credentials: 'include'
+                        });
+                        console.log('Check-session status:', r.status); // Debug
+                        const d = await r.json();
+                        console.log('Check-session response:', d); // Debug
+                        if (d.signedIn) {
+                            console.log('Redirecting to dashboard'); // Debug
+                            window.history.replaceState({}, document.title, '/Foxminer/signin.html');
+                            window.location.href = 'https://foxminer-web.github.io/Foxminer/dashboard.html';
+                        } else {
+                            console.log('No session, data:', d); // Debug
+                            alert('Sign-in failed: No session');
+                        }
+                    } catch (fetchError) {
+                        console.error('Check-session fetch error:', fetchError); // Debug
+                        alert('Sign-in failed: Check session failed');
+                    }
+                } else {
+                    console.log('Signin failed, data:', data); // Debug
+                    alert('Sign in failed: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Signin error:', error); // Debug
+                alert('Sign in failed: ' + error.message);
+            }
         });
-    </script>
+    });
+</script>
 </head>
 <body>
     <header class="container">
