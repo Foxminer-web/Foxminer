@@ -33,17 +33,30 @@
             object-fit: contain;
             margin-left: -25px;
         }
+        .hamburger {
+            display: block;
+            font-size: 2em;
+            cursor: pointer;
+            color: #E94560;
+        }
         nav {
-            display: flex;
-            align-items: center;
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 160px;
+            right: 20px;
             background: #E94560;
-            padding: 10px 20px;
+            padding: 20px;
             border-radius: 5px;
+            align-items: flex-start;
+        }
+        nav.active {
+            display: flex;
         }
         nav a {
             color: #F7F7F7;
             text-decoration: none;
-            margin: 0 15px;
+            margin: 10px 0;
             font-weight: bold;
             padding: 5px 10px;
             transition: background 0.3s;
@@ -53,8 +66,7 @@
             border-radius: 3px;
         }
         .user-info {
-            margin-left: 15px;
-            font-weight: bold;
+            margin: 10px 0;
         }
         .user-info a {
             color: #F7F7F7;
@@ -75,12 +87,6 @@
         }
         .user-info button:hover {
             background: #FF6F61;
-        }
-        .hamburger {
-            display: none;
-            font-size: 2em;
-            cursor: pointer;
-            color: #E94560;
         }
         .hero {
             text-align: center;
@@ -190,11 +196,6 @@
             font-size: 0.9em;
         }
         @media (max-width: 768px) {
-            .hamburger { display: block; }
-            nav { display: none; flex-direction: column; position: absolute; top: 160px; right: 20px; background: #E94560; padding: 20px; border-radius: 5px; }
-            nav.active { display: flex; }
-            nav a { margin: 10px 0; }
-            .user-info { margin: 10px 0; }
             .container { padding: 15px; }
             .hero h1 { font-size: 1.8em; }
             .hero p { font-size: 1em; padding: 0 10px; }
@@ -207,67 +208,66 @@
             .comparison table { font-size: 0.8em; width: 100%; max-width: 100%; overflow-x: auto; display: block; }
         }
         @media (min-width: 769px) {
-            nav.logged-in a { margin-left: 10px; }
             .features { flex-wrap: nowrap; }
             .start-box { display: flex; justify-content: center; align-items: center; max-width: 400px; margin: 0 auto; }
         }
         .footer {
-    background: #0A0A1A;
-    color: #F7F7F7;
-    padding: 40px 0;
-    border-top: 2px solid #E94560;
-}
-.footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 0 20px;
-}
-.footer-section {
-    flex: 1;
-    min-width: 200px;
-    margin: 20px 0;
-}
-.footer-section h3 {
-    color: #E94560;
-    font-size: 1.2em;
-    margin-bottom: 15px;
-    font-weight: bold;
-}
-.footer-section p {
-    font-size: 0.9em;
-    color: #B0B0B0;
-    margin: 5px 0;
-}
-.footer-section a {
-    display: block;
-    color: #F7F7F7;
-    text-decoration: none;
-    font-size: 0.9em;
-    margin: 8px 0;
-    transition: color 0.3s;
-}
-.footer-section a:hover {
-    color: #FF6F61;
-}
-.legal-red {
-    color: #E94560;
-    font-weight: bold;
-}
-.legal-red:hover {
-    color: #FF6F61;
-}
-@media (max-width: 768px) {
-    .footer-container {
-        flex-direction: column;
-        text-align: center;
-    }
-    .footer-section {
-        margin: 15px 0;
-    }
-}
+            background: #0A0A1A;
+            color: #F7F7F7;
+            padding: 40px 0;
+            border-top: 2px solid #E94560;
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+        .footer-section {
+            flex: 1;
+            min-width: 200px;
+            margin: 20px 0;
+        }
+        .footer-section h3 {
+            color: #E94560;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .footer-section p {
+            font-size: 0.9em;
+            color: #B0B0B0;
+            margin: 5px 0;
+        }
+        .footer-section a {
+            display: block;
+            color: #F7F7F7;
+            text-decoration: none;
+            font-size: 0.9em;
+            margin: 8px 0;
+            transition: color 0.3s;
+        }
+        .footer-section a:hover {
+            color: #FF6F61;
+        }
+        .legal-red {
+            color: #E94560;
+            font-weight: bold;
+        }
+        .legal-red:hover {
+            color: #FF6F61;
+        }
+        @media (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-section {
+                margin: 15px 0;
+            }
+        }
     </style>
 </head>
 <body>
