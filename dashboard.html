@@ -233,7 +233,7 @@ nav a:hover { background: #FF6F61; border-radius: 3px; }
                 userInfo.innerHTML = `${data.email} <button onclick="logout()">Logout</button>`;
                 nav.classList.add('logged-in');
                 if (!data.wallet) {
-                    message.textContent = 'Welcome you young, Foxminer! Enter your XMR wallet address and click "save." To start mining please download our app from the Installers tab to start mining with your CPU or visit our "Web Mining" tab to start mining with your browser. Happy Mining!';
+                    message.textContent = 'Welcome you young, Foxminer! Enter your XMR wallet address and click "save." To start mining please download our app from the Installers tab to start mining with your ARM64 CPU or visit our "Web Mining" tab to start mining with your browser. Happy Mining!';
                 } else {
                     document.getElementById('wallet').value = data.wallet;
                     updateStats(data.wallet);
@@ -241,7 +241,7 @@ nav a:hover { background: #FF6F61; border-radius: 3px; }
             } else {
                 isSignedIn = false;
                 userEmail = '';
-                status.textContent = 'Not signed in? Sign up to track your stats! Download the app from the Installers tab to start mining with your spare CPU or visit the "Web Mining" tab at the top of the page to start mining with your web browser.';
+                status.textContent = 'Not signed in? Sign up to track your stats! Download the app from the Installers tab to start mining with your ARM64 CPU or visit the "Web Mining" tab at the top of the page to start mining with your web browser. Compatible with Chrome and Safari';
                 userInfo.innerHTML = '<a href="/Foxminer/signin.html">Sign In</a>';
                 nav.classList.remove('logged-in');
                 message.textContent = '';
