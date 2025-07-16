@@ -73,55 +73,44 @@
             <span id="user-info"><a href="/Foxminer/signin.html">Sign In</a></span>
         </nav>
     </header>
-    <div class="installers">
-        <h1>FOXMINER Installers</h1>
-        <p style="font-size: 1em; color: #B0B0B0; margin-bottom: 20px;">Download the right Foxminer version for your system below!</p>
-        
-        <div class="installer-section">
-            <h2>macOS ARM64 (AArch64)</h2>
-            <p>For Apple Silicon Macs (M1, M2, etc.). Optimized for ARM architecture.</p>
-            <a href="https://github.com/foxminer-web/Foxminer/releases/download/v1.0/Foxminer-v1.0.dmg" target="_blank"><button>Download Foxminer v1.0</button></a>
-        </div>
-
-        <div class="installer-section">
-            <h2>Intel x86_64 (10.9.5 and newer)</h2>
-            <p>For Intel-based Macs running macOS 10.9.5 or later.</p>
-            <a href="#" target="_blank"><button>Download Foxminer v1.0</button></a>
-            <p class="coming-soon">Support Coming Soon</p>
-        </div>
-
-        <div class="installer-section">
-            <h2>Windows ARM</h2>
-            <p>For Windows devices with ARM processors (e.g., Surface Pro X).</p>
-            <a href="#" target="_blank"><button>Download Foxminer v1.0</button></a>
-            <p class="coming-soon">Support Coming Soon</p>
-        </div>
-
-        <div class="installer-section">
-            <h2>Windows x86-64</h2>
-            <p>For 64-bit Windows systems (most modern PCs).</p>
-            <a href="#" target="_blank"><button>Download Foxminer v1.0</button></a>
-            <p class="coming-soon">Support Coming Soon</p>
-        </div>
-
-        <div class="installer-section">
-            <h2>Linux</h2>
-            <p>For Linux distributions (64-bit). Works on Ubuntu, Debian, etc.</p>
-            <a href="#" target="_blank"><button>Download Foxminer v1.0</button></a>
-            <p class="coming-soon">Support Coming Soon</p>
-        </div>
-
-        <section id="how-to-install">
-            <h2>How to Install</h2>
-            <p>For macOS ARM64 (AArch64):</p>
-            <ol>
-                <li>Download Foxminer v1.0 from the button above.</li>
-                <li>Open Foxminer-v1.0.dmg and drag Foxminer.app to Applications.</li>
-                <li>Go to System Settings > Security & Privacy and click "Open Anyway" to allow it.</li>
-            </ol>
-            <p><small>Note: Foxminer is open-source and not from the App Store.</small></p>
-        </section>
+   <div class="installers">
+    <h1>FOXMINER Installers</h1>
+    <p style="font-size: 1em; color: #B0B0B0; margin-bottom: 20px;">Download the right Foxminer version for your system below!</p>
+    
+    <div class="installer-section">
+        <h2>macOS ARM64 (AArch64)</h2>
+        <p>For Apple Silicon Macs (M1, M2, etc.). Optimized for ARM architecture.</p>
+        <a href="https://github.com/Foxminer-web/Foxminer/releases/download/v1.0.0/foxminer-v1-macos.dmg" download><button>Download Foxminer v1.0 (macOS)</button></a>
     </div>
+
+    <div class="installer-section">
+        <h2>Linux ARM64 (AArch64)</h2>
+        <p>For Linux distributions on ARM processors (e.g., Raspberry Pi, ARM servers).</p>
+        <a href="https://github.com/Foxminer-web/Foxminer/releases/download/v1.0.0/foxminer-v1-linux.tar.gz" download><button>Download Foxminer v1.0 (Linux)</button></a>
+    </div>
+
+    <section id="how-to-install">
+        <h2>How to Install</h2>
+        <h3>macOS ARM64</h3>
+        <ol>
+            <li>Download <code>foxminer-v1-macos.dmg</code> using the button above.</li>
+            <li>Double-click the DMG to mount it, or use: <code>hdiutil attach foxminer-v1-macos.dmg</code></li>
+            <li>Open Terminal and navigate to the mounted volume: <code>cd /Volumes/Foxminer</code></li>
+            <li>Run the miner: <code>./foxminer -c config.json</code></li>
+            <li>Enter your Monero wallet address when prompted. It will be saved to <code>/Volumes/Foxminer/config.json</code>.</li>
+            <li>To run again, remount the DMG and repeat steps 3-4. No need to re-enter your wallet.</li>
+        </ol>
+        <h3>Linux ARM64</h3>
+        <ol>
+            <li>Download <code>foxminer-v1-linux.tar.gz</code> using the button above.</li>
+            <li>Extract the tarball: <code>tar -xvzf foxminer-v1-linux.tar.gz</code></li>
+            <li>Navigate to the extracted directory: <code>cd [extracted-folder]</code></li>
+            <li>Run the miner: <code>./foxminer -c config.json</code></li>
+            <li>Enter your Monero wallet address when prompted. It will be saved to <code>config.json</code>.</li>
+        </ol>
+        <p><small>Note: Foxminer is open-source and not from the App Store or package managers. Keep the macOS DMG file, as the wallet is saved in <code>/Volumes/Foxminer/config.json</code> when mounted.</small></p>
+    </section>
+</div>
     <script>
         function toggleMenu() {
             const nav = document.querySelector('nav');
