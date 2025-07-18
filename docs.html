@@ -223,36 +223,36 @@
     <main>
         <h1>FOXMINER Documentation</h1>
         <h2>Introduction</h2>
-        <p>Welcome to FOXMINER, the world’s first frontend CPU miner built from scratch for Monero (XMR) mining on Mac ARM64 systems (M1/M2). Launched in 2025 after 18 months of relentless optimization, FOXMINER redefines CPU mining by stripping away the complexity of traditional setups—no pool configs, no command-line tinkering, just a sleek app that maximizes your profits. Powered by RandomX with auto-algo switching via MoneroOcean integration, we’re here to squeeze every ounce of hashrate from your CPU while keeping resource usage low. Currently rocking ARM64 Macs, with Intel Mac support live and Windows/Linux versions dropping by Q4 2025—this is Monero mining, reborn.</p>
+        <p>Welcome to FOXMINER, a streamlined CPU miner for Monero (XMR) designed for macOS ARM64 (M1/M2) and Linux ARM64 systems, with Windows and additional platforms arriving in Q4 2025. Launched in 2025 after 18 months of optimization, FOXMINER eliminates the complexity of traditional mining setups. Our lightweight executable, powered by RandomX and integrated with MoneroOcean’s auto-algo switching, maximizes your CPU’s hashrate while keeping resource usage low. Run it in Terminal, monitor stats instantly, or dive into detailed insights on our web dashboard—no fuss, just results.</p>
 
         <h2>Getting Started</h2>
-        <p>Getting up and running with FOXMINER is a breeze. Download the DMG from our Installers page (coming soon), install it, and launch the app. Sign up with your email, paste your Monero wallet address (44-88 characters, starting with 4 or 8), hit “Save,” and click “Start Mining.” That’s it—your CPU’s now churning out XMR. No account yet? You’ll need one to track your stats on the dashboard, but the app’s free and open to all Mac users (ARM64 or Intel). Check the Dashboard page after signing in to monitor your hashrate, shares, and earnings in real time.</p>
+        <p>Starting with FOXMINER is simple. Download the DMG for macOS or tar.gz for Linux from our <a href="/Foxminer/installers.html">Installers page</a>. Extract the package, which includes the executable, config.json, and README. Run the executable in Terminal, enter your Monero wallet address (44-88 characters, starting with 4 or 8) when prompted, and mining begins within seconds. Watch stats like hashrate and accepted shares update live in Terminal, or visit <a href="https://foxminer-web.github.io/Foxminer/" target="_blank">https://foxminer-web.github.io/Foxminer/</a>, sign up, enter your wallet address, click “Save,” and access our detailed dashboard for deeper insights like earnings and worker stats. No account is required to mine, but signing up unlocks the dashboard.</p>
 
         <h2>How It Works</h2>
-        <p>FOXMINER is a native macOS app that runs locally on your CPU—no browser nonsense here. It taps into Monero’s RandomX algorithm, fine-tuned with auto-algo switching through MoneroOcean’s pool, dynamically adapting to network conditions for up to 20-30% higher profits than static miners. Once launched, it runs quietly in the background, even if you close the window—stopping only when you hit “Stop” or reboot. Optimized for ARM64 (M1/M2 chips), it delivers 1-3 kH/s on high-end Macs (think MacBook Pro 16” M2 Max) and 500-1500 H/s on Intel models, all while sipping RAM (under 200 MB) and keeping CPU load balanced. Future Windows/Linux builds will bring the same power to every rig by Q4 2025.</p>
+        <p>FOXMINER’s executable runs in Terminal on macOS (ARM64/Intel) or Linux (ARM64), connecting directly to MoneroOcean’s pool with RandomX and auto-algo switching for up to 20-30% higher profits than static miners. After downloading the DMG or tar.gz, extract it and follow the README to launch the executable. Enter your Monero wallet address in the Terminal prompt, and mining starts instantly. Stats like hashrate and accepted shares appear in Terminal within seconds. For more details, sign up at <a href="https://foxminer-web.github.io/Foxminer/" target="_blank">https://foxminer-web.github.io/Foxminer/</a>, enter your wallet, and monitor advanced stats on our web dashboard. The executable runs efficiently in the background, stopping only when you exit Terminal or reboot, with minimal RAM (under 200 MB) and balanced CPU usage.</p>
 
         <h2>Features</h2>
-        <p><strong>Auto Algo-Switching:</strong> RandomX adapts on the fly via MoneroOcean, targeting the most profitable algos for your CPU.</p>
-        <p><strong>ARM64 Optimization:</strong> Built for M1/M2 Macs—max hashrate, minimal strain (Intel Macs supported too).</p>
-        <p><strong>Dashboard Insights:</strong> Live hashrate, worker stats, and payout tracking—signup unlocks it all.</p>
-        <p><strong>Background Mining:</strong> Runs silently even when minimized—pause or stop anytime.</p>
-        <p><strong>Multi-Platform Future:</strong> Windows and Linux versions coming Q4 2025—same app, broader reach.</p>
+        <p><strong>Auto Algo-Switching:</strong> RandomX adapts via MoneroOcean for optimal profitability.</p>
+        <p><strong>ARM64 Optimization:</strong> Tailored for M1/M2 Macs and Linux ARM64, with Intel support included.</p>
+        <p><strong>Dual Stat Tracking:</strong> Live hashrate and shares in Terminal, plus detailed dashboard stats after signup.</p>
+        <p><strong>Background Mining:</strong> Runs seamlessly in Terminal until stopped or system restarts.</p>
+        <p><strong>Multi-Platform Future:</strong> Windows and additional platforms coming in Q4 2025.</p>
 
         <h2>Technical Details</h2>
-        <p>FOXMINER’s core is an open-source RandomX engine, compiled natively for macOS ARM64 and Intel, hitting 1-3 kH/s on M1/M2 (e.g., 2.5 kH/s on M2 Max, 16 cores) and 0.5-1.5 kH/s on Intel i7/i9 rigs. It connects to MoneroOcean’s pool—payouts kick in at 0.3 XMR (configurable), with a tiny 0.003 XMR pool fee. Our dev fee’s a flat 5% (3% to FOXMINER, 2% to the original coder), way leaner than the 20-30% you’d see elsewhere. Expect 1 XMR per 20-40 MH of shares (difficulty ~120G, 1% orphan rate)—your Mac’s earning potential depends on cores and clock speed. All payouts land in your wallet automatically via MoneroOcean.</p>
+        <p>FOXMINER’s open-source RandomX engine is compiled for macOS ARM64, Intel, and Linux ARM64, delivering 1-3 kH/s on M1/M2 Macs (e.g., 2.5 kH/s on M2 Max, 16 cores) and 0.5-1.5 kH/s on Intel i7/i9 or Linux rigs. It connects to MoneroOcean’s pool with a 0.3 XMR payout threshold (configurable) and a 0.003 XMR pool fee. Our 5% dev fee (3% to FOXMINER, 2% to the original coder) is far lower than competitors’ 20-30%. Expect 1 XMR per 20-40 MH of shares (difficulty ~120G, 1% orphan rate). Payouts are automatic via MoneroOcean to your wallet. Stats update in Terminal instantly, with detailed metrics available on our web dashboard after signing up.</p>
 
         <h2>FAQ</h2>
-        <p><strong>Q: Do I need an account?</strong> Yes—to use the app and track stats. Sign up free on the site.</p>
-        <p><strong>Q: What’s the payout threshold?</strong> 0.3 XMR default via MoneroOcean—adjustable in their system.</p>
-        <p><strong>Q: Will it work on my Intel Mac?</strong> Yep—full support for older models, just lower hashrates.</p>
-        <p><strong>Q: What about Windows/Linux?</strong> Coming Q4 2025—ARM64 Macs are the priority now.</p>
-        <p><strong>Q: Fees?</strong> 5% dev fee (3% us, 2% coder) + 0.003 XMR pool fee—keeps us lean and mean.</p>
+        <p><strong>Q: Do I need an account?</strong> No for mining, but yes for dashboard access. Sign up free at <a href="https://foxminer-web.github.io/Foxminer/" target="_blank">https://foxminer-web.github.io/Foxminer/</a>.</p>
+        <p><strong>Q: What’s the payout threshold?</strong> 0.3 XMR default via MoneroOcean, adjustable in their system.</p>
+        <p><strong>Q: Does it work on Intel Macs or Linux?</strong> Yes, full support for Intel Macs and Linux ARM64, with lower hashrates on older hardware.</p>
+        <p><strong>Q: When will Windows be supported?</strong> Q4 2025, along with additional platforms.</p>
+        <p><strong>Q: What are the fees?</strong> 5% dev fee (3% FOXMINER, 2% coder) + 0.003 XMR pool fee.</p>
 
         <h2>Troubleshooting</h2>
-        <p><strong>Mining won’t start?</strong> Double-check your wallet address—44-88 chars, starts with 4 or 8. Re-enter and save.</p>
-        <p><strong>Low hashrate?</strong> Older Macs or fewer cores limit output—test on a beefy M1/M2 for peak results.</p>
-        <p><strong>App crashing?</strong> Ensure macOS is updated (14.0+ recommended). Restart and reinstall if needed.</p>
-        <p><strong>Dashboard empty?</strong> Sign in first—stats sync with your account, not the app alone.</p>
+        <p><strong>Mining won’t start?</strong> Ensure your wallet address is valid (44-88 chars, starts with 4 or 8). Re-enter in the Terminal prompt.</p>
+        <p><strong>Low hashrate?</strong> Older hardware or fewer cores reduce output—try a high-end M1/M2 or Linux ARM64 system.</p>
+        <p><strong>Executable crashes?</strong> Verify macOS (14.0+ recommended) or Linux compatibility. Reinstall and follow README instructions.</p>
+        <p><strong>Dashboard empty?</strong> Sign up and enter your wallet at <a href="https://foxminer-web.github.io/Foxminer/" target="_blank">https://foxminer-web.github.io/Foxminer/</a> to sync stats.</p>
     </main>
 
     <script>
